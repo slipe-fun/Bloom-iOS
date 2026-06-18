@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		DB01A1E42FE4741400AF0B70 /* BlurSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = DB01A1E32FE4741400AF0B70 /* BlurSwiftUI */; };
+		DB01A1E62FE4741400AF0B70 /* BlurUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = DB01A1E52FE4741400AF0B70 /* BlurUIKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		DB01A1C52FE46D5000AF0B70 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -42,6 +47,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB01A1E62FE4741400AF0B70 /* BlurUIKit in Frameworks */,
+				DB01A1E42FE4741400AF0B70 /* BlurSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +107,8 @@
 			);
 			name = Bloom;
 			packageProductDependencies = (
+				DB01A1E32FE4741400AF0B70 /* BlurSwiftUI */,
+				DB01A1E52FE4741400AF0B70 /* BlurUIKit */,
 			);
 			productName = Bloom;
 			productReference = DB01A1B42FE46D4D00AF0B70 /* Bloom.app */;
@@ -177,6 +186,9 @@
 			);
 			mainGroup = DB01A1AB2FE46D4D00AF0B70;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				DB01A1E22FE4741400AF0B70 /* XCRemoteSwiftPackageReference "BlurUIKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DB01A1B52FE46D4D00AF0B70 /* Products */;
 			projectDirPath = "";
@@ -552,6 +564,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DB01A1E22FE4741400AF0B70 /* XCRemoteSwiftPackageReference "BlurUIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TimOliver/BlurUIKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DB01A1E32FE4741400AF0B70 /* BlurSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DB01A1E22FE4741400AF0B70 /* XCRemoteSwiftPackageReference "BlurUIKit" */;
+			productName = BlurSwiftUI;
+		};
+		DB01A1E52FE4741400AF0B70 /* BlurUIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DB01A1E22FE4741400AF0B70 /* XCRemoteSwiftPackageReference "BlurUIKit" */;
+			productName = BlurUIKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DB01A1AC2FE46D4D00AF0B70 /* Project object */;
 }
