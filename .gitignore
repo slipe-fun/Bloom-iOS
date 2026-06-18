@@ -1,0 +1,23 @@
+# Xcode user state and caches
+.DS_Store
+build/
+DerivedData/
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcuserstate
+
+# Swift Package Manager (SPM) caches
+.swiftpm/xcode/package.resolved
+.swiftpm/xcode/xcshareddata/
+
+# Personal settings
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Log files
+*.log
+
+# Crash reports
+*.crash
