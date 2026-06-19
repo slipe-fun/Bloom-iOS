@@ -13,21 +13,12 @@ struct ChatsScreen: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: Theme.spacing.md) {
+            LazyVStack(spacing: 0) {
                 ForEach(1...30, id: \.self) { index in
-                    HStack {
-                        Text("Hi")
-                            .font(Theme.font.medium(size: Theme.fontSize.xxl))
-                            .foregroundStyle(Theme.colors.text)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 100)
-                    .padding(.horizontal, Theme.spacing.lg)
-                    .background(Theme.colors.foreground, in: .rect(cornerRadius: Theme.radius.xl))
+                    ChatRowView(userId: String(index))
                 }
             }
             .padding(.bottom, 80)
-            .padding(.horizontal, Theme.spacing.lg)
         }
         .scrollIndicators(.hidden)
         .frame(maxWidth: .infinity)

@@ -51,8 +51,8 @@ struct ChatsHeaderView: View {
                 
                 LinearGradient(
                     colors: [
-                        Theme.colors.background.opacity(0.85),
-                        Theme.colors.background.opacity(0.4),
+                        Theme.colors.background.opacity(1),
+                        Theme.colors.background.opacity(0.5),
                         Theme.colors.background.opacity(0.0)
                     ],
                     startPoint: .top,
