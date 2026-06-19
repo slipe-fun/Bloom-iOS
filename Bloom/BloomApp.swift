@@ -11,7 +11,14 @@ import SwiftUI
 struct BloomApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ZStack {
+                Theme.colors.background
+                    .ignoresSafeArea()
+                
+                Text("Bloom SwiftUI")
+                    .font(Theme.font.bold(size: Theme.fontSize.xxl))
+                    .foregroundStyle(Theme.colors.text)
+            }
         }
     }
 }
