@@ -9,38 +9,35 @@ import SwiftUI
 import BlurSwiftUI
 
 struct ChatsScreen: View {
+    @State private var scrollY: CGFloat = 0
+    
     var body: some View {
-        ZStack {
-            ScrollView {
-                VStack(spacing: Theme.spacing.md) {
-                    ForEach(1...50, id: \.self) { index in
-                        HStack {
-                            Text("Hi")
-                                .font(Theme.font.medium(size: Theme.fontSize.xxl))
-                                
-                                .foregroundStyle(Theme.colors.text)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 100)
-                        .padding()
-                        .background(Theme.colors.foreground, in: .rect(cornerRadius: Theme.radius.xl))
+        ScrollView {
+            VStack(spacing: Theme.spacing.md) {
+                ForEach(1...30, id: \.self) { index in
+                    HStack {
+                        Text("Hi")
+                            .font(Theme.font.medium(size: Theme.fontSize.xxl))
+                            .foregroundStyle(Theme.colors.text)
                     }
-                }
-                .padding()
-            }
-            .frame(maxWidth: .infinity)
-            .scrollIndicators(.hidden)
-            
-            VStack {
-                VariableBlur(direction: .down)
-                    .dimmingTintColor(Theme.colors.background)
-                    .dimmingOvershoot(.relative(fraction: 1))
-                    .passesTouchesThrough(true)
+                    .frame(maxWidth: .infinity)
                     .frame(height: 100)
-                    .ignoresSafeArea()
-                
-                Spacer()
+                    .padding(.horizontal, Theme.spacing.lg)
+                    .background(Theme.colors.foreground, in: .rect(cornerRadius: Theme.radius.xl))
+                }
             }
+            .padding(.bottom, 80)
+            .padding(.horizontal, Theme.spacing.lg)
+        }
+        .scrollIndicators(.hidden)
+        .frame(maxWidth: .infinity)
+        .onScrollGeometryChange(for: CGFloat.self) { geometry in
+            geometry.contentOffset.y + geometry.contentInsets.top
+        } action: { oldValue, newValue in
+            self.scrollY = newValue
+        }
+        .safeAreaInset(edge: .top, spacing: 0) {
+            ChatsHeaderView(title: "Bloom", scrollY: scrollY)
         }
     }
 }

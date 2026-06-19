@@ -1,0 +1,80 @@
+//
+//  AvatarView.swift
+//  Bloom
+//
+//  Created by Аскольд on 19.06.2026.
+//
+
+import SwiftUI
+
+enum AvatarSize {
+    case sm, md, lg, xl, xxl, xxxl, xxxxl
+    
+    var dimension: CGFloat {
+        switch self {
+        case .sm: return 40
+        case .md: return 44
+        case .lg: return 48
+        case .xl: return 58
+        case .xxl: return 100
+        case .xxxl: return 128
+        case .xxxxl: return 160
+        }
+    }
+}
+
+struct AvatarView: View {
+    var size: AvatarSize = .md
+    var square: Bool = false
+    var image: String?
+    var userId: String = ""
+    
+    private var dimension: CGFloat {
+        size.dimension
+    }
+    
+    var body: some View {
+        Group {
+            if let imageUrlString = image, let url = URL(string: imageUrlString) {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .success(let loadedImage):
+                        loadedImage
+                            .resizable()
+                            .scaledToFill()
+                    case .failure, .empty:
+                        defaultAvatarView
+                    @unknown default:
+                        defaultAvatarView
+                    }
+                }
+            } else {
+                defaultAvatarView
+            }
+        }
+        .frame(width: dimension, height: dimension)
+        .cornerRadius(square ? 0 : dimension / 2)
+    }
+    
+    private var defaultAvatarView: some View {
+        let hash = (userId.isEmpty ? "guest" : userId).hashCode
+        
+        let colorIndex = hash % AvatarConstants.avatarColors.count
+        let colors = AvatarConstants.avatarColors[colorIndex]
+        
+        let avatarNumber = ((hash / AvatarConstants.avatarColors.count) % AvatarConstants.totalAvatarsCount) + 1
+        let iconName = "avatar_\(avatarNumber)"
+        
+        return ZStack {
+            LinearGradient(
+                colors: colors,
+                startPoint: .bottom,
+                endPoint: .top
+            )
+                Image(iconName)
+                    .resizable()
+                    .scaledToFit()
+                    .padding(dimension / 5)
+        }
+    }
+}
