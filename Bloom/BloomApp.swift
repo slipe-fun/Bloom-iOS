@@ -11,7 +11,7 @@ import SwiftUI
 struct BloomApp: App {
     var body: some Scene {
         WindowGroup {
-            ChatsScreen()
+            AppCoordinatorView()
         }
     }
 }

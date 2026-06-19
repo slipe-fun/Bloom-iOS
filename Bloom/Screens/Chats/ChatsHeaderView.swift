@@ -12,6 +12,8 @@ struct ChatsHeaderView: View {
     let title: String
     let scrollY: CGFloat
     
+    @Environment(AppRouter.self) private var router
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -26,7 +28,7 @@ struct ChatsHeaderView: View {
                 Spacer()
                 
                 Button {
-                    print("hello", scrollY)
+                    router.isSettingsPresented = true
                 } label: {
                     AvatarView(
                         size: .md,
