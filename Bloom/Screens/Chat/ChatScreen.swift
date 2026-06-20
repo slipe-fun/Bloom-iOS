@@ -1,19 +1,20 @@
 //
-//  WelcomeScreen.swift
+//  ChatScreen.swift
 //  Bloom
 //
-//  Created by Аскольд on 19.06.2026.
+//  Created by Аскольд on 20.06.2026.
 //
 
 import SwiftUI
-import BlurSwiftUI
 
-struct WelcomeScreen: View {
+struct ChatScreen: View {
+    
+    let chatId: Int
     
     var body: some View {
         VStack(spacing: Theme.spacing.xxl) {
             Button {
-                print("login")
+                print("id: \(chatId)")
             } label: {
                 Text("Login")
                     .font(Theme.font.semibold(size: Theme.fontSize.xxl))
@@ -27,5 +28,6 @@ struct WelcomeScreen: View {
                     )
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
