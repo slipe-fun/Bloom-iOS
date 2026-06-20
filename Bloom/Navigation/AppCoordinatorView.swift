@@ -9,64 +9,92 @@ import SwiftUI
 
 struct AppCoordinatorView: View {
     @State private var router = AppRouter()
-    @State private var transitionProgress: CGFloat = 0.0
-    
+    @State private var dragOffset: CGFloat = 0
+    @State private var isSwiping: Bool = false
+
     var body: some View {
-        GeometryReader { geometry in
-            let width = geometry.size.width
-            
-            let topInset = geometry.safeAreaInsets.top - 7
-            let maxRadius = topInset > 20 ? topInset : 0.0
-            let chatsOffset = -width * transitionProgress
-            let settingsOffset = width / 2 + -width / 2 * transitionProgress
-            
+        GeometryReader { proxy in
+            let width = proxy.size.width
+            let safeArea = proxy.safeAreaInsets
+
+            let topRoute = router.path.last
+            let isSettingsTop = topRoute == .settings
+            let isStandardTop = topRoute != nil && topRoute != .settings
+            let maxRadius = safeArea.top > 20 ? safeArea.top - 6 : 0.0
+
+            let settingsProgress: CGFloat = {
+                if isSettingsTop { return isSwiping ? max(0, 1.0 - dragOffset / width) : 1.0 }
+                return 0.0
+            }()
+
+            let standardProgress: CGFloat = {
+                if isStandardTop { return isSwiping ? max(0, 1.0 - dragOffset / width) : 1.0 }
+                return 0.0
+            }()
+
+            let chatsOffset: CGFloat = {
+                if isSettingsTop { return -width * settingsProgress }
+                if isStandardTop { return -width * 0.3 * standardProgress }
+                return 0.0
+            }()
+
             ZStack {
-                Theme.colors.black.ignoresSafeArea()
-                
+                Theme.colors.background.ignoresSafeArea()
+
                 SettingsScreen()
                     .environment(router)
-                    .background(Color(.systemGroupedBackground).ignoresSafeArea())
-                    .settingsBehindStyle(progress: transitionProgress, cornerRadius: transitionProgress >= 0.99 ? 0 : maxRadius, offset: settingsOffset)
-                    .disabled(transitionProgress == 0)
+                    .background(Theme.colors.grayBackground.ignoresSafeArea())
+                    .modifier(SettingsBehindModifier(progress: settingsProgress, cornerRadius: maxRadius))
+                    .allowsHitTesting(isSettingsTop)
                     .zIndex(0)
-                
-                NavigationStack(path: $router.path) {
-                    ChatsScreen()
-                        .navigationDestination(for: AppRoute.self) { route in
-                            buildView(for: route)
-                        }
-                }
-                .environment(router)
-                .background(Color(.systemBackground).ignoresSafeArea())
-                .chatsSlideLeftStyle(offset: chatsOffset, cornerRadius: transitionProgress <= 0.01 ? 0 : maxRadius)
-                .zIndex(1)
-            }
-            .ignoresSafeArea()
-            .modifier(GlobalSwipeGestureModifier(
-                progress: $transitionProgress,
-                isPresented: router.isSettingsPresented,
-                onEnded: { shouldClose in
-                    withAnimation(.quickSpring) {
-                        router.isSettingsPresented = !shouldClose
-                        transitionProgress = shouldClose ? 0.0 : 1.0
+
+                ChatsScreen()
+                    .environment(router)
+                    .background(Theme.colors.background.ignoresSafeArea())
+                    .modifier(ChatsRootModifier(offset: chatsOffset, isSettingsTransition: isSettingsTop, progress: settingsProgress, cornerRadius: maxRadius))
+                    .allowsHitTesting(router.path.isEmpty)
+                    .zIndex(1)
+
+                ForEach(Array(router.path.enumerated()), id: \.offset) { index, route in
+                    if route != .settings {
+                        let isTop = index == router.path.count - 1
+                        let currentOffset = (isTop && isSwiping) ? dragOffset : 0
+                        let currentProgress = (isTop && isSwiping) ? max(0, 1.0 - dragOffset / width) : 1.0
+
+                        buildView(for: route)
+                            .environment(router)
+                            .background(Theme.colors.background.ignoresSafeArea())
+                            .modifier(PushedScreenModifier(offset: currentOffset, progress: currentProgress))
+                            .zIndex(CGFloat(index + 2))
+                            .transition(.screenPush)
                     }
                 }
-            ))
-            .onChange(of: router.isSettingsPresented) { newValue in
-                withAnimation(.quickSpring) {
-                    transitionProgress = newValue ? 1.0 : 0.0
-                }
             }
+            .environment(\.customSafeArea, safeArea)
+            .ignoresSafeArea()
+            .overlay(
+                Group {
+                    if !router.path.isEmpty {
+                        EdgeSwipeGestureView(
+                            dragOffset: $dragOffset,
+                            isSwiping: $isSwiping,
+                            onPop: { router.pop() }
+                        )
+                        .frame(width: 20)
+                    }
+                },
+                alignment: .leading
+            )
         }
     }
-    
+
     @ViewBuilder
     private func buildView(for route: AppRoute) -> some View {
         switch route {
         case .welcome: WelcomeScreen()
         case .chats: ChatsScreen()
-        case .chatDetail(let userId): Text("Чат с \(userId)")
-        case .settings: SettingsScreen()
+        case .chatDetail(let userId): Text("Chat with \(userId)").frame(maxWidth: .infinity, maxHeight: .infinity)
+        case .settings: EmptyView()
         }
     }
 }

@@ -7,46 +7,121 @@
 
 import SwiftUI
 
-struct SettingsBehindRevealModifier: ViewModifier {
-    let progress: CGFloat
-    let cornerRadius: CGFloat
-    let offset: CGFloat
+struct SettingsBehindModifier: AnimatableModifier {
+    var progress: CGFloat
+    var cornerRadius: CGFloat = 44
     
+    var animatableData: CGFloat {
+        get { progress }
+        set { progress = newValue }
+    }
+
     func body(content: Content) -> some View {
+        let scale = 0.875 + 0.125 * progress
+        let opacity = 0.5 + 0.5 * progress
+        let blur = 5 * (1.0 - progress)
+        let radius: CGFloat = (progress >= 0.999 || progress <= 0.001) ? 0 : cornerRadius
+
         content
-            .scaleEffect(0.75 + 0.25 * progress)
-            .offset(x: offset)
-            .mask(
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .opacity(0.65 + 0.35 * progress)
-                    .scaleEffect(0.75 + 0.25 * progress)
-                    .offset(x: offset)
-                    .ignoresSafeArea()
-            )
+            .ignoresSafeArea()
+            .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
+            .scaleEffect(scale, anchor: .center)
+            .opacity(opacity)
+            .blur(radius: blur)
     }
 }
 
-struct ChatsSlideLeftModifier: ViewModifier {
-    let offset: CGFloat
-    let cornerRadius: CGFloat
+struct ChatsRootModifier: AnimatableModifier {
+    var offset: CGFloat
+    var isSettingsTransition: Bool
+    var progress: CGFloat
+    var cornerRadius: CGFloat = 44
     
+    var animatableData: AnimatablePair<CGFloat, CGFloat> {
+        get { AnimatablePair(offset, progress) }
+        set {
+            offset = newValue.first
+            progress = newValue.second
+        }
+    }
+
     func body(content: Content) -> some View {
+        let radius: CGFloat = (progress < 0.999 && progress > 0.001) ? cornerRadius : 0
+
         content
+            .ignoresSafeArea()
+            .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
             .offset(x: offset)
-            .mask(
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .offset(x: offset)
-                    .ignoresSafeArea()
-            )
+            .shadow(color: Theme.colors.black.opacity(offset < 0 ? 0.06 : 0), radius: 24, x: 0, y: 0)
     }
 }
 
-extension View {
-    func settingsBehindStyle(progress: CGFloat, cornerRadius: CGFloat, offset: CGFloat) -> some View {
-        self.modifier(SettingsBehindRevealModifier(progress: progress, cornerRadius: cornerRadius, offset: offset))
+struct PushedScreenModifier: AnimatableModifier {
+    var offset: CGFloat
+    var progress: CGFloat
+    var cornerRadius: CGFloat = 44
+    
+    var animatableData: AnimatablePair<CGFloat, CGFloat> {
+        get { AnimatablePair(offset, progress) }
+        set {
+            offset = newValue.first
+            progress = newValue.second
+        }
     }
     
-    func chatsSlideLeftStyle(offset: CGFloat, cornerRadius: CGFloat) -> some View {
-        self.modifier(ChatsSlideLeftModifier(offset: offset, cornerRadius: cornerRadius))
+    func body(content: Content) -> some View {
+        let radius: CGFloat = (progress < 0.999 && progress > 0.001) ? cornerRadius : 0
+        
+        content
+            .ignoresSafeArea()
+            .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
+            .offset(x: offset)
+            .shadow(color: .black.opacity(offset < 0 ? 0.7 : 0), radius: 10, x: -5, y: 0)
+    }
+}
+
+extension AnyTransition {
+    static var screenWidth: CGFloat {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return 375 }
+        return windowScene.screen.bounds.width
+    }
+    
+    static var chatsToSettingsPush: AnyTransition {
+        .asymmetric(
+            insertion: .modifier(
+                active: SettingsBehindModifier(progress: 0),
+                identity: SettingsBehindModifier(progress: 1)
+            ),
+            removal: .modifier(
+                active: ChatsRootModifier(offset: -screenWidth, isSettingsTransition: true, progress: 1),
+                identity: ChatsRootModifier(offset: 0, isSettingsTransition: true, progress: 0)
+            )
+        )
+    }
+    
+    static var chatsToSettingsPop: AnyTransition {
+        .asymmetric(
+            insertion: .modifier(
+                active: ChatsRootModifier(offset: -screenWidth, isSettingsTransition: true, progress: 1),
+                identity: ChatsRootModifier(offset: 0, isSettingsTransition: true, progress: 0)
+            ),
+            removal: .modifier(
+                active: SettingsBehindModifier(progress: 0),
+                identity: SettingsBehindModifier(progress: 1)
+            )
+        )
+    }
+    
+    static var screenPush: AnyTransition {
+        .asymmetric(
+            insertion: .modifier(
+                active: PushedScreenModifier(offset: screenWidth, progress: 0),
+                identity: PushedScreenModifier(offset: 0, progress: 1)
+            ),
+            removal: .modifier(
+                active: PushedScreenModifier(offset: screenWidth, progress: 0),
+                identity: PushedScreenModifier(offset: 0, progress: 1)
+            )
+        )
     }
 }

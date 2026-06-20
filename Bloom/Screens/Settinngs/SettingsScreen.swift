@@ -16,14 +16,14 @@ struct SettingsScreen: View {
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                ForEach(1...30, id: \.self) { index in
+                ForEach(1...5, id: \.self) { index in
                     ChatRowView(userId: String(index))
                 }
             }
             .padding(.bottom, 80)
         }
+        .ignoresSafeArea(edges: .bottom)
         .scrollIndicators(.hidden)
-        .disabled(true)
         .frame(maxWidth: .infinity)
         .onScrollGeometryChange(for: CGFloat.self) { geometry in
             geometry.contentOffset.y + geometry.contentInsets.top
@@ -31,7 +31,7 @@ struct SettingsScreen: View {
             self.scrollY = newValue
         }
         .safeAreaInset(edge: .top, spacing: 0) {
-            ChatsHeaderView(title: "Bloom", scrollY: scrollY)
+            SettingsHeaderView(title: "Settings")
         }
     }
 }

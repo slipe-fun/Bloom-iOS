@@ -12,10 +12,10 @@ struct ChatsHeaderView: View {
     let title: String
     let scrollY: CGFloat
     
+    @Environment(\.customSafeArea) var safeArea
     @Environment(AppRouter.self) private var router
     
     var body: some View {
-        VStack(spacing: 0) {
             HStack {
                 HStack {
                     IconView(name: "logo_icon", size: 30, color: Theme.colors.primary)
@@ -39,11 +39,11 @@ struct ChatsHeaderView: View {
                 }
                 .buttonStyle(ScaleButtonStyle())
             }
-            .padding(.top, Theme.spacing.md)
+            .padding(.top, Theme.spacing.md + safeArea.top)
             .padding(.horizontal, Theme.spacing.lg)
             .padding(.bottom, Theme.spacing.lg)
-        }
         .offset(y: max(0, -scrollY / 5))
+        .ignoresSafeArea(edges: .top)
         .background(
             ZStack {
                 VariableBlur(direction: .down)

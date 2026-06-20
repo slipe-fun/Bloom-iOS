@@ -16,6 +16,14 @@ extension Animation {
             initialVelocity: 0.0
         )
     }
+    static var normalSpring: Animation {
+        .interpolatingSpring(
+            mass: 0.8,
+            stiffness: 360.0,
+            damping: 36.0,
+            initialVelocity: 0.0
+        )
+    }
     static var springy: Animation {
         .interpolatingSpring(
             mass: 0.2,

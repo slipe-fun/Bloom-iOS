@@ -6,27 +6,40 @@
 //
 
 import SwiftUI
+import Observation
 
 @Observable
 class AppRouter {
-    
     var path: [AppRoute] = []
     
-    var isSettingsPresented: Bool = false
-    
-    var sheet: AppRoute?
+    var isSettingsPresented: Bool {
+        get { path.contains(.settings) }
+        set {
+            if newValue && !path.contains(.settings) {
+                push(.settings)
+            } else if !newValue && path.last == .settings {
+                pop()
+            }
+        }
+    }
     
     func push(_ route: AppRoute) {
-        path.append(route)
+        withAnimation(.normalSpring) {
+            path.append(route)
+        }
     }
     
     func pop() {
-        if !path.isEmpty {
-            path.removeLast()
+        withAnimation(.normalSpring) {
+            if !path.isEmpty {
+                path.removeLast()
+            }
         }
     }
     
     func popToRoot() {
-        path.removeAll()
+        withAnimation(.normalSpring) {
+            path.removeAll()
+        }
     }
 }
