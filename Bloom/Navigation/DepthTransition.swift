@@ -9,39 +9,44 @@ import SwiftUI
 
 struct SettingsBehindRevealModifier: ViewModifier {
     let progress: CGFloat
+    let cornerRadius: CGFloat
+    let offset: CGFloat
     
     func body(content: Content) -> some View {
-        let currentRadius = 44.0
-        
         content
-            .scaleEffect(0.85 + 0.15 * progress)
-            .blur(radius: 12 * (1.0 - progress))
-            .opacity(progress)
-            .cornerRadius(currentRadius)
-            .ignoresSafeArea()
+            .scaleEffect(0.75 + 0.25 * progress)
+            .offset(x: offset)
+            .mask(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .opacity(0.65 + 0.35 * progress)
+                    .scaleEffect(0.75 + 0.25 * progress)
+                    .offset(x: offset)
+                    .ignoresSafeArea()
+            )
     }
 }
 
 struct ChatsSlideLeftModifier: ViewModifier {
     let offset: CGFloat
-    let progress: CGFloat
+    let cornerRadius: CGFloat
     
     func body(content: Content) -> some View {
-        let currentRadius = 44.0
-        
         content
             .offset(x: offset)
-            .cornerRadius(currentRadius)
-            .ignoresSafeArea()
+            .mask(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .offset(x: offset)
+                    .ignoresSafeArea()
+            )
     }
 }
 
 extension View {
-    func settingsBehindStyle(progress: CGFloat) -> some View {
-        self.modifier(SettingsBehindRevealModifier(progress: progress))
+    func settingsBehindStyle(progress: CGFloat, cornerRadius: CGFloat, offset: CGFloat) -> some View {
+        self.modifier(SettingsBehindRevealModifier(progress: progress, cornerRadius: cornerRadius, offset: offset))
     }
     
-    func chatsSlideLeftStyle(offset: CGFloat, progress: CGFloat) -> some View {
-        self.modifier(ChatsSlideLeftModifier(offset: offset, progress: progress))
+    func chatsSlideLeftStyle(offset: CGFloat, cornerRadius: CGFloat) -> some View {
+        self.modifier(ChatsSlideLeftModifier(offset: offset, cornerRadius: cornerRadius))
     }
 }
