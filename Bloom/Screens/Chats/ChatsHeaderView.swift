@@ -41,7 +41,7 @@ struct ChatsHeaderView: View {
             }
             .padding(.top, Theme.spacing.md + safeArea.top)
             .padding(.horizontal, Theme.spacing.lg)
-            .padding(.bottom, Theme.spacing.lg)
+            .padding(.bottom, Theme.spacing.md)
         .offset(y: max(0, -scrollY / 5))
         .ignoresSafeArea(edges: .top)
         .background(
@@ -53,8 +53,8 @@ struct ChatsHeaderView: View {
                 
                 LinearGradient(
                     colors: [
-                        Theme.colors.background.opacity(1),
-                        Theme.colors.background.opacity(0.5),
+                        Theme.colors.background.opacity(0.8),
+                        Theme.colors.background.opacity(0.45),
                         Theme.colors.background.opacity(0.0)
                     ],
                     startPoint: .top,

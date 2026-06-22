@@ -1,0 +1,72 @@
+//
+//  ChatsFooterView.swift
+//  Bloom
+//
+//  Created by Аскольд on 22.06.2026.
+//
+
+import SwiftUI
+
+struct ChatsFooterView: View {
+    @State private var text: String = ""
+    @FocusState private var isFocused: Bool
+    
+    var body: some View {
+        GlassEffectContainer {
+            VStack(spacing: 0) {
+                HStack(spacing: Theme.spacing.md) {
+                    HStack(spacing: 0) {
+                        VStack(alignment: .center) {
+                            IconView(name: "magnifyingglass_icon", size: 24, color: Theme.colors.secondaryText)
+                        }
+                        .frame(width: 48, height: 48)
+                        
+                        TextField(
+                            "",
+                            text: $text,
+                            prompt:
+                                Text("Search chats")
+                                    .font(Theme.font.medium(size: Theme.fontSize.md))
+                                    .foregroundStyle(Theme.colors.secondaryText)
+                        )
+                        .focused($isFocused)
+                        .textFieldStyle(.plain)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 48)
+                    .glassEffect(.clear.interactive().tint(Theme.colors.pressable.opacity(0.4)))
+                    
+                    Button {
+                        print("Swag")
+                    } label: {
+                        IconView(name: "plus_icon", size: 30, color: Theme.colors.text)
+                    }
+                    .frame(width: 48)
+                    .frame(height: 48)
+                    .glassEffect(.clear.interactive().tint(Theme.colors.pressable.opacity(0.4)))
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, isFocused ? Theme.spacing.lg : Theme.spacing.xxxl)
+                .padding(.top, Theme.spacing.md)
+                .padding(.bottom, Theme.spacing.xxxl)
+                .animation(.quickSpring, value: isFocused)
+                .ignoresSafeArea(edges: .bottom)
+                .background(
+                    ZStack {
+                        LinearGradient(
+                            colors: [
+                                Theme.colors.background.opacity(0.8),
+                                Theme.colors.background.opacity(0.45),
+                                Theme.colors.background.opacity(0.0)
+                            ],
+                            startPoint: .bottom,
+                            endPoint: .top
+                        )
+                        .ignoresSafeArea(edges: .bottom)
+                    }
+                )
+                KeyboardSpacer()
+            }
+        }
+    }
+}

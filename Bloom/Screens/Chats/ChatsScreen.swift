@@ -18,8 +18,8 @@ struct ChatsScreen: View {
                     ChatRowView(userId: String(index))
                 }
             }
-            .padding(.bottom, 80)
         }
+        .scrollDismissesKeyboard(.immediately)
         .scrollIndicators(.hidden)
         .frame(maxWidth: .infinity)
         .onScrollGeometryChange(for: CGFloat.self) { geometry in
@@ -29,6 +29,9 @@ struct ChatsScreen: View {
         }
         .safeAreaInset(edge: .top, spacing: 0) {
             ChatsHeaderView(title: "Bloom", scrollY: scrollY)
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            ChatsFooterView()
         }
     }
 }

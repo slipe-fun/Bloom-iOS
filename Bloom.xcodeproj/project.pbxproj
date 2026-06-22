@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DB01A1E42FE4741400AF0B70 /* BlurSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = DB01A1E32FE4741400AF0B70 /* BlurSwiftUI */; };
-		DB01A1E62FE4741400AF0B70 /* BlurUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = DB01A1E52FE4741400AF0B70 /* BlurUIKit */; };
+		DB49ED6A2FE9931F0099C921 /* LiquidGlassKit in Frameworks */ = {isa = PBXBuildFile; productRef = DB49ED692FE9931F0099C921 /* LiquidGlassKit */; };
+		DBCCCD142FE8AC95004C9C94 /* BlurSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = DBCCCD132FE8AC95004C9C94 /* BlurSwiftUI */; };
+		DBCCCD162FE8AC95004C9C94 /* BlurUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = DBCCCD152FE8AC95004C9C94 /* BlurUIKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,8 +61,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB01A1E62FE4741400AF0B70 /* BlurUIKit in Frameworks */,
-				DB01A1E42FE4741400AF0B70 /* BlurSwiftUI in Frameworks */,
+				DBCCCD162FE8AC95004C9C94 /* BlurUIKit in Frameworks */,
+				DBCCCD142FE8AC95004C9C94 /* BlurSwiftUI in Frameworks */,
+				DB49ED6A2FE9931F0099C921 /* LiquidGlassKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,8 +122,9 @@
 			);
 			name = Bloom;
 			packageProductDependencies = (
-				DB01A1E32FE4741400AF0B70 /* BlurSwiftUI */,
-				DB01A1E52FE4741400AF0B70 /* BlurUIKit */,
+				DBCCCD132FE8AC95004C9C94 /* BlurSwiftUI */,
+				DBCCCD152FE8AC95004C9C94 /* BlurUIKit */,
+				DB49ED692FE9931F0099C921 /* LiquidGlassKit */,
 			);
 			productName = Bloom;
 			productReference = DB01A1B42FE46D4D00AF0B70 /* Bloom.app */;
@@ -200,7 +203,8 @@
 			mainGroup = DB01A1AB2FE46D4D00AF0B70;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				DB01A1E22FE4741400AF0B70 /* XCRemoteSwiftPackageReference "BlurUIKit" */,
+				DBCCCD122FE8AC95004C9C94 /* XCRemoteSwiftPackageReference "BlurUIKit" */,
+				DB49ED682FE9931F0099C921 /* XCRemoteSwiftPackageReference "LiquidGlassKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DB01A1B52FE46D4D00AF0B70 /* Products */;
@@ -413,7 +417,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -449,7 +453,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -581,7 +585,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		DB01A1E22FE4741400AF0B70 /* XCRemoteSwiftPackageReference "BlurUIKit" */ = {
+		DB49ED682FE9931F0099C921 /* XCRemoteSwiftPackageReference "LiquidGlassKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/DnV1eX/LiquidGlassKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
+		DBCCCD122FE8AC95004C9C94 /* XCRemoteSwiftPackageReference "BlurUIKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TimOliver/BlurUIKit";
 			requirement = {
@@ -592,14 +604,19 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		DB01A1E32FE4741400AF0B70 /* BlurSwiftUI */ = {
+		DB49ED692FE9931F0099C921 /* LiquidGlassKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DB01A1E22FE4741400AF0B70 /* XCRemoteSwiftPackageReference "BlurUIKit" */;
+			package = DB49ED682FE9931F0099C921 /* XCRemoteSwiftPackageReference "LiquidGlassKit" */;
+			productName = LiquidGlassKit;
+		};
+		DBCCCD132FE8AC95004C9C94 /* BlurSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DBCCCD122FE8AC95004C9C94 /* XCRemoteSwiftPackageReference "BlurUIKit" */;
 			productName = BlurSwiftUI;
 		};
-		DB01A1E52FE4741400AF0B70 /* BlurUIKit */ = {
+		DBCCCD152FE8AC95004C9C94 /* BlurUIKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DB01A1E22FE4741400AF0B70 /* XCRemoteSwiftPackageReference "BlurUIKit" */;
+			package = DBCCCD122FE8AC95004C9C94 /* XCRemoteSwiftPackageReference "BlurUIKit" */;
 			productName = BlurUIKit;
 		};
 /* End XCSwiftPackageProductDependency section */
