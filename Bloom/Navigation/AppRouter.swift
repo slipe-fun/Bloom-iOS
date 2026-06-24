@@ -12,6 +12,16 @@ import Observation
 class AppRouter {
     var path: [AppRoute] = []
     
+    var isAuthenticated: Bool {
+        didSet {
+            UserDefaults.standard.set(isAuthenticated, forKey: "isAuthenticated")
+        }
+    }
+    
+    init() {
+        self.isAuthenticated = UserDefaults.standard.bool(forKey: "isAuthenticated")
+    }
+    
     var isSettingsPresented: Bool {
         get { path.contains(.settings) }
         set {
@@ -19,6 +29,15 @@ class AppRouter {
                 push(.settings)
             } else if !newValue && path.last == .settings {
                 pop()
+            }
+        }
+    }
+    
+    func setAuthenticated(_ authenticated: Bool) {
+        withAnimation(.quickSpring) {
+            self.isAuthenticated = authenticated
+            if !authenticated {
+                self.path.removeAll()
             }
         }
     }

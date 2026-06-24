@@ -40,20 +40,32 @@ struct AppCoordinatorView: View {
 
             ZStack {
                 Theme.colors.background.ignoresSafeArea()
-
-                SettingsScreen()
-                    .environment(router)
-                    .background(Theme.colors.grayBackground.ignoresSafeArea())
-                    .modifier(SettingsBehindModifier(progress: settingsProgress, cornerRadius: maxRadius))
-                    .allowsHitTesting(isSettingsTop)
-                    .zIndex(0)
-
-                ChatsScreen()
-                    .environment(router)
-                    .background(Theme.colors.background.ignoresSafeArea())
-                    .modifier(ChatsRootModifier(offset: chatsOffset, isSettingsTransition: isSettingsTop, progress: settingsProgress, cornerRadius: maxRadius))
-                    .allowsHitTesting(router.path.isEmpty)
-                    .zIndex(1)
+                
+                if router.isAuthenticated {
+                    SettingsScreen()
+                        .environment(router)
+                        .background(Theme.colors.grayBackground.ignoresSafeArea())
+                        .modifier(SettingsBehindModifier(progress: settingsProgress, cornerRadius: maxRadius))
+                        .allowsHitTesting(isSettingsTop)
+                        .zIndex(0)
+                }
+                
+                Group {
+                    if router.isAuthenticated {
+                        ChatsScreen()
+                            .environment(router)
+                            .background(Theme.colors.background.ignoresSafeArea())
+                            .modifier(ChatsRootModifier(offset: chatsOffset, isSettingsTransition: isSettingsTop, progress: settingsProgress, cornerRadius: maxRadius))
+                            .transition(.opacity)
+                    } else {
+                        WelcomeScreen()
+                            .environment(router)
+                            .background(Theme.colors.background.ignoresSafeArea())
+                            .transition(.opacity)
+                    }
+                }
+                .allowsHitTesting(router.path.isEmpty)
+                .zIndex(1)
 
                 ForEach(Array(router.path.enumerated()), id: \.offset) { index, route in
                     if route != .settings {

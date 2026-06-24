@@ -21,6 +21,10 @@ struct Theme {
         static let modal: CGFloat = 40
     }
     
+    struct lineSpacing {
+        static let md: CGFloat = 8
+    }
+    
     struct fontSize {
         static let xs: CGFloat = 12
         static let sm: CGFloat = 14

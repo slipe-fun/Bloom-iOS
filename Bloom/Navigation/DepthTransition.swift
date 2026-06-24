@@ -47,7 +47,7 @@ struct ChatsRootModifier: AnimatableModifier {
 
     func body(content: Content) -> some View {
         let radius: CGFloat = (progress < 0.999 && progress > 0.001) ? cornerRadius : 0
-        let brightness: Double = 0 + 0.25 * progress
+        let brightness: Double = 0 + 0.1 * progress
 
         content
             .ignoresSafeArea()

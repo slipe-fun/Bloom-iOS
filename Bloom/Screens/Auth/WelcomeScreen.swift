@@ -9,23 +9,12 @@ import SwiftUI
 import BlurSwiftUI
 
 struct WelcomeScreen: View {
+    @Environment(AppRouter.self) private var router
     
     var body: some View {
-        VStack(spacing: Theme.spacing.xxl) {
-            Button {
-                print("login")
-            } label: {
-                Text("Login")
-                    .font(Theme.font.semibold(size: Theme.fontSize.xxl))
-                    .foregroundStyle(Theme.colors.primary)
-                    .frame(maxWidth: .infinity)
-                    .padding(Theme.spacing.lg)
-                    .background(Theme.colors.text)
-                    .background(
-                        RoundedRectangle(cornerRadius: Theme.radius.full)
-                            .fill(Theme.colors.text)
-                    )
-            }
+        VStack(alignment: .trailing) {
+            WelcomeTitleView()
+            WelcomeFooterView()
         }
     }
 }
