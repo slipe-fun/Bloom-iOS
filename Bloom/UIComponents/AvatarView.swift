@@ -14,8 +14,8 @@ enum AvatarSize {
         switch self {
         case .sm: return 40
         case .md: return 44
-        case .lg: return 48
-        case .xl: return 58
+        case .lg: return 58
+        case .xl: return 76
         case .xxl: return 100
         case .xxxl: return 128
         case .xxxxl: return 160

@@ -19,9 +19,8 @@ struct WelcomeFooterView: View {
                     Task {
                         let success = await BiometricAuthManager.authenticate()
                         if success {
-                            
+                            try? await Task.sleep(for: .seconds(1))
                             self.shown = true
-                            print("Face ID \(success)")
                         }
                     }
                 } label: {

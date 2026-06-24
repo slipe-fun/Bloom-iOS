@@ -15,7 +15,7 @@ struct ChatRowView: View {
             print("New chat")
         } label: {
             HStack(alignment: .top, spacing: 0) {
-                AvatarView(size: .xl, userId: userId)
+                AvatarView(size: .lg, userId: userId)
                     .padding(.trailing, Theme.spacing.lg)
                     .padding(.vertical, Theme.spacing.md)
                 VStack(alignment: .leading, spacing: Theme.spacing.sm - 2) {

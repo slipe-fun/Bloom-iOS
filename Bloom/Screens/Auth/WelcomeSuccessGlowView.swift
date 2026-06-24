@@ -9,29 +9,93 @@ import SwiftUI
 
 struct WelcomeSuccessGlowView: View {
     @Binding var shown: Bool
+    @State private var isRendered: Bool = false
+    @State private var animationProgress: CGFloat = 0.0
+    @State private var opacity: Double = 0.0
+    @State private var blur: CGFloat = 10.0
+    @State private var offset: CGFloat = 40.0
     
-    @State private var revealProgress: CGFloat = 0.0
+    @Environment(AppRouter.self) private var router
     
     var body: some View {
-        if shown {
-            ZStack {
+        ZStack {
+            if isRendered {
                 Theme.colors.background.opacity(0.75)
                     .ignoresSafeArea()
-                    .opacity(shown ? 1.0 : 0.0)
+                    .opacity(opacity)
                 
-                AmbientUnderglowView(tintColor: Theme.colors.red, particleColor: Theme.colors.red, animationProgress: shown ? 1.0 : 0.0)
+                AmbientUnderglowView(
+                    tintColor: Theme.colors.text,
+                    particleColor: Theme.colors.text,
+                    animationProgress: animationProgress
+                )
                 
-                VStack {
-                    Button("swag") {
-                        self.shown = false
+                VStack(alignment: .center, spacing: Theme.spacing.lg) {
+                    AvatarView(size: .xl, square: false, image: "", userId: "dj#@*)(JD*")
+                    
+                    VStack(spacing: Theme.spacing.xs) {
+                        Text("Welcome")
+                            .font(Theme.font.medium(size: Theme.fontSize.md))
+                            .lineSpacing(Theme.lineSpacing.md)
+                            .foregroundStyle(Theme.colors.secondaryText)
+                        
+                        Text("Dikiy Dikiens!")
+                            .font(Theme.font.semibold(size: Theme.fontSize.xxl))
+                            .lineSpacing(Theme.lineSpacing.md)
+                            .foregroundStyle(Theme.colors.text)
+                    }
+                    
+                    Button {
+                        router.isAuthenticated = true
+                    } label: {
+                        Text("Continue to chats")
+                            .font(Theme.font.semibold(size: Theme.fontSize.lg))
+                            .foregroundStyle(Theme.colors.text)
                     }
                     .buttonStyle(.plain)
                     .frame(height: 52)
-                    .glassEffect(.regular.interactive().tint(Theme.colors.glassBackdrop))
+                    .padding(.horizontal, Theme.spacing.xxxl)
+                    .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                .padding(.vertical, Theme.spacing.lg * 6.5)
+                .opacity(opacity)
+                .blur(radius: blur)
+                .offset(y: offset)
+            }
+        }
+        .allowsHitTesting(shown)
+        .zIndex(1)
+        .onChange(of: shown, initial: true) { _, newValue in
+            handleVisibilityChange(newValue)
+        }
+    }
+    
+    private func handleVisibilityChange(_ isVisible: Bool) {
+        if isVisible {
+            isRendered = true
+            
+            withAnimation(.smooth) {
+                blur = 0.0
+                animationProgress = 1.0
+                opacity = 1.0
+                offset = 0.0
+            }
+        } else {
+            withAnimation(.smooth) {
+                blur = 10.0
+                animationProgress = 0.0
+                opacity = 0.0
+                offset = 40.0
+            }
+            
+            Task {
+                try? await Task.sleep(for: .seconds(0.5))
+                
+                if !shown {
+                    isRendered = false
                 }
             }
-            .zIndex(1)
-            .animation(.normalSpring, value: shown)
         }
     }
 }

@@ -20,8 +20,8 @@ struct WelcomeScreen: View {
                 WelcomeFooterView(shown: $shown)
             }
             .disabled(shown)
-            .blur(radius: shown ? 8.0 : 0.0)
-            .animation(.normalSpring, value: shown)
+            .blur(radius: shown ? 10.0 : 0.0)
+            .animation(.smooth, value: shown)
             .overlay{
                 WelcomeSuccessGlowView(shown: $shown)
             }
