@@ -9,11 +9,11 @@ import SwiftUI
 
 struct ChatsFooterView: View {
     @State private var text: String = ""
+    @State private var keyboard: KeyboardObserver = KeyboardObserver(offset: 12)
     @FocusState private var isFocused: Bool
     
     var body: some View {
         GlassEffectContainer {
-            VStack(spacing: 0) {
                 HStack(spacing: Theme.spacing.md) {
                     HStack(spacing: 0) {
                         VStack(alignment: .center) {
@@ -29,12 +29,13 @@ struct ChatsFooterView: View {
                                     .font(Theme.font.medium(size: Theme.fontSize.md))
                                     .foregroundStyle(Theme.colors.secondaryText)
                         )
+                        .frame(maxHeight: .infinity)
                         .focused($isFocused)
                         .textFieldStyle(.plain)
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 48)
-                    .glassEffect(.clear.interactive().tint(Theme.colors.pressable.opacity(0.4)))
+                    .glassEffect(.clear.interactive().tint(Theme.colors.pressable.opacity(0.55)))
                     
                     Button {
                         print("Swag")
@@ -43,13 +44,14 @@ struct ChatsFooterView: View {
                     }
                     .frame(width: 48)
                     .frame(height: 48)
-                    .glassEffect(.clear.interactive().tint(Theme.colors.pressable.opacity(0.4)))
+                    .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
                 }
+                .offset(y: -keyboard.height)
+                .animation(keyboard.animation, value: keyboard.height)
                 .frame(maxWidth: .infinity)
-                .padding(.horizontal, isFocused ? Theme.spacing.lg : Theme.spacing.xxxl)
+                .padding(.horizontal, keyboard.progress >= 0.1 || keyboard.progress <= 0.1 ? Theme.spacing.xxxl : Theme.spacing.xxxl)
                 .padding(.top, Theme.spacing.md)
                 .padding(.bottom, Theme.spacing.xxxl)
-                .animation(.quickSpring, value: isFocused)
                 .ignoresSafeArea(edges: .bottom)
                 .background(
                     ZStack {
@@ -65,8 +67,6 @@ struct ChatsFooterView: View {
                         .ignoresSafeArea(edges: .bottom)
                     }
                 )
-                KeyboardSpacer()
-            }
         }
     }
 }
