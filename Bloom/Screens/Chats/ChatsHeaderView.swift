@@ -37,6 +37,7 @@ struct ChatsHeaderView: View {
                         userId: "dasdsf432$#"
                     )
                 }
+                .buttonStyle(.plain)
                 .glassEffect(.clear.interactive().tint(Theme.colors.background))
             }
             .padding(.top, Theme.spacing.md + safeArea.top)
