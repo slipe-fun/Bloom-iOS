@@ -20,7 +20,7 @@ struct AppCoordinatorView: View {
             let topRoute = router.path.last
             let isSettingsTop = topRoute == .settings
             let isStandardTop = topRoute != nil && topRoute != .settings
-            let maxRadius = safeArea.top > 20 ? safeArea.top - 6 : 0.0
+            let maxRadius = safeArea.top > 20 ? safeArea.top - 4 : 0.0
 
             let settingsProgress: CGFloat = {
                 if isSettingsTop { return isSwiping ? max(0, 1.0 - dragOffset / width) : 1.0 }

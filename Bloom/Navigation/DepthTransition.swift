@@ -17,9 +17,8 @@ struct SettingsBehindModifier: AnimatableModifier {
     }
 
     func body(content: Content) -> some View {
-        let scale = 0.875 + 0.125 * progress
+        let scale = 0.9 + 0.1 * progress
         let opacity = 0.5 + 0.5 * progress
-        let blur = 5 * (1.0 - progress)
         let radius: CGFloat = (progress >= 0.999 || progress <= 0.001) ? 0 : cornerRadius
 
         content
@@ -27,7 +26,6 @@ struct SettingsBehindModifier: AnimatableModifier {
             .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
             .scaleEffect(scale, anchor: .center)
             .opacity(opacity)
-            .blur(radius: blur)
     }
 }
 
@@ -36,6 +34,8 @@ struct ChatsRootModifier: AnimatableModifier {
     var isSettingsTransition: Bool
     var progress: CGFloat
     var cornerRadius: CGFloat = 44
+    
+    @Environment(\.colorScheme) var colorScheme
     
     var animatableData: AnimatablePair<CGFloat, CGFloat> {
         get { AnimatablePair(offset, progress) }
@@ -47,12 +47,14 @@ struct ChatsRootModifier: AnimatableModifier {
 
     func body(content: Content) -> some View {
         let radius: CGFloat = (progress < 0.999 && progress > 0.001) ? cornerRadius : 0
+        let brightness: Double = 0 + 0.25 * progress
 
         content
             .ignoresSafeArea()
             .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
             .offset(x: offset)
-            .shadow(color: Theme.colors.black.opacity(offset < 0 ? 0.06 : 0), radius: 24, x: 0, y: 0)
+            .brightness(colorScheme == .dark ? brightness : 0)
+            .shadow(color: Theme.colors.black.opacity(offset < 0 ? 0.08 : 0), radius: 20, x: 0, y: 0)
     }
 }
 
