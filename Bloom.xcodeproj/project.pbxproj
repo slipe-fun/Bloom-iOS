@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DB49ED6A2FE9931F0099C921 /* LiquidGlassKit in Frameworks */ = {isa = PBXBuildFile; productRef = DB49ED692FE9931F0099C921 /* LiquidGlassKit */; };
+		DB49ED7A2FEC50A00099C921 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = DB49ED792FEC50A00099C921 /* Lottie */; };
 		DBCCCD142FE8AC95004C9C94 /* BlurSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = DBCCCD132FE8AC95004C9C94 /* BlurSwiftUI */; };
 		DBCCCD162FE8AC95004C9C94 /* BlurUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = DBCCCD152FE8AC95004C9C94 /* BlurUIKit */; };
 /* End PBXBuildFile section */
@@ -64,6 +65,7 @@
 				DBCCCD162FE8AC95004C9C94 /* BlurUIKit in Frameworks */,
 				DBCCCD142FE8AC95004C9C94 /* BlurSwiftUI in Frameworks */,
 				DB49ED6A2FE9931F0099C921 /* LiquidGlassKit in Frameworks */,
+				DB49ED7A2FEC50A00099C921 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +127,7 @@
 				DBCCCD132FE8AC95004C9C94 /* BlurSwiftUI */,
 				DBCCCD152FE8AC95004C9C94 /* BlurUIKit */,
 				DB49ED692FE9931F0099C921 /* LiquidGlassKit */,
+				DB49ED792FEC50A00099C921 /* Lottie */,
 			);
 			productName = Bloom;
 			productReference = DB01A1B42FE46D4D00AF0B70 /* Bloom.app */;
@@ -205,6 +208,7 @@
 			packageReferences = (
 				DBCCCD122FE8AC95004C9C94 /* XCRemoteSwiftPackageReference "BlurUIKit" */,
 				DB49ED682FE9931F0099C921 /* XCRemoteSwiftPackageReference "LiquidGlassKit" */,
+				DB49ED782FEC50A00099C921 /* XCRemoteSwiftPackageReference "lottie-spm" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DB01A1B52FE46D4D00AF0B70 /* Products */;
@@ -593,6 +597,14 @@
 				minimumVersion = 1.0.1;
 			};
 		};
+		DB49ED782FEC50A00099C921 /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.6.1;
+			};
+		};
 		DBCCCD122FE8AC95004C9C94 /* XCRemoteSwiftPackageReference "BlurUIKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TimOliver/BlurUIKit";
@@ -608,6 +620,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DB49ED682FE9931F0099C921 /* XCRemoteSwiftPackageReference "LiquidGlassKit" */;
 			productName = LiquidGlassKit;
+		};
+		DB49ED792FEC50A00099C921 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DB49ED782FEC50A00099C921 /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
 		};
 		DBCCCD132FE8AC95004C9C94 /* BlurSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

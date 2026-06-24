@@ -39,6 +39,7 @@ struct WelcomeTitleView: View {
                                         }
                                 }
                             )
+                            .sensoryFeedback(.selection, trigger: hoveredIndex)
                     }
                 }
                 .coordinateSpace(name: containerSpace)
