@@ -37,6 +37,7 @@ struct ChatsFooterView: View {
                     .padding(.trailing, Theme.spacing.md)
                     .foregroundStyle(Theme.colors.text)
                     .textFieldStyle(.plain)
+                    .tint(Theme.colors.primary)
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 48)
