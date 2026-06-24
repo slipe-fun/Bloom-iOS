@@ -9,11 +9,12 @@ import SwiftUI
 
 struct ChatsFooterView: View {
     @State private var text: String = ""
-    @State private var keyboard: KeyboardObserver = KeyboardObserver(offset: 12)
+    @State private var keyboardHeight: CGFloat = 0
     @FocusState private var isFocused: Bool
     
     var body: some View {
-        GlassEffectContainer {
+        KeyboardAttachedBar {
+            GlassEffectContainer {
                 HStack(spacing: Theme.spacing.md) {
                     HStack(spacing: 0) {
                         VStack(alignment: .center) {
@@ -26,8 +27,8 @@ struct ChatsFooterView: View {
                             text: $text,
                             prompt:
                                 Text("Search chats")
-                                    .font(Theme.font.medium(size: Theme.fontSize.md))
-                                    .foregroundStyle(Theme.colors.secondaryText)
+                                .font(Theme.font.medium(size: Theme.fontSize.md))
+                                .foregroundStyle(Theme.colors.secondaryText)
                         )
                         .frame(maxHeight: .infinity)
                         .focused($isFocused)
@@ -46,10 +47,8 @@ struct ChatsFooterView: View {
                     .frame(height: 48)
                     .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
                 }
-                .offset(y: -keyboard.height)
-                .animation(keyboard.animation, value: keyboard.height)
                 .frame(maxWidth: .infinity)
-                .padding(.horizontal, keyboard.progress >= 0.1 || keyboard.progress <= 0.1 ? Theme.spacing.xxxl : Theme.spacing.xxxl)
+                .padding(.horizontal, isFocused ? Theme.spacing.lg : Theme.spacing.xxxl)
                 .padding(.top, Theme.spacing.md)
                 .padding(.bottom, Theme.spacing.xxxl)
                 .ignoresSafeArea(edges: .bottom)
@@ -67,6 +66,7 @@ struct ChatsFooterView: View {
                         .ignoresSafeArea(edges: .bottom)
                     }
                 )
+            }
         }
     }
 }
