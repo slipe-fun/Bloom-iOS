@@ -19,7 +19,7 @@ struct WelcomeFooterView: View {
                     Task {
                         let success = await BiometricAuthManager.authenticate()
                         if success {
-                            try? await Task.sleep(for: .seconds(1))
+                            try? await Task.sleep(for: .seconds(2))
                             self.shown = true
                         }
                     }
