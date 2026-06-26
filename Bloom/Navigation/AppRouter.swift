@@ -9,6 +9,7 @@ import SwiftUI
 import Observation
 
 @Observable
+@MainActor
 class AppRouter {
     var path: [AppRoute] = []
     
@@ -20,6 +21,10 @@ class AppRouter {
     
     init() {
         self.isAuthenticated = UserDefaults.standard.bool(forKey: "isAuthenticated")
+        
+        Task {
+            _ = HapticManager.shared
+        }
     }
     
     var isSettingsPresented: Bool {
@@ -33,6 +38,16 @@ class AppRouter {
         }
     }
     
+    
+    var standardPath: [AppRoute] {
+        path.filter { $0 != .settings }
+    }
+    
+    var isSettingsTop: Bool {
+        path.last == .settings
+    }
+    
+    
     func setAuthenticated(_ authenticated: Bool) {
         withAnimation(.quickSpring) {
             self.isAuthenticated = authenticated
@@ -45,11 +60,21 @@ class AppRouter {
     func push(_ route: AppRoute) {
         withAnimation(.normalSpring) {
             path.append(route)
+        
+            if route == .settings {
+                HapticManager.shared.triggerSettingsOpeningHaptic()
+            }
         }
     }
     
-    func pop() {
-        withAnimation(.normalSpring) {
+    func pop(animated: Bool = true) {
+        if animated {
+            withAnimation(.normalSpring) {
+                if !path.isEmpty {
+                    path.removeLast()
+                }
+            }
+        } else {
             if !path.isEmpty {
                 path.removeLast()
             }

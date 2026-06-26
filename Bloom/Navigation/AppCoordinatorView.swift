@@ -17,9 +17,9 @@ struct AppCoordinatorView: View {
             let width = proxy.size.width
             let safeArea = proxy.safeAreaInsets
 
-            let topRoute = router.path.last
-            let isSettingsTop = topRoute == .settings
-            let isStandardTop = topRoute != nil && topRoute != .settings
+            let standardPath = router.standardPath
+            let isSettingsTop = router.isSettingsTop
+            let isStandardTop = !standardPath.isEmpty
             let maxRadius = safeArea.top > 20 ? safeArea.top - 4 : 0.0
 
             let settingsProgress: CGFloat = {
@@ -41,7 +41,9 @@ struct AppCoordinatorView: View {
             ZStack {
                 Theme.colors.background.ignoresSafeArea()
                 
-                if router.isAuthenticated {
+                let isSettingsVisible = isSettingsTop || settingsProgress > 0.001
+                
+                if router.isAuthenticated && isSettingsVisible {
                     SettingsScreen()
                         .environment(router)
                         .background(Theme.colors.grayBackground.ignoresSafeArea())
@@ -50,12 +52,20 @@ struct AppCoordinatorView: View {
                         .zIndex(0)
                 }
                 
+                let isRootRendered = standardPath.count < 2
+                
                 Group {
                     if router.isAuthenticated {
                         ChatsScreen()
                             .environment(router)
                             .background(Theme.colors.background.ignoresSafeArea())
-                            .modifier(ChatsRootModifier(offset: chatsOffset, isSettingsTransition: isSettingsTop, progress: settingsProgress, cornerRadius: maxRadius))
+                            .modifier(ChatsRootModifier(
+                                offset: chatsOffset,
+                                isSettingsTransition: isSettingsTop,
+                                settingsProgress: settingsProgress,
+                                standardProgress: standardProgress,
+                                cornerRadius: maxRadius
+                            ))
                             .transition(.opacity)
                     } else {
                         WelcomeScreen()
@@ -64,23 +74,56 @@ struct AppCoordinatorView: View {
                             .transition(.opacity)
                     }
                 }
-                .allowsHitTesting(router.path.isEmpty)
+                .opacity(isRootRendered ? 1.0 : 0.0)
+                .allowsHitTesting(isRootRendered && standardPath.isEmpty)
                 .zIndex(1)
 
-                ForEach(Array(router.path.enumerated()), id: \.offset) { index, route in
-                    if route != .settings {
-                        let isTop = index == router.path.count - 1
-                        let currentOffset = (isTop && isSwiping) ? dragOffset : 0
-                        let currentProgress = (isTop && isSwiping) ? max(0, 1.0 - dragOffset / width) : 1.0
-                        let currentOpacity = isTop ? 1.0 : 0.75 + 0.25 * standardProgress
+                ForEach(Array(standardPath.enumerated()), id: \.offset) { index, route in
+                    let isTop = index == standardPath.count - 1
+                    let isPrevious = index == standardPath.count - 2
+                    let isRendered = index >= standardPath.count - 2
+                    
+                    let currentProgress: CGFloat = {
+                        if isTop {
+                            return isSwiping ? (1.0 - dragOffset / width) : 1.0
+                        } else if isPrevious {
+                            return isSwiping ? dragOffset / width : 0.0
+                        }
+                        return 0.0
+                    }()
+                    
+                    let currentOffset: CGFloat = {
+                        if isTop {
+                            return isSwiping ? dragOffset : 0
+                        } else if isPrevious {
+                            return isSwiping ? -width * 0.3 * (1.0 - dragOffset / width) : -width * 0.3
+                        }
+                        return -width * 0.3
+                    }()
+                    
+                    let currentOpacity: CGFloat = {
+                        if isTop {
+                            return 1.0
+                        } else if isPrevious {
+                            return max(0.75, min(1.0, 0.75 + 0.25 * currentProgress))
+                        }
+                        return 0.75
+                    }()
 
-                        buildView(for: route)
-                            .environment(router)
-                            .background(Theme.colors.background.ignoresSafeArea())
-                            .modifier(PushedScreenModifier(opacity: currentOpacity, offset: currentOffset, progress: currentProgress))
-                            .zIndex(CGFloat(index + 2))
-                            .transition(.screenPush)
-                    }
+                    buildView(for: route)
+                        .environment(router)
+                        .background(Theme.colors.background.ignoresSafeArea())
+                        .modifier(PushedScreenModifier(
+                            isTop: isTop,
+                            opacity: currentOpacity,
+                            offset: currentOffset,
+                            progress: currentProgress,
+                            cornerRadius: maxRadius
+                        ))
+                        .opacity(isRendered ? 1.0 : 0.0)
+                        .allowsHitTesting(isTop && isRendered)
+                        .transition(.screenPush(width: width, cornerRadius: maxRadius))
+                        .zIndex(Double(index + 2))
                 }
             }
             .environment(\.customSafeArea, safeArea)
@@ -91,7 +134,8 @@ struct AppCoordinatorView: View {
                         EdgeSwipeGestureView(
                             dragOffset: $dragOffset,
                             isSwiping: $isSwiping,
-                            onPop: { router.pop() }
+                            screenWidth: width,
+                            onPop: { router.pop(animated: false) }
                         )
                         .frame(width: 20)
                     }

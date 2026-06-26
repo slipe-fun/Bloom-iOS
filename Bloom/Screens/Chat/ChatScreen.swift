@@ -29,6 +29,7 @@ struct ChatScreen: View {
                     )
             }
         }
+        .padding(.horizontal, 32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

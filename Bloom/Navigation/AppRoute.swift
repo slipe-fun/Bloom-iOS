@@ -5,7 +5,7 @@
 //  Created by Аскольд on 20.06.2026.
 //
 
-import Foundation
+import SwiftUI
 
 enum AppRoute: Hashable {
     case welcome

@@ -11,6 +11,7 @@ import UIKit
 struct EdgeSwipeGestureView: UIViewRepresentable {
     @Binding var dragOffset: CGFloat
     @Binding var isSwiping: Bool
+    let screenWidth: CGFloat
     let onPop: () -> Void
     
     func makeUIView(context: Context) -> UIView {
@@ -36,31 +37,44 @@ struct EdgeSwipeGestureView: UIViewRepresentable {
         @objc func handlePan(_ recognizer: UIScreenEdgePanGestureRecognizer) {
             guard let view = recognizer.view else { return }
             let translation = recognizer.translation(in: view)
-            let velocity = recognizer.velocity(in: view).x
-            let width = UIScreen.main.bounds.width
+            let velocityX = recognizer.velocity(in: view).x
+            let width = parent.screenWidth
             
             switch recognizer.state {
             case .began:
                 parent.isSwiping = true
                 parent.dragOffset = 0
             case .changed:
-                parent.dragOffset = max(0, translation.x)
+                let x = translation.x
+                if x > width {
+                    parent.dragOffset = width + (x - width) * 0.38
+                } else {
+                    parent.dragOffset = max(0, x)
+                }
             case .ended, .cancelled:
-                let shouldPop = translation.x > width * 0.35 || velocity > 300
+                let translationX = translation.x
+                let shouldPop = translationX > width * 0.35 || velocityX > 300
+                
                 if shouldPop {
                     withAnimation(.normalSpring) {
                         parent.dragOffset = width
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                        self.parent.onPop()
-                        self.parent.isSwiping = false
-                        self.parent.dragOffset = 0
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.38) {
+                        var transaction = Transaction(animation: .none)
+                        transaction.disablesAnimations = true
+                        withTransaction(transaction) {
+                            self.parent.onPop()
+                            self.parent.isSwiping = false
+                            self.parent.dragOffset = 0
+                        }
                     }
                 } else {
                     withAnimation(.normalSpring) {
                         parent.dragOffset = 0
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
                         self.parent.isSwiping = false
                     }
                 }
@@ -72,6 +86,24 @@ struct EdgeSwipeGestureView: UIViewRepresentable {
         
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
             return false
+        }
+    }
+}
+
+@MainActor
+class HapticManager {
+    static let shared = HapticManager()
+    
+    private let selectionGenerator = UISelectionFeedbackGenerator()
+    
+    private init() {
+        selectionGenerator.prepare()
+    }
+    
+    func triggerSettingsOpeningHaptic() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+            self.selectionGenerator.selectionChanged()
+            self.selectionGenerator.prepare()
         }
     }
 }
