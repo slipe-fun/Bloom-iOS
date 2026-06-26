@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct ChatScreen: View {
-    
+    @Environment(AppRouter.self) private var router
     let chatId: Int
     
     var body: some View {
         VStack(spacing: Theme.spacing.xxl) {
             Button {
+                router.push(.chatDetail(chatId: chatId))
                 print("id: \(chatId)")
             } label: {
                 Text("Login")
@@ -28,6 +29,6 @@ struct ChatScreen: View {
                     )
             }
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

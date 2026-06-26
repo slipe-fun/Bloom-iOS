@@ -10,6 +10,6 @@ import Foundation
 enum AppRoute: Hashable {
     case welcome
     case chats
-    case chatDetail(userId: String)
+    case chatDetail(chatId: Int)
     case settings
 }

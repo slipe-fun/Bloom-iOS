@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct ChatRowView: View {
-    var userId: String
+    @Environment(AppRouter.self) private var router
+    
+    var userId: Int
     
     var body: some View {
         Button {
-            print("New chat")
+            router.push(.chatDetail(chatId: userId))
         } label: {
             HStack(alignment: .top, spacing: 0) {
-                AvatarView(size: .lg, userId: userId)
+                AvatarView(size: .lg, userId: String(userId))
                     .padding(.trailing, Theme.spacing.lg)
                     .padding(.vertical, Theme.spacing.md)
                 VStack(alignment: .leading, spacing: Theme.spacing.sm - 2) {

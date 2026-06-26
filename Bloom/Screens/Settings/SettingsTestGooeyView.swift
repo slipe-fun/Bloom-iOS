@@ -36,7 +36,7 @@ struct SettingsTestGooeyView: View {
                             )
                         
                     case .failure:
-                        Color.gray
+                        Color.clear
                             .overlay(Text("Err"))
                     @unknown default:
                         EmptyView()

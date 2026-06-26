@@ -72,11 +72,12 @@ struct AppCoordinatorView: View {
                         let isTop = index == router.path.count - 1
                         let currentOffset = (isTop && isSwiping) ? dragOffset : 0
                         let currentProgress = (isTop && isSwiping) ? max(0, 1.0 - dragOffset / width) : 1.0
+                        let currentOpacity = isTop ? 1.0 : 0.75 + 0.25 * standardProgress
 
                         buildView(for: route)
                             .environment(router)
                             .background(Theme.colors.background.ignoresSafeArea())
-                            .modifier(PushedScreenModifier(offset: currentOffset, progress: currentProgress))
+                            .modifier(PushedScreenModifier(opacity: currentOpacity, offset: currentOffset, progress: currentProgress))
                             .zIndex(CGFloat(index + 2))
                             .transition(.screenPush)
                     }
@@ -105,7 +106,7 @@ struct AppCoordinatorView: View {
         switch route {
         case .welcome: WelcomeScreen()
         case .chats: ChatsScreen()
-        case .chatDetail(let userId): Text("Chat with \(userId)").frame(maxWidth: .infinity, maxHeight: .infinity)
+        case .chatDetail(let chatId): ChatScreen(chatId: chatId)
         case .settings: EmptyView()
         }
     }

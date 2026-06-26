@@ -17,8 +17,8 @@ struct SettingsBehindModifier: AnimatableModifier {
     }
 
     func body(content: Content) -> some View {
-        let scale = 0.9 + 0.1 * progress
-        let opacity = 0.5 + 0.5 * progress
+        let scale: CGFloat = 0.9 + 0.1 * progress
+        let opacity: CGFloat = 0.0 + 1.0 * progress
         let radius: CGFloat = (progress >= 0.999 || progress <= 0.001) ? 0 : cornerRadius
 
         content
@@ -59,6 +59,7 @@ struct ChatsRootModifier: AnimatableModifier {
 }
 
 struct PushedScreenModifier: AnimatableModifier {
+    var opacity: CGFloat
     var offset: CGFloat
     var progress: CGFloat
     var cornerRadius: CGFloat = 44
@@ -73,12 +74,14 @@ struct PushedScreenModifier: AnimatableModifier {
     
     func body(content: Content) -> some View {
         let radius: CGFloat = (progress < 0.999 && progress > 0.001) ? cornerRadius : 0
+        let shadowOpacity: CGFloat = (progress < 0.999 && progress > 0.001) ? 0.08 : 0
         
         content
             .ignoresSafeArea()
             .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
             .offset(x: offset)
-            .shadow(color: .black.opacity(offset < 0 ? 0.7 : 0), radius: 10, x: -5, y: 0)
+            .opacity(opacity)
+            .shadow(color: Theme.colors.black.opacity(shadowOpacity), radius: 20, x: 0, y: 0)
     }
 }
 
@@ -117,12 +120,12 @@ extension AnyTransition {
     static var screenPush: AnyTransition {
         .asymmetric(
             insertion: .modifier(
-                active: PushedScreenModifier(offset: screenWidth, progress: 0),
-                identity: PushedScreenModifier(offset: 0, progress: 1)
+                active: PushedScreenModifier(opacity: 0.5, offset: screenWidth, progress: 0),
+                identity: PushedScreenModifier(opacity: 1, offset: 0, progress: 1)
             ),
             removal: .modifier(
-                active: PushedScreenModifier(offset: screenWidth, progress: 0),
-                identity: PushedScreenModifier(offset: 0, progress: 1)
+                active: PushedScreenModifier(opacity: 1, offset: screenWidth, progress: 0),
+                identity: PushedScreenModifier(opacity: 1, offset: 0, progress: 1)
             )
         )
     }
