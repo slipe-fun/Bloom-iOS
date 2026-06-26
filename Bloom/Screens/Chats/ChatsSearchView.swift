@@ -1,24 +1,25 @@
 //
-//  ChatsScreen.swift
+//  ChatsSearchView.swift
 //  Bloom
 //
-//  Created by Аскольд on 19.06.2026.
+//  Created by Аскольд on 27.06.2026.
 //
 
 import SwiftUI
 
-struct ChatsScreen: View {
+struct ChatsSearchView: View {
+    @Environment(\.customSafeArea) private var safeArea
     @State private var scrollY: CGFloat = 0
-    @State private var keyboardHeight: CGFloat = 0
-    @State private var footerHeight: CGFloat = 0
-    @State private var store = SearchStore()
+    @State private var collapsed: Bool = false
+    
+    let footerHeight: CGFloat
     
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack(alignment: .top) {
             ScrollView {
                 LazyVStack(spacing: 0) {
                     ForEach(1...5, id: \.self) { index in
-                        ChatRowView(userId: index)
+                        
                     }
                 }
                 .padding(.bottom, footerHeight)
@@ -28,10 +29,13 @@ struct ChatsScreen: View {
             .onScrollGeometryChange(for: CGFloat.self) { geometry in
                 geometry.contentOffset.y + geometry.contentInsets.top
             } action: { oldValue, newValue in
+                withAnimation(.normalSpring) {
+                    self.collapsed = newValue > Theme.spacing.xxxl + safeArea.top
+                }
                 self.scrollY = newValue
             }
             .safeAreaInset(edge: .top, spacing: 0) {
-                ChatsHeaderView(title: "Bloom", scrollY: scrollY)
+                ChatsSearchHeaderView(scrollY: scrollY, collapsed: collapsed)
             }
             .simultaneousGesture(
                 DragGesture().onChanged { value in
@@ -45,17 +49,16 @@ struct ChatsScreen: View {
                     }
                 }
             )
-            .offset(y: store.search ? -60 : 0)
-            .opacity(store.search ? 0 : 1)
             
-            if (store.search) {
-                ChatsSearchView(footerHeight: footerHeight)
-            }
-            
-            KeyboardPinnedView(keyboardHeight: $keyboardHeight, footerHeight: $footerHeight) {
-                ChatsFooterView(keyboardHeight: keyboardHeight, footerHeight: footerHeight)
-            }
+                if (collapsed) {
+                    ChatsSearchFloatHeaderView()
+                        .transition(
+                            AnyTransition.opacity
+                                .combined(with: .blur(radius: 4))
+                        )
+                }
         }
-        .environment(store)
+        .background(Theme.colors.background)
+        .transition(.opacity.combined(with: .offset(y: 60)))
     }
 }

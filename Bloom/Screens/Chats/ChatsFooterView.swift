@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct ChatsFooterView: View {
-    @State private var text: String = ""
+    @Environment(SearchStore.self) private var store
     @FocusState private var isFocused: Bool
+    
     let keyboardHeight: CGFloat
     let footerHeight: CGFloat
     
@@ -22,9 +23,11 @@ struct ChatsFooterView: View {
                     }
                     .frame(width: 48, height: 48)
                     
+                    @Bindable var bindableStore = store
+                    
                     TextField(
                         "",
-                        text: $text,
+                        text: $bindableStore.searchValue,
                         prompt:
                             Text("Search chats")
                             .font(Theme.font.medium(size: Theme.fontSize.md))
@@ -38,6 +41,9 @@ struct ChatsFooterView: View {
                     .foregroundStyle(Theme.colors.text)
                     .textFieldStyle(.plain)
                     .tint(Theme.colors.primary)
+                    .onChange(of: isFocused) { _, newValue in
+                        if newValue { store.setSearch(true) }
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 48)
@@ -48,10 +54,11 @@ struct ChatsFooterView: View {
                 }
                 
                 Button {
-                    print("Swag")
+                    isFocused = false
+                    store.clearSearch()
                 } label: {
                     IconView(name: "plus_icon", size: 30, color: Theme.colors.text)
-                        .rotationEffect(Angle(degrees: isFocused ? 45 : 0))
+                        .rotationEffect(.degrees(store.search ? 45 : 0))
                 }
                 .buttonStyle(.plain)
                 .frame(width: 48)
@@ -62,7 +69,7 @@ struct ChatsFooterView: View {
             .padding(.horizontal, keyboardHeight > 0 ? Theme.spacing.lg : Theme.spacing.xxxl)
             .padding(.top, Theme.spacing.md)
             .padding(.bottom, keyboardHeight > 0 ? Theme.spacing.lg : Theme.spacing.xxxl)
-            .animation(.quickSpring, value: isFocused)
+            .animation(.quickSpring, value: store.search)
             .background(alignment: .top) {
                 ZStack {
                     LinearGradient(
