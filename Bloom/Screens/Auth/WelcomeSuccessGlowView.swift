@@ -17,7 +17,11 @@ struct WelcomeSuccessGlowView: View {
     
     @Environment(AppRouter.self) private var router
     
+    let id: String = "dasdsf432"
+    
     var body: some View {
+        let color = avatarGradient(for: id)[0]
+        
         ZStack {
             if isRendered {
                 Theme.colors.background.opacity(0.75)
@@ -25,13 +29,13 @@ struct WelcomeSuccessGlowView: View {
                     .opacity(opacity)
                 
                 AmbientUnderglowView(
-                    tintColor: Theme.colors.text,
-                    particleColor: Theme.colors.text,
+                    tintColor: color,
+                    particleColor: color,
                     animationProgress: animationProgress
                 )
                 
                 VStack(alignment: .center, spacing: Theme.spacing.lg) {
-                    AvatarView(size: .xl, square: false, image: "", userId: "dj#@*)(JD*")
+                    AvatarView(size: .xl, square: false, image: "", id: id, name: "Dikiy Super")
                     
                     VStack(spacing: Theme.spacing.xs) {
                         Text("Welcome")
@@ -55,7 +59,7 @@ struct WelcomeSuccessGlowView: View {
                     .buttonStyle(.plain)
                     .frame(height: 52)
                     .padding(.horizontal, Theme.spacing.xxxl)
-                    .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
+                    .glassEffect(.clear.interactive().tint(color.opacity(0.5)))
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 .padding(.vertical, Theme.spacing.lg * 6.5)

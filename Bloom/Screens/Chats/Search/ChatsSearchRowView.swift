@@ -17,7 +17,7 @@ struct ChatsSearchRowView: View {
             router.push(.chatDetail(chatId: userId))
         } label: {
             HStack(alignment: .top, spacing: 0) {
-                AvatarView(size: .md, userId: String(userId))
+                AvatarView(size: .md, id: String(userId), name: String(userId))
                     .padding(.trailing, Theme.spacing.lg)
                     .padding(.vertical, Theme.spacing.md)
                 VStack(alignment: .leading, spacing: Theme.spacing.sm - 2) {

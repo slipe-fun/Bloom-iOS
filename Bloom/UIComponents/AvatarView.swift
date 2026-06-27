@@ -27,7 +27,8 @@ struct AvatarView: View {
     var size: AvatarSize = .md
     var square: Bool = false
     var image: String?
-    var userId: String = ""
+    var id: String = ""
+    var name: String = ""
     
     private var dimension: CGFloat {
         size.dimension
@@ -57,24 +58,21 @@ struct AvatarView: View {
     }
     
     private var defaultAvatarView: some View {
-        let hash = (userId.isEmpty ? "guest" : userId).hashCode
+        let colors = avatarGradient(for: id)
+        let initials = initials(from: name)
         
-        let colorIndex = hash % AvatarConstants.avatarColors.count
-        let colors = AvatarConstants.avatarColors[colorIndex]
-        
-        let avatarNumber = ((hash / AvatarConstants.avatarColors.count) % AvatarConstants.totalAvatarsCount) + 1
-        let iconName = "avatar_\(avatarNumber)"
-        
-        return ZStack {
-            LinearGradient(
-                colors: colors,
-                startPoint: .bottom,
-                endPoint: .top
+        return Circle()
+            .fill(
+                LinearGradient(
+                    colors: colors,
+                    startPoint: .bottom,
+                    endPoint: .top
+                )
             )
-                Image(iconName)
-                    .resizable()
-                    .scaledToFit()
-                    .padding(dimension / 5)
-        }
+            .overlay(
+                Text(initials)
+                    .font(Theme.font.bold(size: dimension / 2.25))
+                    .foregroundStyle(Theme.colors.white)
+            )
     }
 }

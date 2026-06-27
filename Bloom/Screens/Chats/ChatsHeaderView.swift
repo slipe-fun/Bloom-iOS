@@ -34,7 +34,8 @@ struct ChatsHeaderView: View {
                         size: .md,
                         square: false,
                         image: "",
-                        userId: "dasdsf432"
+                        id: "dasdsf432",
+                        name: "Dikiy Super"
                     )
                 }
                 .buttonStyle(.plain)
