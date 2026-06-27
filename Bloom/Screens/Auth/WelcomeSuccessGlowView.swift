@@ -54,7 +54,7 @@ struct WelcomeSuccessGlowView: View {
                     } label: {
                         Text("Continue to chats")
                             .font(Theme.font.semibold(size: Theme.fontSize.lg))
-                            .foregroundStyle(Theme.colors.text)
+                            .foregroundStyle(Theme.colors.white)
                     }
                     .buttonStyle(.plain)
                     .frame(height: 52)
