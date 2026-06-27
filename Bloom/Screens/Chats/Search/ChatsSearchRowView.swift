@@ -1,13 +1,13 @@
 //
-//  ChatRowView.swift
+//  ChatsSearchRowView.swift
 //  Bloom
 //
-//  Created by Аскольд on 19.06.2026.
+//  Created by Аскольд on 27.06.2026.
 //
 
 import SwiftUI
 
-struct ChatsRowView: View {
+struct ChatsSearchRowView: View {
     @Environment(AppRouter.self) private var router
     
     var userId: Int
@@ -17,7 +17,7 @@ struct ChatsRowView: View {
             router.push(.chatDetail(chatId: userId))
         } label: {
             HStack(alignment: .top, spacing: 0) {
-                AvatarView(size: .lg, userId: String(userId))
+                AvatarView(size: .md, userId: String(userId))
                     .padding(.trailing, Theme.spacing.lg)
                     .padding(.vertical, Theme.spacing.md)
                 VStack(alignment: .leading, spacing: Theme.spacing.sm - 2) {
@@ -28,18 +28,12 @@ struct ChatsRowView: View {
                         
                         Spacer()
                         
-                        Text("11:11")
-                            .font(Theme.font.medium(size: Theme.fontSize.sm))
-                            .foregroundStyle(Theme.colors.secondaryText)
-                        
                         IconView(name: "chevron.right_icon", size: 16, color: Theme.colors.secondaryText)
                     }
                     
-                    Text("Test last message")
+                    Text("@username")
                         .font(Theme.font.medium(size: Theme.fontSize.sm))
                         .foregroundStyle(Theme.colors.secondaryText)
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(2)
                 }
                 .padding(.top, Theme.spacing.md)
                 .frame(maxWidth: .infinity, alignment: .topLeading)

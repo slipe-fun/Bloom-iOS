@@ -17,11 +17,8 @@ struct ChatsFooterView: View {
     var body: some View {
         GlassEffectContainer {
             HStack(spacing: Theme.spacing.md) {
-                HStack(spacing: 0) {
-                    VStack(alignment: .center) {
-                        IconView(name: "magnifyingglass_icon", size: 24, color: Theme.colors.secondaryText)
-                    }
-                    .frame(width: 48, height: 48)
+                HStack(spacing: Theme.spacing.sm) {
+                    IconView(name: "magnifyingglass_icon", size: 22, color: store.search ? Theme.colors.text : Theme.colors.secondaryText)
                     
                     @Bindable var bindableStore = store
                     
@@ -45,9 +42,10 @@ struct ChatsFooterView: View {
                         if newValue { store.setSearch(true) }
                     }
                 }
+                .padding(.leading, Theme.spacing.md)
                 .frame(maxWidth: .infinity)
                 .frame(height: 48)
-                .glassEffect(.clear.interactive().tint(Theme.colors.pressable.opacity(0.55)))
+                .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
                 .contentShape(Rectangle())
                 .onTapGesture {
                     isFocused = true
@@ -78,11 +76,11 @@ struct ChatsFooterView: View {
                             Theme.colors.background.opacity(0.45),
                             Theme.colors.background.opacity(0.0)
                         ],
-                        startPoint: UnitPoint(x: 0.5, y: keyboardHeight > 0 ? (footerHeight / (keyboardHeight + footerHeight)) : 1.0),
+                        startPoint: .bottom,
                         endPoint: .top
                     )
                     .ignoresSafeArea(edges: .bottom)
-                    .frame(minHeight: keyboardHeight + footerHeight)
+                    .frame(height: keyboardHeight > 0 ? 0 : footerHeight)
                 }
             }
         }

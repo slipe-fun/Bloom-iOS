@@ -43,7 +43,7 @@ struct ChatsHeaderView: View {
             .padding(.top, Theme.spacing.md + safeArea.top)
             .padding(.horizontal, Theme.spacing.lg)
             .padding(.bottom, Theme.spacing.md)
-        .offset(y: max(0, -scrollY / 5))
+        .offset(y: max(0, -scrollY / 4))
         .ignoresSafeArea(edges: .top)
         .background(
             ZStack {

@@ -18,8 +18,8 @@ struct ChatsSearchView: View {
         ZStack(alignment: .top) {
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    ForEach(1...5, id: \.self) { index in
-                        
+                    ForEach(1...10, id: \.self) { index in
+                        ChatsSearchRowView(userId: index)
                     }
                 }
                 .padding(.bottom, footerHeight)
@@ -30,7 +30,7 @@ struct ChatsSearchView: View {
                 geometry.contentOffset.y + geometry.contentInsets.top
             } action: { oldValue, newValue in
                 withAnimation(.normalSpring) {
-                    self.collapsed = newValue > Theme.spacing.xxxl + safeArea.top
+                    self.collapsed = newValue > Theme.spacing.xxxl
                 }
                 self.scrollY = newValue
             }

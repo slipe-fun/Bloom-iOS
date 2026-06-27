@@ -10,9 +10,9 @@ import SwiftUI
 struct RowButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .background(configuration.isPressed ? Theme.colors.foregroundTransparent : Color.clear)
+            .background(configuration.isPressed ? Theme.colors.foreground : Color.clear)
             .contentShape(Rectangle())
-            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+            .animation(.smooth, value: configuration.isPressed)
     }
 }
 

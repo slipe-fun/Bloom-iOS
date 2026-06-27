@@ -25,7 +25,7 @@ struct ChatsSearchHeaderView: View {
         .padding(.top, Theme.spacing.xxxl + safeArea.top)
         .padding(.horizontal, Theme.spacing.lg)
         .padding(.bottom, Theme.spacing.md)
-        .offset(y: max(0, -scrollY / 5))
+        .offset(y: min(-scrollY, -scrollY / 4))
         .ignoresSafeArea(edges: .top)
         .opacity(collapsed ? 0 : 1)
     }
@@ -43,7 +43,7 @@ struct ChatsSearchFloatHeaderView: View {
         .frame(maxWidth: .infinity)
         .padding(.top, Theme.spacing.md + safeArea.top)
         .padding(.horizontal, Theme.spacing.lg)
-        .padding(.bottom, Theme.spacing.md)
+        .padding(.bottom, Theme.spacing.xxl)
         .ignoresSafeArea(edges: .top)
         .background(
             ZStack {

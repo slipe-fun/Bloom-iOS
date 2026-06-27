@@ -18,7 +18,7 @@ struct ChatsScreen: View {
             ScrollView {
                 LazyVStack(spacing: 0) {
                     ForEach(1...5, id: \.self) { index in
-                        ChatRowView(userId: index)
+                        ChatsRowView(userId: index)
                     }
                 }
                 .padding(.bottom, footerHeight)
