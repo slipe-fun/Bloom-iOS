@@ -10,6 +10,7 @@ import SwiftUI
 struct CustomBottomSheetContainerView<Content: View>: View {
     @Bindable var manager: BottomSheetManager
     let screenSize: CGSize
+    let safeAreaInsets: EdgeInsets
     @ViewBuilder let content: Content
     
     @State private var dragOffset: CGFloat = 0
@@ -17,9 +18,10 @@ struct CustomBottomSheetContainerView<Content: View>: View {
     @State private var dragStartTranslation: CGFloat = 0
     
     private var collapsedHeight: CGFloat = 400
-    private var expandedY: CGFloat { 0 }
-    private var collapsedY: CGFloat { screenSize.height - collapsedHeight - 5 }
-    private var hiddenY: CGFloat { screenSize.height + 20 }
+    private var sheetSpace: CGFloat = Theme.spacing.sm
+    private var expandedY: CGFloat { safeAreaInsets.top + Theme.spacing.xxxl }
+    private var collapsedY: CGFloat { screenSize.height - collapsedHeight - sheetSpace }
+    private var hiddenY: CGFloat { screenSize.height + Theme.spacing.xxxl }
     
     private var baseOffsetY: CGFloat {
         switch manager.state {
@@ -39,94 +41,95 @@ struct CustomBottomSheetContainerView<Content: View>: View {
     }
     
     init(
-           manager: BottomSheetManager,
-           screenSize: CGSize,
-           @ViewBuilder content: () -> Content
-       ) {
-           self.manager = manager
-           self.screenSize = screenSize
-           self.content = content()
-       }
+        manager: BottomSheetManager,
+        screenSize: CGSize,
+        safeAreaInsets: EdgeInsets,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.manager = manager
+        self.screenSize = screenSize
+        self.safeAreaInsets = safeAreaInsets
+        self.content = content()
+    }
     
     var body: some View {
-        let currentWidth = (screenSize.width - 10) + (10 * progress)
-        let currentHeight = collapsedHeight + ((screenSize.height - collapsedHeight) * progress)
-        let currentCornerRadius: CGFloat = 39
+        let currentWidth = (screenSize.width - (sheetSpace * 2)) + ((sheetSpace * 2) * progress)
+        let expandedHeight = screenSize.height - expandedY
+        let currentHeight = collapsedHeight + ((expandedHeight - collapsedHeight) * progress)
+        let currentCornerRadius: CGFloat = safeAreaInsets.top - 4 - sheetSpace
         
         VStack(spacing: 0) {
-            DragHandleView()
-                .frame(height: 30)
-                .padding(.top, 8)
-            
             content
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .frame(width: currentWidth, height: currentHeight, alignment: .top)
         .background(
-            Color(.systemBackground)
+            Theme.colors.sectionForeground
         )
+        .scrollIndicators(.hidden)
         .clipShape(RoundedRectangle(cornerRadius: currentCornerRadius))
         .offset(y: currentY)
         .scrollDisabled(manager.state == .collapsed || isDraggingSheet)
-        .simultaneousGesture(dragGesture)
+        .gesture(panGesture)
     }
     
-    private var dragGesture: some Gesture {
-        DragGesture(minimumDistance: 5, coordinateSpace: .global)
-            .onChanged { value in
-                let y = value.translation.height
-                
-                if manager.state == .expanded {
-                    if y < 0 {
-                        isDraggingSheet = false
-                        dragOffset = 0
-                    } else if y > 0 {
-                        if manager.scrollOffset <= 0 {
-                            if !isDraggingSheet {
-                                isDraggingSheet = true
-                                dragStartTranslation = y
-                            }
-                            dragOffset = y - dragStartTranslation
-                        } else {
+    private var panGesture: some UIGestureRecognizerRepresentable {
+            CustomPanGesture(
+                onChanged: { recognizer in
+                    let y = recognizer.translation(in: nil).y
+                    
+                    if manager.state == .expanded {
+                        if y < 0 {
                             isDraggingSheet = false
+                            dragOffset = 0
+                        } else if y > 0 {
+                            if manager.scrollOffset <= 0 {
+                                if !isDraggingSheet {
+                                    isDraggingSheet = true
+                                    dragStartTranslation = y
+                                }
+                                dragOffset = y - dragStartTranslation
+                            } else {
+                                isDraggingSheet = false
+                            }
+                        }
+                    } else if manager.state == .collapsed {
+                        isDraggingSheet = true
+                        if y > 0 {
+                            dragOffset = y * 0.3
+                        } else {
+                            dragOffset = y
                         }
                     }
-                } else if manager.state == .collapsed {
-                    isDraggingSheet = true
-                    if y > 0 {
-                        dragOffset = y * 0.3
-                    } else {
-                        dragOffset = y
-                    }
-                }
-            }
-            .onEnded { value in
-                let y = value.translation.height
-                let velocity = value.velocity.height
-                
-                if manager.state == .collapsed {
-                    withAnimation(.normalSpring) {
-                        if y < -50 || velocity < -300 {
-                            manager.state = .expanded
-                        } else if y > 50 || velocity > 300 {
-                            manager.dismiss()
-                        }
-                        dragOffset = 0
-                    }
-                } else if manager.state == .expanded {
-                    if isDraggingSheet {
-                        let actualDrag = y - dragStartTranslation
+                },
+                onEnded: { recognizer in
+                    let y = recognizer.translation(in: nil).y
+                    let velocity = recognizer.velocity(in: nil).y
+                    
+                    if manager.state == .collapsed {
                         withAnimation(.normalSpring) {
-                            if actualDrag > 100 || velocity > 300 {
-                                manager.state = .collapsed
+                            if y < -50 || velocity < -300 {
+                                manager.state = .expanded
+                            } else if y > 50 || velocity > 300 {
+                                manager.dismiss()
                             }
                             dragOffset = 0
                         }
+                    } else if manager.state == .expanded {
+                        if isDraggingSheet {
+                            let actualDrag = y - dragStartTranslation
+                            withAnimation(.normalSpring) {
+                                if actualDrag > 100 || velocity > 300 {
+                                    manager.state = .collapsed
+                                }
+                                dragOffset = 0
+                            }
+                        }
                     }
+                    
+                    isDraggingSheet = false
+                    dragStartTranslation = 0
                 }
-                
-                isDraggingSheet = false
-                dragStartTranslation = 0
-            }
-    }
+            )
+        }
 }

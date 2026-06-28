@@ -58,28 +58,16 @@ struct ChatsFooterView: View {
                         store.clearSearch()
                     } else {
                         bottomSheetManager.present {
-                                            ScrollView {
-                                                LazyVStack(spacing: 12) {
-                                                    ForEach(1...30, id: \.self) { index in
-                                                        Text("Элемент списка №\(index)")
-                                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                                            .padding()
-                                                            .background(Color(.secondarySystemBackground))
-                                                            .cornerRadius(8)
-                                                    }
-                                                }
-                                                .padding()
-                                            }
-                                            .bindBottomSheetScrollOffset(to: bottomSheetManager)
-                                        }
+                           NewMessageView()
+                                .bindBottomSheetScrollOffset(to: bottomSheetManager)
+                        }
                     }
                 } label: {
                     IconView(name: "plus_icon", size: 30, color: Theme.colors.text)
                         .rotationEffect(.degrees(store.search ? 45 : 0))
                 }
                 .buttonStyle(.plain)
-                .frame(width: 48)
-                .frame(height: 48)
+                .frame(width: 48, height: 48)
                 .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
             }
             .frame(maxWidth: .infinity)

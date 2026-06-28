@@ -10,15 +10,13 @@ import SwiftUI
 @main
 struct BloomApp: App {
     @State private var bottomSheetManager = BottomSheetManager()
+    @State private var router = AppRouter()
     
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                AppCoordinatorView()
-                
-                GlobalBottomSheetOverlayView()
-            }
-            .environment(bottomSheetManager)
+            AppCoordinatorView()
+                .environment(bottomSheetManager)
+                .environment(router)
         }
     }
 }

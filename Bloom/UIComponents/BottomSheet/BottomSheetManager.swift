@@ -37,6 +37,7 @@ final class BottomSheetManager {
         withAnimation(.normalSpring) {
             self.state = .hidden
         }
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             if self.state == .hidden {
                 self.content = nil

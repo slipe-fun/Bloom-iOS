@@ -9,11 +9,16 @@ import SwiftUI
 
 struct ChatsSearchRowView: View {
     @Environment(AppRouter.self) private var router
+    @Environment(BottomSheetManager.self) private var bottomSheetManager
     
     var userId: Int
+    var sheet: Bool = false
     
     var body: some View {
         Button {
+            if (sheet) {
+                bottomSheetManager.dismiss()
+            }
             router.push(.chatDetail(chatId: userId))
         } label: {
             HStack(alignment: .top, spacing: 0) {

@@ -9,16 +9,18 @@ import SwiftUI
 
 struct GlobalBottomSheetOverlayView: View {
     @Environment(BottomSheetManager.self) private var manager
+    @Environment(\.customSafeArea) private var safeAreaInsets
     
     var body: some View {
         GeometryReader { proxy in
-            let screenSize = proxy.size
+            let screenWidth = proxy.size.width + safeAreaInsets.leading + safeAreaInsets.trailing
+            let screenHeight = proxy.size.height
+            let screenSize = CGSize(width: screenWidth, height: screenHeight)
             
             ZStack(alignment: .top) {
                 if manager.state != .hidden {
-                    Color.black
-                        .opacity(0.15)
-                        .ignoresSafeArea()
+                    Theme.colors.black
+                        .opacity(0.2)
                         .onTapGesture {
                             manager.dismiss()
                         }
@@ -30,14 +32,15 @@ struct GlobalBottomSheetOverlayView: View {
                     
                     CustomBottomSheetContainerView(
                         manager: bindableManager,
-                        screenSize: screenSize
+                        screenSize: screenSize,
+                        safeAreaInsets: safeAreaInsets
                     ) {
                         content
                     }
                 }
             }
-            .ignoresSafeArea(edges: .bottom)
             .animation(.normalSpring, value: manager.state)
         }
+        .ignoresSafeArea()
     }
 }

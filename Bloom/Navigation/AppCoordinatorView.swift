@@ -7,10 +7,16 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct AppCoordinatorView: View {
-    @State private var router = AppRouter()
+    @Environment(AppRouter.self) private var router
+    @Environment(BottomSheetManager.self) private var bottomSheetManager
+    
     @State private var dragOffset: CGFloat = 0
     @State private var isSwiping: Bool = false
+    
+    @State private var bottomSheetZIndex: Double = 200
 
     var body: some View {
         GeometryReader { proxy in
@@ -125,9 +131,17 @@ struct AppCoordinatorView: View {
                         .transition(.screenPush(width: width, cornerRadius: maxRadius))
                         .zIndex(Double(index + 2))
                 }
+                
+                GlobalBottomSheetOverlayView()
+                    .zIndex(bottomSheetZIndex)
             }
             .environment(\.customSafeArea, safeArea)
             .ignoresSafeArea()
+            .onChange(of: bottomSheetManager.state) { oldValue, newValue in
+                if oldValue == .hidden && newValue != .hidden {
+                    bottomSheetZIndex = Double(router.standardPath.count) + 1.5
+                }
+            }
             .overlay(
                 Group {
                     if !router.path.isEmpty {
