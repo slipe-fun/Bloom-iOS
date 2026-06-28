@@ -9,27 +9,19 @@ import SwiftUI
 
 struct ChatScreen: View {
     @Environment(AppRouter.self) private var router
+    @State private var store = MessageListStore()
+    @State private var keyboardHeight: CGFloat = 0
+    @State private var footerHeight: CGFloat = 0
+    
     let chatId: Int
     
     var body: some View {
-        VStack(spacing: Theme.spacing.xxl) {
-            Button {
-                router.push(.chatDetail(chatId: chatId))
-                print("id: \(chatId)")
-            } label: {
-                Text("Login")
-                    .font(Theme.font.semibold(size: Theme.fontSize.xxl))
-                    .foregroundStyle(Theme.colors.primary)
-                    .frame(maxWidth: .infinity)
-                    .padding(Theme.spacing.lg)
-                    .background(Theme.colors.text)
-                    .background(
-                        RoundedRectangle(cornerRadius: Theme.radius.full)
-                            .fill(Theme.colors.text)
-                    )
+        ZStack {
+            MessagesListView(store: store, bottomInset:footerHeight, keyboardHeight: keyboardHeight)
+            KeyboardPinnedView(keyboardHeight: $keyboardHeight, footerHeight: $footerHeight) {
+                ChatFooterView(keyboardHeight: keyboardHeight, footerHeight: footerHeight, store: store)
             }
         }
-        .padding(.horizontal, 32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

@@ -1,80 +1,84 @@
 //
-//  ChatsFooterView.swift
+//  ChatFooterView.swift
 //  Bloom
 //
-//  Created by Аскольд on 22.06.2026.
+//  Created by Аскольд on 29.06.2026.
 //
 
 import SwiftUI
 
-struct ChatsFooterView: View {
-    @Environment(SearchStore.self) private var store
-    @Environment(BottomSheetManager.self) private var bottomSheetManager
-    @FocusState private var isFocused: Bool
+struct ChatFooterView: View {
+    @State private var sex: String = ""
+    @FocusState private var focused: Bool
     
     let keyboardHeight: CGFloat
     let footerHeight: CGFloat
+    let store: MessageListStore
     
     var body: some View {
         GlassEffectContainer {
             HStack(spacing: Theme.spacing.md) {
+                Button {
+                   print("Media")
+                } label: {
+                    IconView(name: "plus_icon", size: 26, color: Theme.colors.text)
+                }
+                .buttonStyle(.plain)
+                .frame(width: 44, height: 44)
+                .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
+                
                 HStack(spacing: Theme.spacing.sm) {
-                    IconView(name: "magnifyingglass_icon", size: 22, color: store.search ? Theme.colors.text : Theme.colors.secondaryText)
-                    
-                    @Bindable var bindableStore = store
-                    
                     TextField(
                         "",
-                        text: $bindableStore.searchValue,
+                        text: $sex,
                         prompt:
-                            Text("Search chats")
+                            Text("Type a message...")
                             .font(Theme.font.medium(size: Theme.fontSize.md))
                             .foregroundStyle(Theme.colors.secondaryText)
                     )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .contentShape(Rectangle())
-                    .focused($isFocused)
+                    .focused($focused)
                     .font(Theme.font.medium(size: Theme.fontSize.md))
-                    .padding(.trailing, Theme.spacing.md)
+                    .padding(.leading, Theme.spacing.lg)
                     .foregroundStyle(Theme.colors.text)
                     .textFieldStyle(.plain)
                     .tint(Theme.colors.primary)
-                    .onChange(of: isFocused) { _, newValue in
-                        if newValue { store.setSearch(true) }
+                    
+                    Button {
+                        let newMessage = MessageItem(
+                            id: (store.data.first?.id ?? 0) + 1,
+                            content: self.sex,
+                            seen: "Прочитано",
+                            date: "12:00",
+                            me: Bool.random(),
+                            nonce: UUID().uuidString,
+                            chatId: 1,
+                            authorId: "user_1",
+                            groupEnd: true,
+                            groupStart: true
+                        )
+                        withAnimation(.quickSpring) {
+                            store.data.insert(newMessage, at: 0)
+                        }
+                    } label: {
+                        IconView(name: "waveform_icon", size: 26, color: Theme.colors.secondaryText)
                     }
+                    .buttonStyle(.plain)
+                    .frame(width: 44, height: 44)
                 }
-                .padding(.leading, Theme.spacing.md)
+                .onTapGesture {
+                    self.focused = true
+                }
                 .frame(maxWidth: .infinity)
-                .frame(height: 48)
+                .frame(height: 44)
                 .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
                 .contentShape(Rectangle())
-                .onTapGesture {
-                    isFocused = true
-                }
-                
-                Button {
-                    if (store.search) {
-                        isFocused = false
-                        store.clearSearch()
-                    } else {
-                        bottomSheetManager.present {
-                           NewMessageView()
-                                .bindBottomSheetScrollOffset(to: bottomSheetManager)
-                        }
-                    }
-                } label: {
-                    IconView(name: "plus_icon", size: 28, color: Theme.colors.text)
-                        .rotationEffect(.degrees(store.search ? 45 : 0))
-                }
-                .buttonStyle(.plain)
-                .frame(width: 48, height: 48)
-                .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
             }
             .frame(maxWidth: .infinity)
             .padding(.horizontal, keyboardHeight > 0 ? Theme.spacing.lg : Theme.spacing.xxxl)
             .padding(.top, Theme.spacing.md)
             .padding(.bottom, keyboardHeight > 0 ? Theme.spacing.lg : Theme.spacing.xxxl)
-            .animation(.quickSpring, value: store.search)
             .background(alignment: .top) {
                 ZStack {
                     LinearGradient(
