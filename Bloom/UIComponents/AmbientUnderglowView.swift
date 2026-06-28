@@ -19,28 +19,18 @@ struct AmbientUnderglowView: View {
             let frameSize = geometry.size
             
             TimelineView(.animation) { timeline in
-                let elapsed = timeline.date.timeIntervalSince(startDate)
+                let elapsed = Float(timeline.date.timeIntervalSince(startDate))
                 
-                autoreleasepool {
-                    let sizeArg = Shader.Argument.float2(frameSize)
-                    let timeArg = Shader.Argument.float(Float(elapsed))
-                    let progressArg = Shader.Argument.float(Float(animationProgress))
-                    let colorArg = Shader.Argument.color(tintColor)
-                    let partColorArg = Shader.Argument.color(particleColor)
-                    
-                    let underglowShader = ShaderLibrary.ambientUnderglow(
-                        sizeArg,
-                        timeArg,
-                        progressArg,
-                        colorArg,
-                        partColorArg
-                    )
-                    return Rectangle()
-                        .fill(Color.black)
-                        .colorEffect(
-                            underglowShader
+                Color.black
+                    .colorEffect(
+                        ShaderLibrary.ambientUnderglow(
+                            .float2(frameSize),
+                            .float(elapsed),
+                            .float(Float(animationProgress)),
+                            .color(tintColor),
+                            .color(particleColor)
                         )
-                }
+                    )
             }
         }
     }

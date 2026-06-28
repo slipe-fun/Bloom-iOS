@@ -60,7 +60,9 @@ struct EdgeSwipeGestureView: UIViewRepresentable {
                         parent.dragOffset = width
                     }
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.38) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.38))
+                        
                         var transaction = Transaction(animation: .none)
                         transaction.disablesAnimations = true
                         withTransaction(transaction) {
@@ -74,7 +76,9 @@ struct EdgeSwipeGestureView: UIViewRepresentable {
                         parent.dragOffset = 0
                     }
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.35))
+                        
                         self.parent.isSwiping = false
                     }
                 }
@@ -96,12 +100,20 @@ class HapticManager {
     
     private let selectionGenerator = UISelectionFeedbackGenerator()
     
+    private var hapticTask: Task<Void, Never>?
+    
     private init() {
         selectionGenerator.prepare()
     }
     
     func triggerSettingsOpeningHaptic() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+        hapticTask?.cancel()
+        
+        hapticTask = Task {
+            try? await Task.sleep(for: .seconds(0.08))
+            
+            guard !Task.isCancelled else { return }
+            
             self.selectionGenerator.selectionChanged()
             self.selectionGenerator.prepare()
         }

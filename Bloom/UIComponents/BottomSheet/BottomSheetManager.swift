@@ -26,7 +26,7 @@ final class BottomSheetManager {
         self.content = AnyView(content())
         self.scrollOffset = 0
         
-        DispatchQueue.main.async {
+        Task { @MainActor in
             withAnimation(.normalSpring) {
                 self.state = .collapsed
             }
@@ -38,7 +38,9 @@ final class BottomSheetManager {
             self.state = .hidden
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.35))
+            
             if self.state == .hidden {
                 self.content = nil
             }

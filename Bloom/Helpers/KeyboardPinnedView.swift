@@ -87,7 +87,7 @@ final class KeyboardPinnedViewController<Content: View>: UIViewController {
         if currentKeyboardHeight != lastKeyboardHeight || currentFooterHeight != lastFooterHeight {
             lastKeyboardHeight = currentKeyboardHeight
             lastFooterHeight = currentFooterHeight
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 self.keyboardHeight = currentKeyboardHeight
                 self.footerHeight = currentFooterHeight
             }
