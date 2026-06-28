@@ -45,7 +45,7 @@ struct ChatsScreen: View {
                     }
                 }
             )
-            .offset(y: store.search ? -60 : 0)
+            .offset(y: store.search ? -80 : 0)
             .opacity(store.search ? 0 : 1)
             
             if (store.search) {

@@ -59,6 +59,6 @@ struct ChatsSearchView: View {
                 }
         }
         .background(Theme.colors.background)
-        .transition(.opacity.combined(with: .offset(y: 60)))
+        .transition(.opacity.combined(with: .offset(y: 80)))
     }
 }
