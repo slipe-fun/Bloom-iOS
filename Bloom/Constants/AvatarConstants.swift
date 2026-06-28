@@ -9,15 +9,13 @@ import SwiftUI
 
 struct AvatarConstants {
     static let avatarColors: [[Color]] = [
-        [Color(uiColor: UIColor(hex: "#FF1A1A")), Color(uiColor: UIColor(hex: "#FF4D4D"))],
-        [Color(uiColor: UIColor(hex: "#FF8C1A")), Color(uiColor: UIColor(hex: "#FFA64D"))],
-        [Color(uiColor: UIColor(hex: "#E5CA00")), Color(uiColor: UIColor(hex: "#FFE41A"))],
-        [Color(uiColor: UIColor(hex: "#8CD147")), Color(uiColor: UIColor(hex: "#A6DB70"))],
-        [Color(uiColor: UIColor(hex: "#4CCDA8")), Color(uiColor: UIColor(hex: "#74D8BB"))],
-        [Color(uiColor: UIColor(hex: "#00CEE5")), Color(uiColor: UIColor(hex: "#1AE8FF"))],
-        [Color(uiColor: UIColor(hex: "#1A37FF")), Color(uiColor: UIColor(hex: "#4D64FF"))],
-        [Color(uiColor: UIColor(hex: "#881AFF")), Color(uiColor: UIColor(hex: "#A34DFF"))],
-        [Color(uiColor: UIColor(hex: "#FF1A8C")), Color(uiColor: UIColor(hex: "#FF4DA6"))],
-        [Color(uiColor: UIColor(hex: "#404040")), Color(uiColor: UIColor(hex: "#4D4D4D"))]
+        [Color(uiColor: UIColor(hex: "#F64DFF")), Color(uiColor: UIColor(hex: "#F980FF"))],
+        [Color(uiColor: UIColor(hex: "#404040")), Color(uiColor: UIColor(hex: "#595959"))],
+        [Color(uiColor: UIColor(hex: "#4DA6FF")), Color(uiColor: UIColor(hex: "#80BFFF"))],
+        [Color(uiColor: UIColor(hex: "#B74DFF")), Color(uiColor: UIColor(hex: "#CC80FF"))],
+        [Color(uiColor: UIColor(hex: "#FF784D")), Color(uiColor: UIColor(hex: "#FF9E80"))],
+        [Color(uiColor: UIColor(hex: "#6DDF6D")), Color(uiColor: UIColor(hex: "#96E896"))],
+        [Color(uiColor: UIColor(hex: "#4D76FF")), Color(uiColor: UIColor(hex: "#809DFF"))],
+        [Color(uiColor: UIColor(hex: "#FF4D4F")), Color(uiColor: UIColor(hex: "#FF8081"))]
     ]
 }
