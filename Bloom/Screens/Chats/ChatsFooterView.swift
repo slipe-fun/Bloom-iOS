@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ChatsFooterView: View {
     @Environment(SearchStore.self) private var store
+    @Environment(BottomSheetManager.self) private var bottomSheetManager
     @FocusState private var isFocused: Bool
     
     let keyboardHeight: CGFloat
@@ -52,8 +53,26 @@ struct ChatsFooterView: View {
                 }
                 
                 Button {
-                    isFocused = false
-                    store.clearSearch()
+                    if (store.search) {
+                        isFocused = false
+                        store.clearSearch()
+                    } else {
+                        bottomSheetManager.present {
+                                            ScrollView {
+                                                LazyVStack(spacing: 12) {
+                                                    ForEach(1...30, id: \.self) { index in
+                                                        Text("Элемент списка №\(index)")
+                                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                                            .padding()
+                                                            .background(Color(.secondarySystemBackground))
+                                                            .cornerRadius(8)
+                                                    }
+                                                }
+                                                .padding()
+                                            }
+                                            .bindBottomSheetScrollOffset(to: bottomSheetManager)
+                                        }
+                    }
                 } label: {
                     IconView(name: "plus_icon", size: 30, color: Theme.colors.text)
                         .rotationEffect(.degrees(store.search ? 45 : 0))
