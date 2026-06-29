@@ -11,7 +11,6 @@ import Observation
 struct MessageItem: Identifiable, Hashable, Sendable {
     let id: Int
     let content: String
-    let seen: String?
     let date: String
     let me: Bool
     let nonce: String
@@ -30,7 +29,7 @@ struct IndexedMessageItem: Identifiable, Hashable, Sendable {
 
 @Observable
 @MainActor
-final class MessageListStore {
+final class MessagesListStore {
     var data: [MessageItem] = [] {
         didSet {
             self.indexedItems = data.enumerated().map {
@@ -40,7 +39,5 @@ final class MessageListStore {
     }
     
     private(set) var indexedItems: [IndexedMessageItem] = []
-    var contentInsetTop: CGFloat = 0
-    var contentInsetBottom: CGFloat = 0
     var lastSeenId: Int = 0
 }

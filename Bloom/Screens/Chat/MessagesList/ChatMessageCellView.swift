@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct MessageCellView: View, Equatable {
+struct ChatMessageCellView: View, Equatable {
     let item: MessageItem
     let isSeen: Bool
 
-    static func == (lhs: MessageCellView, rhs: MessageCellView) -> Bool {
+    static func == (lhs: ChatMessageCellView, rhs: ChatMessageCellView) -> Bool {
         lhs.item.id == rhs.item.id &&
         lhs.item.content == rhs.item.content &&
         lhs.isSeen == rhs.isSeen
@@ -58,7 +58,7 @@ struct MessageCellView: View, Equatable {
                 messageBubble
                 
                 if item.me && isSeen {
-                    Text(item.seen ?? "Read")
+                    Text("Read")
                         .font(Theme.font.medium(size: Theme.fontSize.sm))
                         .foregroundColor(Theme.colors.secondaryText)
                         .transition(.opacity)
@@ -70,6 +70,6 @@ struct MessageCellView: View, Equatable {
             }
         }
         .contentShape(.rect)
-        .animation(.springy, value: isSeen)
+        .animation(.quickSpring, value: isSeen)
     }
 }

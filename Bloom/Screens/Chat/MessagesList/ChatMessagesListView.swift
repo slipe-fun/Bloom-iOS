@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct MessagesListView: View {
-    let store: MessageListStore
+struct ChatMessagesListView: View {
+    @Environment(MessagesListStore.self) private var store
+    
     let bottomInset: CGFloat
     let keyboardHeight: CGFloat
     
@@ -16,16 +17,15 @@ struct MessagesListView: View {
     
     var body: some View {
         ZStack {
-            
             ScrollView {
                 ScrollViewReader { proxy in
-                    LazyVStack(spacing: 4) {
+                    LazyVStack(spacing: Theme.spacing.sm) {
                         Color.clear
                             .frame(height: bottomInset + keyboardHeight)
                         .id(bottomSpacerId)
 
                         ForEach(store.data) { item in
-                            MessageCellView(
+                            ChatMessageCellView(
                                 item: item,
                                 isSeen: item.id <= store.lastSeenId,
                             )
@@ -39,8 +39,8 @@ struct MessagesListView: View {
                             ))
                         }
                     }
+                    .animation(.normalSpring, value: keyboardHeight)
                     .scrollTargetLayout()
-                    .padding(.bottom, store.contentInsetTop)
                     .onChange(of: store.indexedItems.count) { _, _ in
                         withAnimation(.quickSpring) {
                             proxy.scrollTo(bottomSpacerId, anchor: .top)

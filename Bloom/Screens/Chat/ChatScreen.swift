@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ChatScreen: View {
     @Environment(AppRouter.self) private var router
-    @State private var store = MessageListStore()
+    @State private var store = MessagesListStore()
     @State private var keyboardHeight: CGFloat = 0
     @State private var footerHeight: CGFloat = 0
     
@@ -17,11 +17,12 @@ struct ChatScreen: View {
     
     var body: some View {
         ZStack {
-            MessagesListView(store: store, bottomInset:footerHeight, keyboardHeight: keyboardHeight)
+            ChatMessagesListView(bottomInset:footerHeight, keyboardHeight: keyboardHeight)
             KeyboardPinnedView(keyboardHeight: $keyboardHeight, footerHeight: $footerHeight) {
-                ChatFooterView(keyboardHeight: keyboardHeight, footerHeight: footerHeight, store: store)
+                ChatFooterView(keyboardHeight: keyboardHeight, footerHeight: footerHeight)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .environment(store)
     }
 }
