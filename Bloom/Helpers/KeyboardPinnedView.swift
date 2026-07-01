@@ -130,13 +130,8 @@ final class KeyboardPinnedViewController<Content: View>: UIViewController {
         if heightsChanged {
             lastKeyboardHeight = currentKeyboardHeight
             lastFooterHeight = currentFooterHeight
-            
-            var transaction = Transaction()
-            transaction.disablesAnimations = true
-            withTransaction(transaction) {
-                self.keyboardHeight = currentKeyboardHeight
-                self.footerHeight = currentFooterHeight
-            }
+            self.keyboardHeight = currentKeyboardHeight
+            self.footerHeight = currentFooterHeight
         }
         
         if visibilityChanged {

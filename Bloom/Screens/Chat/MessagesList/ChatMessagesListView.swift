@@ -51,7 +51,7 @@ struct ChatMessagesListView: View {
             .scaleEffect(y: -1)
             .simultaneousGesture(
                 DragGesture().onChanged { value in
-                    if abs(value.translation.height) > 10 {
+                    if abs(value.translation.height) > 0.01 {
                         UIApplication.shared.sendAction(
                             #selector(UIResponder.resignFirstResponder),
                             to: nil,
