@@ -25,7 +25,6 @@ struct KeyboardPinnedView<Content: View>: UIViewControllerRepresentable {
     
     func updateUIViewController(_ uiViewController: KeyboardPinnedViewController<Content>, context: Context) {
         uiViewController.hostingController.rootView = content
-        uiViewController.hostingController.view.invalidateIntrinsicContentSize()
     }
 }
 
@@ -36,8 +35,18 @@ final class TouchThroughView: UIView {
     }
 }
 
+final class MeasuringHostingController<Content: View>: UIHostingController<Content> {
+    var onLayoutSubviews: (() -> Void)?
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        view.invalidateIntrinsicContentSize()
+        onLayoutSubviews?()
+    }
+}
+
 final class KeyboardPinnedViewController<Content: View>: UIViewController {
-    let hostingController: UIHostingController<Content>
+    let hostingController: MeasuringHostingController<Content>
     @Binding var keyboardHeight: CGFloat
     @Binding var footerHeight: CGFloat
     
@@ -45,7 +54,7 @@ final class KeyboardPinnedViewController<Content: View>: UIViewController {
     private var lastFooterHeight: CGFloat = -1
     
     init(rootView: Content, keyboardHeight: Binding<CGFloat>, footerHeight: Binding<CGFloat>) {
-        self.hostingController = UIHostingController(rootView: rootView)
+        self.hostingController = MeasuringHostingController(rootView: rootView)
         self._keyboardHeight = keyboardHeight
         self._footerHeight = footerHeight
         super.init(nibName: nil, bundle: nil)
@@ -76,21 +85,31 @@ final class KeyboardPinnedViewController<Content: View>: UIViewController {
             hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             hostingController.view.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor)
         ])
+        
+        hostingController.onLayoutSubviews = { [weak self] in
+            self?.updateMeasurements()
+        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        updateMeasurements()
+    }
+    
+    private func updateMeasurements() {
         let minY = view.keyboardLayoutGuide.layoutFrame.minY
         let currentKeyboardHeight = (minY > 0 && minY < view.bounds.height) ? (view.bounds.height - minY) : 0
         let currentFooterHeight = hostingController.view.bounds.height
         
-        if currentKeyboardHeight != lastKeyboardHeight || currentFooterHeight != lastFooterHeight {
-            lastKeyboardHeight = currentKeyboardHeight
-            lastFooterHeight = currentFooterHeight
-            Task { @MainActor in
-                self.keyboardHeight = currentKeyboardHeight
-                self.footerHeight = currentFooterHeight
-            }
+        guard currentKeyboardHeight != lastKeyboardHeight || currentFooterHeight != lastFooterHeight else { return }
+        lastKeyboardHeight = currentKeyboardHeight
+        lastFooterHeight = currentFooterHeight
+        
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            self.keyboardHeight = currentKeyboardHeight
+            self.footerHeight = currentFooterHeight
         }
     }
 }

@@ -59,23 +59,23 @@ struct ChatFooterView: View {
                 .contentShape(Rectangle())
             }
             .frame(maxWidth: .infinity)
-            .padding(.horizontal, keyboardHeight > 0 ? Theme.spacing.lg : Theme.spacing.xxxl)
-            .padding(.top, Theme.spacing.md)
-            .padding(.bottom, keyboardHeight > 0 ? Theme.spacing.lg : Theme.spacing.xxxl)
-            .background(alignment: .top) {
-                ZStack {
-                    LinearGradient(
-                        colors: [
-                            Theme.colors.background.opacity(0.8),
-                            Theme.colors.background.opacity(0.45),
-                            Theme.colors.background.opacity(0.0)
-                        ],
-                        startPoint: .bottom,
-                        endPoint: .top
-                    )
-                    .ignoresSafeArea(edges: .bottom)
-                    .frame(height: keyboardHeight > 0 ? 0 : footerHeight)
-                }
+        }
+        .padding(.horizontal, focused ? Theme.spacing.lg : Theme.spacing.xxxl)
+        .padding(.top, Theme.spacing.md)
+        .padding(.bottom, focused ? Theme.spacing.lg : Theme.spacing.xxxl)
+        .background(alignment: .top) {
+            ZStack {
+                LinearGradient(
+                    colors: [
+                        Theme.colors.background.opacity(0.8),
+                        Theme.colors.background.opacity(0.45),
+                        Theme.colors.background.opacity(0.0)
+                    ],
+                    startPoint: .bottom,
+                    endPoint: .top
+                )
+                .ignoresSafeArea(edges: .bottom)
+                .frame(height: focused ? 0 : footerHeight)
             }
         }
     }
