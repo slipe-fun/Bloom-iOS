@@ -14,6 +14,7 @@ struct ChatFooterView: View {
     
     let keyboardHeight: CGFloat
     let footerHeight: CGFloat
+    let isKeyboardVisible: Bool
     
     var body: some View {
         GlassEffectContainer {
@@ -60,9 +61,9 @@ struct ChatFooterView: View {
             }
             .frame(maxWidth: .infinity)
         }
-        .padding(.horizontal, focused ? Theme.spacing.lg : Theme.spacing.xxxl)
+        .padding(.horizontal, isKeyboardVisible ? Theme.spacing.lg : Theme.spacing.xxxl)
         .padding(.top, Theme.spacing.md)
-        .padding(.bottom, focused ? Theme.spacing.lg : Theme.spacing.xxxl)
+        .padding(.bottom, isKeyboardVisible ? Theme.spacing.lg : Theme.spacing.xxxl)
         .background(alignment: .top) {
             ZStack {
                 LinearGradient(
@@ -75,7 +76,7 @@ struct ChatFooterView: View {
                     endPoint: .top
                 )
                 .ignoresSafeArea(edges: .bottom)
-                .frame(height: focused ? 0 : footerHeight)
+                .frame(height: isKeyboardVisible ? 0 : footerHeight)
             }
         }
     }

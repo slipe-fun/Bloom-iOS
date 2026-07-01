@@ -11,6 +11,7 @@ struct ChatsScreen: View {
     @State private var scrollY: CGFloat = 0
     @State private var keyboardHeight: CGFloat = 0
     @State private var footerHeight: CGFloat = 0
+    @State private var isKeyboardVisible: Bool = false
     @State private var store = SearchStore()
     
     var body: some View {
@@ -52,8 +53,8 @@ struct ChatsScreen: View {
                 ChatsSearchView(footerHeight: footerHeight)
             }
             
-            KeyboardPinnedView(keyboardHeight: $keyboardHeight, footerHeight: $footerHeight) {
-                ChatsFooterView(keyboardHeight: keyboardHeight, footerHeight: footerHeight)
+            KeyboardPinnedView(keyboardHeight: $keyboardHeight, footerHeight: $footerHeight, isKeyboardVisible: $isKeyboardVisible) {
+                ChatsFooterView(keyboardHeight: keyboardHeight, footerHeight: footerHeight, isKeyboardVisible: isKeyboardVisible)
             }
         }
         .environment(store)

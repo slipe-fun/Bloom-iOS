@@ -1,5 +1,5 @@
 //
-//  KeyboardHeightReader.swift
+//  KeyboardPinnedView.swift
 //  Bloom
 //
 //  Created by Аскольд on 24.06.2026.
@@ -11,16 +11,28 @@ import UIKit
 struct KeyboardPinnedView<Content: View>: UIViewControllerRepresentable {
     @Binding var keyboardHeight: CGFloat
     @Binding var footerHeight: CGFloat
+    @Binding var isKeyboardVisible: Bool
     let content: Content
     
-    init(keyboardHeight: Binding<CGFloat>, footerHeight: Binding<CGFloat>, @ViewBuilder content: () -> Content) {
+    init(
+        keyboardHeight: Binding<CGFloat>,
+        footerHeight: Binding<CGFloat>,
+        isKeyboardVisible: Binding<Bool>,
+        @ViewBuilder content: () -> Content
+    ) {
         self._keyboardHeight = keyboardHeight
         self._footerHeight = footerHeight
+        self._isKeyboardVisible = isKeyboardVisible
         self.content = content()
     }
     
     func makeUIViewController(context: Context) -> KeyboardPinnedViewController<Content> {
-        KeyboardPinnedViewController(rootView: content, keyboardHeight: $keyboardHeight, footerHeight: $footerHeight)
+        KeyboardPinnedViewController(
+            rootView: content,
+            keyboardHeight: $keyboardHeight,
+            footerHeight: $footerHeight,
+            isKeyboardVisible: $isKeyboardVisible
+        )
     }
     
     func updateUIViewController(_ uiViewController: KeyboardPinnedViewController<Content>, context: Context) {
@@ -49,14 +61,22 @@ final class KeyboardPinnedViewController<Content: View>: UIViewController {
     let hostingController: MeasuringHostingController<Content>
     @Binding var keyboardHeight: CGFloat
     @Binding var footerHeight: CGFloat
+    @Binding var isKeyboardVisible: Bool
     
     private var lastKeyboardHeight: CGFloat = -1
     private var lastFooterHeight: CGFloat = -1
+    private var lastIsKeyboardVisible: Bool? = nil
     
-    init(rootView: Content, keyboardHeight: Binding<CGFloat>, footerHeight: Binding<CGFloat>) {
+    init(
+        rootView: Content,
+        keyboardHeight: Binding<CGFloat>,
+        footerHeight: Binding<CGFloat>,
+        isKeyboardVisible: Binding<Bool>
+    ) {
         self.hostingController = MeasuringHostingController(rootView: rootView)
         self._keyboardHeight = keyboardHeight
         self._footerHeight = footerHeight
+        self._isKeyboardVisible = isKeyboardVisible
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -100,16 +120,36 @@ final class KeyboardPinnedViewController<Content: View>: UIViewController {
         let minY = view.keyboardLayoutGuide.layoutFrame.minY
         let currentKeyboardHeight = (minY > 0 && minY < view.bounds.height) ? (view.bounds.height - minY) : 0
         let currentFooterHeight = hostingController.view.bounds.height
+        let currentIsKeyboardVisible = currentKeyboardHeight > 0
         
-        guard currentKeyboardHeight != lastKeyboardHeight || currentFooterHeight != lastFooterHeight else { return }
-        lastKeyboardHeight = currentKeyboardHeight
-        lastFooterHeight = currentFooterHeight
+        let heightsChanged = currentKeyboardHeight != lastKeyboardHeight || currentFooterHeight != lastFooterHeight
+        let visibilityChanged = currentIsKeyboardVisible != lastIsKeyboardVisible
         
-        var transaction = Transaction()
-        transaction.disablesAnimations = true
-        withTransaction(transaction) {
-            self.keyboardHeight = currentKeyboardHeight
-            self.footerHeight = currentFooterHeight
+        guard heightsChanged || visibilityChanged else { return }
+        
+        if heightsChanged {
+            lastKeyboardHeight = currentKeyboardHeight
+            lastFooterHeight = currentFooterHeight
+            
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                self.keyboardHeight = currentKeyboardHeight
+                self.footerHeight = currentFooterHeight
+            }
+        }
+        
+        if visibilityChanged {
+            lastIsKeyboardVisible = currentIsKeyboardVisible
+            
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                var transaction = Transaction()
+                transaction.disablesAnimations = true
+                withTransaction(transaction) {
+                    self.isKeyboardVisible = currentIsKeyboardVisible
+                }
+            }
         }
     }
 }

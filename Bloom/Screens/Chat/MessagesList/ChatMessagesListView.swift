@@ -30,7 +30,7 @@ struct ChatMessagesListView: View {
                                 isSeen: item.id <= store.lastSeenId,
                             )
                             .equatable()
-                            .padding(.horizontal, 16)
+                            .padding(.horizontal, Theme.spacing.lg)
                             .scaleEffect(y: -1)
                             .id(item.id)
                             .transition(.asymmetric(
@@ -39,7 +39,6 @@ struct ChatMessagesListView: View {
                             ))
                         }
                     }
-                    .animation(.normalSpring, value: keyboardHeight)
                     .scrollTargetLayout()
                     .onChange(of: store.indexedItems.count) { _, _ in
                         withAnimation(.quickSpring) {

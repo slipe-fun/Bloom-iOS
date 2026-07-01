@@ -14,6 +14,7 @@ struct ChatsFooterView: View {
     
     let keyboardHeight: CGFloat
     let footerHeight: CGFloat
+    let isKeyboardVisible: Bool
     
     var body: some View {
         GlassEffectContainer {
@@ -71,9 +72,9 @@ struct ChatsFooterView: View {
                 .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
             }
             .frame(maxWidth: .infinity)
-            .padding(.horizontal, keyboardHeight > 0 ? Theme.spacing.lg : Theme.spacing.xxxl)
+            .padding(.horizontal, isKeyboardVisible ? Theme.spacing.lg : Theme.spacing.xxxl)
             .padding(.top, Theme.spacing.md)
-            .padding(.bottom, keyboardHeight > 0 ? Theme.spacing.lg : Theme.spacing.xxxl)
+            .padding(.bottom, isKeyboardVisible ? Theme.spacing.lg : Theme.spacing.xxxl)
             .animation(.quickSpring, value: store.search)
             .background(alignment: .top) {
                 ZStack {
@@ -87,7 +88,7 @@ struct ChatsFooterView: View {
                         endPoint: .top
                     )
                     .ignoresSafeArea(edges: .bottom)
-                    .frame(height: keyboardHeight > 0 ? 0 : footerHeight)
+                    .frame(height: isKeyboardVisible ? 0 : footerHeight)
                 }
             }
         }
