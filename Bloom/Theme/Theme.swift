@@ -83,7 +83,7 @@ struct Theme {
         static let grayBackground = Color.dynamic(lightHex: "f1f1f4", darkHex: "000000ff")
         static let secondaryText = Color.dynamic(lightHex: "0000006b", darkHex: "ffffff6b")
         static let switcher = Color.dynamic(lightHex: "d7d7db", darkHex: "595959")
-        static let pressable = Color.dynamic(lightHex: "a6a6a6", darkHex: "333333") 
+        static let pressable = Color.dynamic(lightHex: "d2d0d8", darkHex: "333333") 
         static let sectionForeground = Color.dynamic(lightHex: "ffffff", darkHex: "1b1b1d")
         static let foreground = Color.dynamic(lightHex: "f1f1f4", darkHex: "1b1b1d")
         static let foregroundTransparent = Color.dynamic(lightHex: "0000001c", darkHex: "ffffff1c")
