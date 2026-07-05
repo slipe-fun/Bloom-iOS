@@ -30,6 +30,9 @@ struct ChatFooterSendView: View {
                     groupStart: true
                 )
                 withAnimation(.quickSpring) {
+                    store.lastSeenId = store.data.first?.id ?? 0
+                }
+                withAnimation(.quickSpring) {
                     store.data.insert(newMessage, at: 0)
                 }
                 self.text = ""

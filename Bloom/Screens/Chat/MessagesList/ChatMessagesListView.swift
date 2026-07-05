@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ChatMessagesListView: View {
     @Environment(MessagesListStore.self) private var store
+    @Environment(\.customSafeArea.self) private var safeArea
     
     let bottomInset: CGFloat
     let keyboardHeight: CGFloat
@@ -19,7 +20,7 @@ struct ChatMessagesListView: View {
         ZStack {
             ScrollView {
                 ScrollViewReader { proxy in
-                    LazyVStack(spacing: Theme.spacing.sm) {
+                    LazyVStack(spacing: 0) {
                         Color.clear
                             .frame(height: bottomInset + keyboardHeight)
                         .id(bottomSpacerId)
@@ -46,6 +47,10 @@ struct ChatMessagesListView: View {
                         }
                     }
                 }
+            }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                ChatHeaderView()
+                    .scaleEffect(y: -1)
             }
             .scrollIndicators(.hidden)
             .scaleEffect(y: -1)

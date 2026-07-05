@@ -19,6 +19,7 @@ struct ChatScreen: View {
     var body: some View {
         ZStack {
             ChatMessagesListView(bottomInset:footerHeight, keyboardHeight: keyboardHeight)
+            
             KeyboardPinnedView(keyboardHeight: $keyboardHeight, footerHeight: $footerHeight, isKeyboardVisible: $isKeyboardVisible) {
                 ChatFooterView(keyboardHeight: keyboardHeight, footerHeight: footerHeight, isKeyboardVisible: isKeyboardVisible)
             }

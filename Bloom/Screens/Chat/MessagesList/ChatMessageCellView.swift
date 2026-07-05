@@ -28,7 +28,7 @@ struct ChatMessageCellView: View, Equatable {
 
     private var messageBubble: some View {
         let invisibleSpaceForTime = Text("\u{00A0}\u{00A0}" + item.date)
-            .font(Theme.font.footnote)
+            .font(Theme.font.messageTime)
             .foregroundColor(.clear)
 
         return Text("\(item.content)\(invisibleSpaceForTime)")
@@ -40,7 +40,7 @@ struct ChatMessageCellView: View, Equatable {
             .background(backgroundColor, in: .rect(cornerRadius: 22, style: .continuous))
             .overlay(
                 Text(item.date)
-                    .font(Theme.font.footnote)
+                    .font(Theme.font.messageTime)
                     .foregroundColor(textColor.opacity(0.5))
                     .padding(.trailing, 13)
                     .padding(.bottom, 9),
@@ -54,7 +54,7 @@ struct ChatMessageCellView: View, Equatable {
                 Spacer(minLength: 55)
             }
 
-            VStack(alignment: item.me ? .trailing : .leading, spacing: 8) {
+            VStack(alignment: item.me ? .trailing : .leading, spacing: Theme.spacing.xs + 2) {
                 messageBubble
                 
                 if item.me && isSeen {
@@ -64,6 +64,7 @@ struct ChatMessageCellView: View, Equatable {
                         .transition(.opacity)
                 }
             }
+            .padding(.top, Theme.spacing.lg)
 
             if !item.me {
                 Spacer(minLength: 55)

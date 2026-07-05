@@ -25,17 +25,6 @@ struct Theme {
         static let md: CGFloat = 6
     }
     
-    struct fontSize {
-        static let xs: CGFloat = 12
-        static let sm: CGFloat = 14
-        static let md: CGFloat = 16
-        static let lg: CGFloat = 18
-        static let xl: CGFloat = 20
-        static let xxl: CGFloat = 24
-        static let xxxl: CGFloat = 32
-        static let superSize: CGFloat = 64
-    }
-    
     struct radius {
         static let xxs: CGFloat = 8
         static let xs: CGFloat = 12
@@ -84,6 +73,8 @@ struct Theme {
         
 
         static let footnote = fonts.medium(size: 14)
+        
+        static let messageTime = fonts.regular(size: 12)
     }
     
     struct colors {
@@ -98,7 +89,7 @@ struct Theme {
         static let foregroundTransparent = Color.dynamic(lightHex: "0000001c", darkHex: "ffffff1c")
         static let indicator = Color.dynamic(lightHex: "0000001a", darkHex: "ffffff26")
         static let border = Color.dynamic(lightHex: "0000000d", darkHex: "ffffff17")
-        static let shadow = Color.dynamic(light: Color.black.opacity(0.06), dark: Color.clear)
+        static let shadow = Color.dynamic(light: Color.black.opacity(0.08), dark: Color.clear)
         
         static let white = Color(uiColor: UIColor(hex: "ffffff"))
         static let black = Color(uiColor: UIColor(hex: "000000"))
