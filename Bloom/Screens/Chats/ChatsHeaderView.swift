@@ -21,7 +21,7 @@ struct ChatsHeaderView: View {
                     IconView(name: "logo_icon", size: 30, color: Theme.colors.primary)
                         .rotationEffect(.degrees(max(0, -scrollY / 3)))
                     Text(title)
-                        .font(Theme.font.bold(size: Theme.fontSize.xxl))
+                        .font(Theme.font.title2)
                         .foregroundStyle(Theme.colors.text)
                 }
                 

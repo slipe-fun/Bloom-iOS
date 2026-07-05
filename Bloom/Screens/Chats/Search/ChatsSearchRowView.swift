@@ -25,10 +25,10 @@ struct ChatsSearchRowView: View {
                 AvatarView(size: .md, id: String(userId), name: String(userId))
                     .padding(.trailing, Theme.spacing.lg)
                     .padding(.vertical, Theme.spacing.md)
-                VStack(alignment: .leading, spacing: Theme.spacing.sm - 2) {
+                VStack(alignment: .leading, spacing: Theme.spacing.xs - 1) {
                     HStack(spacing: Theme.spacing.xs) {
                         Text("Test name")
-                            .font(Theme.font.semibold(size: Theme.fontSize.md))
+                            .font(Theme.font.headline)
                             .foregroundStyle(Theme.colors.text)
                         
                         Spacer()
@@ -37,7 +37,7 @@ struct ChatsSearchRowView: View {
                     }
                     
                     Text("@username")
-                        .font(Theme.font.medium(size: Theme.fontSize.sm))
+                        .font(Theme.font.subTitle)
                         .foregroundStyle(Theme.colors.secondaryText)
                 }
                 .padding(.top, Theme.spacing.md)

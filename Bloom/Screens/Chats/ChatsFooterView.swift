@@ -29,13 +29,13 @@ struct ChatsFooterView: View {
                         text: $bindableStore.searchValue,
                         prompt:
                             Text("Search chats")
-                            .font(Theme.font.medium(size: Theme.fontSize.md))
+                            .font(Theme.font.body)
                             .foregroundStyle(Theme.colors.secondaryText)
                     )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .contentShape(Rectangle())
                     .focused($isFocused)
-                    .font(Theme.font.medium(size: Theme.fontSize.md))
+                    .font(Theme.font.body)
                     .padding(.trailing, Theme.spacing.md)
                     .foregroundStyle(Theme.colors.text)
                     .textFieldStyle(.plain)

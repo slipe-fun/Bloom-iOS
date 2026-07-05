@@ -23,7 +23,7 @@ struct NewMessageHeaderView: View {
                 .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
                 
                 Text("New message")
-                    .font(Theme.font.semibold(size: Theme.fontSize.lg))
+                    .font(Theme.font.title4)
                     .foregroundStyle(Theme.colors.text)
                     .frame(maxWidth: .infinity)
             }

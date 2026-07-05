@@ -17,9 +17,10 @@ struct CustomBottomSheetContainerView<Content: View>: View {
     @State private var isDraggingSheet: Bool = false
     @State private var dragStartTranslation: CGFloat = 0
     
-    private var collapsedHeight: CGFloat = 400
-    private var sheetSpace: CGFloat = Theme.spacing.sm
-    private var expandedY: CGFloat { safeAreaInsets.top + Theme.spacing.xxxl }
+    private var collapsedHeight: CGFloat = 450
+    private var sheetSpace: CGFloat = 8
+    private var sheetTopRadius: CGFloat = 40
+    private var expandedY: CGFloat { safeAreaInsets.top + Theme.spacing.md }
     private var collapsedY: CGFloat { screenSize.height - collapsedHeight - sheetSpace }
     private var hiddenY: CGFloat { screenSize.height + Theme.spacing.xxxl }
     
@@ -56,7 +57,7 @@ struct CustomBottomSheetContainerView<Content: View>: View {
         let currentWidth = (screenSize.width - (sheetSpace * 2)) + ((sheetSpace * 2) * progress)
         let expandedHeight = screenSize.height - expandedY
         let currentHeight = collapsedHeight + ((expandedHeight - collapsedHeight) * progress)
-        let currentCornerRadius: CGFloat = safeAreaInsets.top - 4 - sheetSpace
+        let currentRadius: CGFloat = progress >= 0.999 ? 0 : safeAreaInsets.top - 4
         
         VStack(spacing: 0) {
             content
@@ -67,7 +68,16 @@ struct CustomBottomSheetContainerView<Content: View>: View {
             Theme.colors.sectionForeground
         )
         .scrollIndicators(.hidden)
-        .clipShape(RoundedRectangle(cornerRadius: currentCornerRadius))
+        .clipShape(
+            UnevenRoundedRectangle(
+                cornerRadii: .init(
+                    topLeading: sheetTopRadius,
+                    bottomLeading: currentRadius,
+                    bottomTrailing: currentRadius,
+                    topTrailing: sheetTopRadius
+                )
+            )
+        )
         .offset(y: currentY)
         .scrollDisabled(manager.state == .collapsed || isDraggingSheet)
         .gesture(panGesture)

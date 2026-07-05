@@ -58,11 +58,32 @@ struct Theme {
         static let md: CGFloat = 0.85
     }
     
-    struct font {
+    struct fonts {
         static func regular(size: CGFloat) -> Font { .custom("OpenRunde-Regular", size: size) }
         static func medium(size: CGFloat) -> Font { .custom("OpenRunde-Medium", size: size) }
         static func semibold(size: CGFloat) -> Font { .custom("OpenRunde-Semibold", size: size) }
         static func bold(size: CGFloat) -> Font { .custom("OpenRunde-Bold", size: size) }
+    }
+    
+    struct font {
+        static let superTitle = fonts.bold(size: 64)
+        static let largeTitle = fonts.bold(size: 34)
+
+        static let title2 = fonts.bold(size: 24)
+        static let title3 = fonts.semibold(size: 20)
+        static let title4 = fonts.semibold(size: 17)
+        
+        static let button = fonts.semibold(size: 18)
+        static let headBody = fonts.medium(size: 18)
+
+        static let headline = fonts.semibold(size: 16)
+
+        static let body = fonts.medium(size: 16)
+
+        static let subTitle = fonts.medium(size: 15)
+        
+
+        static let footnote = fonts.medium(size: 14)
     }
     
     struct colors {

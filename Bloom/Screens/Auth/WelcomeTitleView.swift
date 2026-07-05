@@ -20,7 +20,7 @@ struct WelcomeTitleView: View {
                 HStack(spacing: 0) {
                     ForEach(0..<items.count, id: \.self) { index in
                         Text(items[index])
-                            .font(Theme.font.bold(size: Theme.fontSize.superSize))
+                            .font(Theme.font.superTitle)
                             .foregroundStyle(Theme.colors.text)
                             .scaleEffect(hoveredIndex == nil ? 1.0 : (hoveredIndex == index ? 1.35 : 0.8))
                             .opacity(hoveredIndex == nil ? 1.0 : (hoveredIndex == index ? 1.0 : 0.5))
@@ -56,7 +56,7 @@ struct WelcomeTitleView: View {
                 .offset(y: isAppeared ? 0 : 20)
                 
                 Text("🔒 Secured as Bank, ☎️ Simple as SMS and 🏎 Fast as Formula 1")
-                    .font(Theme.font.medium(size: Theme.fontSize.lg))
+                    .font(Theme.font.headBody)
                     .foregroundColor(Theme.colors.secondaryText)
                     .multilineTextAlignment(.center)
                     .scaleEffect(hoveredIndex == nil ? 1.0 : 0.9)

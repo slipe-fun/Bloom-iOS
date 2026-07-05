@@ -17,7 +17,7 @@ struct ChatsSearchHeaderView: View {
     var body: some View {
         HStack {
             Text("Search")
-                .font(Theme.font.bold(size: Theme.fontSize.xxxl))
+                .font(Theme.font.largeTitle)
                 .foregroundStyle(Theme.colors.text)
                 
             Spacer()
@@ -37,7 +37,7 @@ struct ChatsSearchFloatHeaderView: View {
     var body: some View {
         ZStack(alignment: .center) {
             Text("Search")
-                .font(Theme.font.semibold(size: Theme.fontSize.lg))
+                .font(Theme.font.title4)
                 .foregroundStyle(Theme.colors.text)
         }
         .frame(maxWidth: .infinity)

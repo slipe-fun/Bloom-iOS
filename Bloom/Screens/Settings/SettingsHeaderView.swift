@@ -18,7 +18,7 @@ struct SettingsHeaderView: View {
         VStack(spacing: 0) {
             HStack(alignment: .center) {
                 Text(title)
-                    .font(Theme.font.semibold(size: Theme.fontSize.lg))
+                    .font(Theme.font.title4)
                     .foregroundStyle(Theme.colors.text)
             }
             .padding(.top, Theme.spacing.md + safeArea.top)

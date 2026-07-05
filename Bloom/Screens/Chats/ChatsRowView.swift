@@ -23,20 +23,20 @@ struct ChatsRowView: View {
                 VStack(alignment: .leading, spacing: Theme.spacing.sm - 2) {
                     HStack(spacing: Theme.spacing.xs) {
                         Text("Test name")
-                            .font(Theme.font.semibold(size: Theme.fontSize.md))
+                            .font(Theme.font.headline)
                             .foregroundStyle(Theme.colors.text)
                         
                         Spacer()
                         
                         Text("11:11")
-                            .font(Theme.font.medium(size: Theme.fontSize.sm))
+                            .font(Theme.font.footnote)
                             .foregroundStyle(Theme.colors.secondaryText)
                         
                         IconView(name: "chevron.right_icon", size: 16, color: Theme.colors.secondaryText)
                     }
                     
                     Text("Test last message")
-                        .font(Theme.font.medium(size: Theme.fontSize.sm))
+                        .font(Theme.font.subTitle)
                         .foregroundStyle(Theme.colors.secondaryText)
                         .multilineTextAlignment(.leading)
                         .lineLimit(2)

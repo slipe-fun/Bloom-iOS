@@ -33,7 +33,7 @@ struct WelcomeFooterView: View {
                             color: Theme.colors.white
                         )
                         Text("Continue with FaceID")
-                            .font(Theme.font.semibold(size: Theme.fontSize.lg))
+                            .font(Theme.font.button)
                             .foregroundStyle(Theme.colors.white)
                     }
                 }
@@ -43,10 +43,9 @@ struct WelcomeFooterView: View {
                 .glassEffect(.regular.interactive().tint(Theme.colors.primary))
                 
                 Text("By continuing you agree to the **[Terms of Service](custom-scheme//terms)**")
-                    .font(Theme.font.medium(size: Theme.fontSize.md))
+                    .font(Theme.font.body)
                     .foregroundStyle(Theme.colors.secondaryText)
                     .tint(Theme.colors.primary)
-                    .multilineTextAlignment(.center)
                     .environment(\.openURL, OpenURLAction { url in
                         if url.scheme == "custom-scheme" {
                             print("Terms opened!")
@@ -54,6 +53,8 @@ struct WelcomeFooterView: View {
                         }
                         return .systemAction
                     })
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
             }
             .padding(.horizontal, Theme.spacing.xxxl + 8)
             .padding(.bottom, Theme.spacing.xxxl + 8)

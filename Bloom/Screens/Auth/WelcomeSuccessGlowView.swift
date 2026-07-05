@@ -39,12 +39,12 @@ struct WelcomeSuccessGlowView: View {
                     
                     VStack(spacing: Theme.spacing.xs) {
                         Text("Welcome")
-                            .font(Theme.font.medium(size: Theme.fontSize.md))
+                            .font(Theme.font.body)
                             .lineSpacing(Theme.lineSpacing.md)
                             .foregroundStyle(Theme.colors.secondaryText)
                         
                         Text("Dikiy Dikiens!")
-                            .font(Theme.font.semibold(size: Theme.fontSize.xxl))
+                            .font(Theme.font.title2)
                             .lineSpacing(Theme.lineSpacing.md)
                             .foregroundStyle(Theme.colors.text)
                     }
@@ -53,7 +53,7 @@ struct WelcomeSuccessGlowView: View {
                         router.isAuthenticated = true
                     } label: {
                         Text("Continue to chats")
-                            .font(Theme.font.semibold(size: Theme.fontSize.lg))
+                            .font(Theme.font.button)
                             .foregroundStyle(Theme.colors.white)
                     }
                     .buttonStyle(.plain)

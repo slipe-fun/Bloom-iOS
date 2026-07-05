@@ -34,7 +34,7 @@ struct ChatFooterView: View {
                         text: $text,
                         prompt:
                             Text("Type a message...")
-                            .font(Theme.font.medium(size: Theme.fontSize.md))
+                            .font(Theme.font.body)
                             .foregroundStyle(Theme.colors.secondaryText),
                         axis: .vertical
                     )
@@ -42,7 +42,7 @@ struct ChatFooterView: View {
                     .contentShape(Rectangle())
                     .lineLimit(1...5)
                     .focused($focused)
-                    .font(Theme.font.medium(size: Theme.fontSize.md))
+                    .font(Theme.font.body)
                     .padding(.leading, Theme.spacing.lg)
                     .padding(.vertical, Theme.spacing.md)
                     .foregroundStyle(Theme.colors.text)

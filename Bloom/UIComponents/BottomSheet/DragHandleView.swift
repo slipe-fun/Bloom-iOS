@@ -9,13 +9,13 @@ import SwiftUI
 
 struct DragHandleView: View {
     var body: some View {
-        Capsule()
-            .fill(Color.secondary.opacity(0.35))
-            .frame(width: 38, height: 5)
-            .padding(.top, 10)
-            .padding(.bottom, 10)
-            .frame(maxWidth: .infinity)
-            .background(Color(.systemBackground))
-            .contentShape(Rectangle())
+        ZStack {
+            Capsule()
+                .fill(Theme.colors.secondaryText)
+                .frame(width: 32, height: 4)
+                .padding(.top, 6)
+                .padding(.bottom, 6)
+                .contentShape(Rectangle())
+        }
     }
 }
