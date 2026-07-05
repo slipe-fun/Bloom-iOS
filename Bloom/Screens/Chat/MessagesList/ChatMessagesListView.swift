@@ -10,9 +10,8 @@ import SwiftUI
 struct ChatMessagesListView: View {
     @Environment(MessagesListStore.self) private var store
     @Environment(\.customSafeArea.self) private var safeArea
+    @State private var keyboardHeight: CGFloat = 0
     
-    let bottomInset: CGFloat
-    let keyboardHeight: CGFloat
     
     private let bottomSpacerId = "BOTTOM_SPACER"
     
@@ -21,9 +20,9 @@ struct ChatMessagesListView: View {
             ScrollView {
                 ScrollViewReader { proxy in
                     LazyVStack(spacing: 0) {
-                        Color.clear
-                            .frame(height: bottomInset + keyboardHeight)
-                        .id(bottomSpacerId)
+//                        Color.red
+//                            .frame(height: keyboardHeight + 40)
+//                        .id(bottomSpacerId)
 
                         ForEach(store.data) { item in
                             ChatMessageCellView(
@@ -35,7 +34,7 @@ struct ChatMessagesListView: View {
                             .scaleEffect(y: -1)
                             .id(item.id)
                             .transition(.asymmetric(
-                                insertion: AnyTransition.opacity.combined(with: .blur(radius: 10)).combined(with: .offset(y: -bottomInset * 1.25)),
+                                insertion: AnyTransition.opacity.combined(with: .blur(radius: 10)).combined(with: .offset(y: -40 * 1.25)),
                                 removal: .opacity
                             ))
                         }
