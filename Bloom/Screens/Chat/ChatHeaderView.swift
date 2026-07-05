@@ -28,7 +28,7 @@ struct ChatHeaderView: View {
                     AvatarView(size: .md, image: "", id: "DSFSDF#@1223", name: "Dikiy Super")
                         .shadow(color: Theme.colors.shadow, radius: 24, x: 0, y: 0)
                     
-                    VStack(alignment: .leading, spacing: Theme.spacing.xxs) {
+                    VStack(alignment: .leading, spacing: Theme.spacing.xs - 1) {
                         Text("Dikiy Super")
                             .font(Theme.font.headline)
                             .foregroundStyle(Theme.colors.text)
