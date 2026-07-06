@@ -23,7 +23,7 @@ struct ChatMessagesListView: View {
                     LazyVStack(spacing: 0) {
                         Color.clear
                             .frame(height: bottomInset + keyboardHeight)
-                        .id(bottomSpacerId)
+                            .id(bottomSpacerId)
 
                         ForEach(store.data) { item in
                             ChatMessageCellView(
@@ -42,7 +42,7 @@ struct ChatMessagesListView: View {
                     }
                     .scrollTargetLayout()
                     .onChange(of: store.indexedItems.count) { _, _ in
-                        withAnimation(.quickSpring) {
+                        withAnimation(.normalSpring) {
                             proxy.scrollTo(bottomSpacerId, anchor: .top)
                         }
                     }

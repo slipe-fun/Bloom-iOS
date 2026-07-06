@@ -31,7 +31,7 @@ struct Theme {
         static let sm: CGFloat = 16
         static let md: CGFloat = 20
         static let lg: CGFloat = 24
-        static let xl: CGFloat = 26
+        static let xl: CGFloat = 28
         static let xxl: CGFloat = 32
         static let xxxl: CGFloat = 42
         static let full: CGFloat = 999
@@ -59,6 +59,7 @@ struct Theme {
         static let largeTitle = fonts.bold(size: 34)
 
         static let title2 = fonts.bold(size: 24)
+        static let title2Thinner = fonts.semibold(size: 24)
         static let title3 = fonts.semibold(size: 20)
         static let title4 = fonts.semibold(size: 17)
         

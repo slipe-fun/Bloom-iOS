@@ -75,7 +75,7 @@ struct ChatsFooterView: View {
             .padding(.horizontal, isKeyboardVisible ? Theme.spacing.lg : Theme.spacing.xxxl)
             .padding(.top, Theme.spacing.md)
             .padding(.bottom, isKeyboardVisible ? Theme.spacing.lg : Theme.spacing.xxxl)
-            .animation(.quickSpring, value: store.search)
+            .animation(.normalSpring, value: store.search)
             .background(alignment: .top) {
                 ZStack {
                     LinearGradient(

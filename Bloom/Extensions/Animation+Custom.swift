@@ -9,27 +9,18 @@ import SwiftUI
 
 extension Animation {
     static var quickSpring: Animation {
-        .interpolatingSpring(
-            mass: 0.2,
-            stiffness: 120.0,
-            damping: 12.0,
-            initialVelocity: 0.0
-        )
+        .smooth(duration: 0.2)
     }
+    
     static var normalSpring: Animation {
-        .interpolatingSpring(
-            mass: 0.8,
-            stiffness: 360.0,
-            damping: 36.0,
-            initialVelocity: 0.0
-        )
+        .smooth(duration: 0.3)
     }
+    
+    static var slowSpring: Animation {
+        .smooth(duration: 0.7)
+    }
+    
     static var springy: Animation {
-        .interpolatingSpring(
-            mass: 0.2,
-            stiffness: 67.712,
-            damping: 3.5,
-            initialVelocity: 0.0
-        )
+        .bouncy(duration: 0.2, extraBounce: 0.55)
     }
 }

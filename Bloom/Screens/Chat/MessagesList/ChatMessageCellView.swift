@@ -71,6 +71,6 @@ struct ChatMessageCellView: View, Equatable {
             }
         }
         .contentShape(.rect)
-        .animation(.quickSpring, value: isSeen)
+        .animation(.normalSpring, value: isSeen)
     }
 }

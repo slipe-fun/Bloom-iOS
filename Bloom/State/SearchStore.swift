@@ -15,7 +15,7 @@ final class SearchStore {
     
     @MainActor
     func setSearch(_ isActive: Bool) {
-        withAnimation(.quickSpring) {
+        withAnimation(.normalSpring) {
             self.search = isActive
         }
     }
