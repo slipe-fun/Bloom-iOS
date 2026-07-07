@@ -76,21 +76,7 @@ struct ChatsFooterView: View {
             .padding(.top, Theme.spacing.md)
             .padding(.bottom, isKeyboardVisible ? Theme.spacing.lg : Theme.spacing.xxxl)
             .animation(.normalSpring, value: store.search)
-            .background(alignment: .top) {
-                ZStack {
-                    LinearGradient(
-                        colors: [
-                            Theme.colors.background.opacity(0.8),
-                            Theme.colors.background.opacity(0.45),
-                            Theme.colors.background.opacity(0.0)
-                        ],
-                        startPoint: .bottom,
-                        endPoint: .top
-                    )
-                    .ignoresSafeArea(edges: .bottom)
-                    .frame(height: isKeyboardVisible ? 0 : footerHeight)
-                }
-            }
+            .bottomGradientBackground(color: Theme.colors.background, height: isKeyboardVisible ? 0 : footerHeight)
         }
     }
 }

@@ -88,14 +88,16 @@ struct ChatMessageCellView: View, Equatable {
                 Spacer(minLength: 55)
             }
 
-            VStack(alignment: item.me ? .trailing : .leading, spacing: Theme.spacing.sm) {
+            VStack(alignment: item.me ? .trailing : .leading, spacing: 0) {
                 messageBubble
                 
-                if item.me && isSeen {
+                if item.me {
                     Text("Read")
                         .font(Theme.font.subTitle)
                         .foregroundColor(Theme.colors.secondaryText)
-                        .transition(.opacity)
+                        .padding(.top, isSeen ? Theme.spacing.sm : 0)
+                        .frame(height: isSeen ? nil : 0, alignment: .top)
+                        .opacity(isSeen ? 1 : 0)
                 }
             }
             .padding(.top, Theme.spacing.lg)
@@ -105,6 +107,5 @@ struct ChatMessageCellView: View, Equatable {
             }
         }
         .contentShape(.rect)
-        .animation(.normalSpring, value: isSeen)
     }
 }

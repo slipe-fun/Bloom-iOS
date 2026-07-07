@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import BlurSwiftUI
 
 struct NewMessageHeaderView: View {
     @Environment(BottomSheetManager.self) private var bottomSheetManager
@@ -31,25 +30,6 @@ struct NewMessageHeaderView: View {
             .padding(.leading, Theme.spacing.lg)
             .padding(.trailing, Theme.spacing.lg + 44)
             .padding(.bottom, Theme.spacing.md)
-        .ignoresSafeArea(edges: .top)
-        .background(
-            ZStack {
-                VariableBlur(direction: .down)
-                    .dimmingOvershoot(.relative(fraction: 1.35))
-                    .passesTouchesThrough(true)
-                    .ignoresSafeArea()
-                
-                LinearGradient(
-                    colors: [
-                        Theme.colors.sectionForeground.opacity(0.8),
-                        Theme.colors.sectionForeground.opacity(0.45),
-                        Theme.colors.sectionForeground.opacity(0.0)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea(edges: .top)
-            }
-        )
+            .topGradientBackground(color: Theme.colors.sectionForeground)
     }
 }

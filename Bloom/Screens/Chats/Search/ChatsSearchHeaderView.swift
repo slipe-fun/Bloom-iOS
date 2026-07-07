@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import BlurSwiftUI
 
 struct ChatsSearchHeaderView: View {
     let scrollY: CGFloat
@@ -45,24 +44,6 @@ struct ChatsSearchFloatHeaderView: View {
         .padding(.horizontal, Theme.spacing.lg)
         .padding(.bottom, Theme.spacing.xxl)
         .ignoresSafeArea(edges: .top)
-        .background(
-            ZStack {
-                VariableBlur(direction: .down)
-                    .dimmingOvershoot(.relative(fraction: 1.35))
-                    .passesTouchesThrough(true)
-                    .ignoresSafeArea()
-                
-                LinearGradient(
-                    colors: [
-                        Theme.colors.background.opacity(0.8),
-                        Theme.colors.background.opacity(0.45),
-                        Theme.colors.background.opacity(0.0)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea(edges: .top)
-            }
-        )
+        .topGradientBackground(color: Theme.colors.background)
     }
 }

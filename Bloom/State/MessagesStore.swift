@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Observation
+import DequeModule
 
 struct MessageItem: Identifiable, Hashable, Sendable {
     let id: Int
@@ -20,24 +21,9 @@ struct MessageItem: Identifiable, Hashable, Sendable {
     let groupStart: Bool
 }
 
-struct IndexedMessageItem: Identifiable, Hashable, Sendable {
-    let index: Int
-    let element: MessageItem
-    
-    var id: Int { element.id }
-}
-
 @Observable
 @MainActor
 final class MessagesListStore {
-    var data: [MessageItem] = [] {
-        didSet {
-            self.indexedItems = data.enumerated().map {
-                IndexedMessageItem(index: $0.offset, element: $0.element)
-            }
-        }
-    }
-    
-    private(set) var indexedItems: [IndexedMessageItem] = []
+    var data: Deque<MessageItem> = []
     var lastSeenId: Int = 0
 }

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import BlurSwiftUI
 
 struct ChatHeaderView: View {
     @Environment(AppRouter.self) private var router
@@ -55,24 +54,6 @@ struct ChatHeaderView: View {
         .padding(.top, Theme.spacing.md + safeArea.top)
         .padding(.horizontal, Theme.spacing.lg)
         .padding(.bottom, Theme.spacing.md)
-        .background(alignment: .bottom) {
-            ZStack {
-                VariableBlur(direction: .down)
-                    .dimmingOvershoot(.relative(fraction: 1.35))
-                    .passesTouchesThrough(true)
-                    .ignoresSafeArea()
-                
-                LinearGradient(
-                    colors: [
-                        Theme.colors.background.opacity(0.8),
-                        Theme.colors.background.opacity(0.45),
-                        Theme.colors.background.opacity(0.0)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(maxHeight: .infinity)
-            }
-        }
+        .topGradientBackground(color: Theme.colors.background)
     }
 }

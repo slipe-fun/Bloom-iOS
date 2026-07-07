@@ -30,10 +30,14 @@ struct ChatFooterSendView: View {
                     groupStart: true
                 )
                 withAnimation(.normalSpring) {
-                    store.lastSeenId = store.data.first?.id ?? 0
+                    store.data.prepend(newMessage)
                 }
-                withAnimation(.normalSpring) {
-                    store.data.insert(newMessage, at: 0)
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(3.0))
+                    
+                    withAnimation(.normalSpring) {
+                        store.lastSeenId = store.data.first?.id ?? 0
+                    }
                 }
                 self.text = ""
             }

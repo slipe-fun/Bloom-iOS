@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import BlurSwiftUI
 
 struct ChatsHeaderView: View {
     let title: String
@@ -46,24 +45,6 @@ struct ChatsHeaderView: View {
             .padding(.bottom, Theme.spacing.md)
         .offset(y: max(0, -scrollY / 4))
         .ignoresSafeArea(edges: .top)
-        .background(
-            ZStack {
-                VariableBlur(direction: .down)
-                    .dimmingOvershoot(.relative(fraction: 1.35))
-                    .passesTouchesThrough(true)
-                    .ignoresSafeArea()
-                
-                LinearGradient(
-                    colors: [
-                        Theme.colors.background.opacity(0.8),
-                        Theme.colors.background.opacity(0.45),
-                        Theme.colors.background.opacity(0.0)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea(edges: .top)
-            }
-        )
+        .topGradientBackground(color: Theme.colors.background)
     }
 }

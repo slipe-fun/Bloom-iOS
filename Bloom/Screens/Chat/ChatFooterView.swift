@@ -64,20 +64,6 @@ struct ChatFooterView: View {
         .padding(.horizontal, isKeyboardVisible ? Theme.spacing.lg : Theme.spacing.xxxl)
         .padding(.top, Theme.spacing.md)
         .padding(.bottom, isKeyboardVisible ? Theme.spacing.lg : Theme.spacing.xxxl)
-        .background(alignment: .top) {
-            ZStack {
-                LinearGradient(
-                    colors: [
-                        Theme.colors.background.opacity(0.8),
-                        Theme.colors.background.opacity(0.45),
-                        Theme.colors.background.opacity(0.0)
-                    ],
-                    startPoint: .bottom,
-                    endPoint: .top
-                )
-                .ignoresSafeArea(edges: .bottom)
-                .frame(height: isKeyboardVisible ? 0 : footerHeight)
-            }
-        }
+        .bottomGradientBackground(color: Theme.colors.background, height: isKeyboardVisible ? 0 : footerHeight)
     }
 }

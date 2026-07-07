@@ -41,7 +41,7 @@ struct ChatMessagesListView: View {
                         }
                     }
                     .scrollTargetLayout()
-                    .onChange(of: store.indexedItems.count) { _, _ in
+                    .onChange(of: store.data.count) { _, _ in
                         withAnimation(.normalSpring) {
                             proxy.scrollTo(bottomSpacerId, anchor: .top)
                         }
