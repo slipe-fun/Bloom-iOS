@@ -56,7 +56,7 @@ struct ChatFooterView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: 44)
-                .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop), in: RoundedRectangle(cornerRadius: 44 / 2, style: .continuous))
+                .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop), in: RoundedRectangle(cornerRadius: 44 / 2))
                 .contentShape(Rectangle())
             }
             .frame(maxWidth: .infinity)

@@ -50,7 +50,7 @@ struct ChatsRootModifier: AnimatableModifier {
     func body(content: Content) -> some View {
         let radius: CGFloat = (settingsProgress < 0.999 && settingsProgress > 0.001) ? cornerRadius : 0
         let brightness: Double = 0 + 0.1 * settingsProgress
-        let backdropHitTesting: Bool = (standardProgress < 0.95 && standardProgress > 0.05)
+        let backdropHitTesting: Bool = (standardProgress < 0.99 && standardProgress > 0.01)
         let backdropOpacity = max(0.0, 0.1 * standardProgress)
 
         content
@@ -87,7 +87,7 @@ struct PushedScreenModifier: AnimatableModifier {
     func body(content: Content) -> some View {
         let radius: CGFloat = (progress < 0.999 && progress > 0.001) ? cornerRadius : 0
         let shadowOpacity: CGFloat = (progress < 0.999) ? 0.08 : 0
-        let backdropHitTesting: Bool = (progress < 0.95 && progress > 0.05)
+        let backdropHitTesting: Bool = (progress < 0.99 && progress > 0.01)
         let backdropOpacity = isTop ? 0.0 : max(0.0, 0.1 * (1.0 - progress))
         
         content

@@ -70,7 +70,7 @@ struct ChatMessageCellView: View, Equatable {
                 .padding(.horizontal, 15)
                 .padding(.vertical, 11)
                 .frame(minWidth: 60, minHeight: 40, alignment: .leading)
-                .background(backgroundColor, in: .rect(cornerRadius: 22, style: .continuous))
+                .background(backgroundColor, in: RoundedRectangle(cornerRadius: 22))
                 .overlay(
                     Text(item.date)
                         .font(Theme.font.messageTime)
