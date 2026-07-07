@@ -47,9 +47,7 @@ struct AppCoordinatorView: View {
             ZStack {
                 Theme.colors.background.ignoresSafeArea()
                 
-                let isSettingsVisible = isSettingsTop || settingsProgress > 0.001
-                
-                if router.isAuthenticated && isSettingsVisible {
+                if router.isAuthenticated {
                     SettingsScreen()
                         .environment(router)
                         .background(Theme.colors.grayBackground.ignoresSafeArea())
@@ -81,7 +79,7 @@ struct AppCoordinatorView: View {
                     }
                 }
                 .opacity(isRootRendered ? 1.0 : 0.0)
-                .allowsHitTesting(isRootRendered && standardPath.isEmpty)
+                .allowsHitTesting(isRootRendered)
                 .zIndex(1)
 
                 ForEach(Array(standardPath.enumerated()), id: \.offset) { index, route in

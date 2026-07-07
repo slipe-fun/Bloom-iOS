@@ -39,7 +39,7 @@ final class BottomSheetManager {
         }
 
         Task { @MainActor in
-            try? await Task.sleep(for: .seconds(0.25))
+            try? await Task.sleep(for: .seconds(0.3))
             
             if self.state == .hidden {
                 self.content = nil
