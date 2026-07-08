@@ -28,7 +28,7 @@ struct ChatMediaSheetView: View {
                 LazyVGrid(columns: columns, spacing: spacing) {
                     ForEach(manager.assets, id: \.localIdentifier) { asset in
                         Button {
-                            withAnimation(.quickSpring) {
+                            withAnimation(.springy) {
                                 manager.toggleSelection(for: asset)
                             }
                         } label: {
@@ -40,7 +40,7 @@ struct ChatMediaSheetView: View {
                 .padding(.horizontal, spacing)
             }
             .safeAreaInset(edge: .top, spacing: 0) {
-                ChatMediaSheetHeaderView()
+                ChatMediaSheetHeaderView(manager: manager)
             }
         }
     }

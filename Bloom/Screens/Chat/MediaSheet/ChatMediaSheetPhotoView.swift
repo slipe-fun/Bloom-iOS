@@ -23,8 +23,11 @@ struct ChatMediaSheetPhotoView: View {
         return cache
     }()
     
+    private var isSelected: Bool {
+        return manager.selectedAssets.contains(asset)
+    }
+    
     private var isDisabled: Bool {
-        let isSelected = manager.selectedAssets.contains(asset)
         let isLimitReached = manager.selectedAssets.count >= PhotoLibraryManager.maxSelectionLimit
         
         return isLimitReached && !isSelected
@@ -43,26 +46,31 @@ struct ChatMediaSheetPhotoView: View {
                     }
             }
                 
-            if manager.selectedAssets.contains(asset) {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.title3)
-                    .foregroundColor(.blue)
-                    .background(Circle().fill(Color.white))
-                    .padding(4)
-            } else {
-                Image(systemName: "circle")
-                    .font(.title3)
-                    .foregroundColor(.white.opacity(0.8))
-                    .shadow(radius: 1)
-                    .padding(4)
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Theme.colors.primary)
+                    .scaleEffect(isSelected ? 1 : 0.85)
+                    .opacity(isSelected ? 1 : 0)
+                if isSelected {
+                    Text("\((manager.selectedAssets.firstIndex(of: asset) ?? 0) + 1)")
+                        .font(Theme.font.footnote)
+                        .foregroundStyle(Theme.colors.white)
+                }
             }
+            .frame(width: 24, height: 24)
+            .overlay {
+                RoundedRectangle(cornerRadius: 20)
+                    .strokeBorder(Theme.colors.white, lineWidth: 1.75)
+                    .shadow(radius: isSelected ? 0 : 2)
+            }
+            .offset(x: -Theme.spacing.xs, y: Theme.spacing.xs)
         }
         .frame(width: cellSize, height: cellSize)
         .contentShape(Rectangle())
         .clipShape(
             RoundedRectangle(cornerRadius: Theme.radius.sm)
         )
-        .opacity(isDisabled ? 0.5 : 1.0)
+        .opacity(isDisabled ? 0.4 : 1.0)
         .animation(.quickSpring, value: isDisabled)
         .allowsHitTesting(!isDisabled)
         .onAppear {

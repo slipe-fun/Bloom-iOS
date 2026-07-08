@@ -23,4 +23,5 @@ extension Animation {
     static var springy: Animation {
         .bouncy(duration: 0.25, extraBounce: 0.2)
     }
+    
 }

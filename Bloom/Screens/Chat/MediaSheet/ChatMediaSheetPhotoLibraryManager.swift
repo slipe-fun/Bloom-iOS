@@ -11,7 +11,7 @@ import Photos
 @MainActor
 class PhotoLibraryManager: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
     @Published var fetchResult: PHFetchResult<PHAsset> = PHFetchResult<PHAsset>()
-    @Published var selectedAssets: Set<PHAsset> = []
+    @Published var selectedAssets: [PHAsset] = []
     @Published var permissionStatus: PHAuthorizationStatus = .notDetermined
     
     static let imageManager = PHCachingImageManager()
@@ -65,11 +65,11 @@ class PhotoLibraryManager: NSObject, ObservableObject, PHPhotoLibraryChangeObser
     }
     
     func toggleSelection(for asset: PHAsset) {
-        if selectedAssets.contains(asset) {
-            selectedAssets.remove(asset)
+        if let index = selectedAssets.firstIndex(of: asset) {
+            selectedAssets.remove(at: index)
         } else {
             guard selectedAssets.count < Self.maxSelectionLimit else { return }
-            selectedAssets.insert(asset)
+            selectedAssets.append(asset)
         }
     }
     
