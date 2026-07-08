@@ -21,7 +21,10 @@ struct ChatMediaSheetHeaderView: View {
                 .frame(width: 44, height: 44)
                 .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
                 
-                Spacer()
+                Text("Gallery")
+                    .font(Theme.font.title4)
+                    .foregroundStyle(Theme.colors.text)
+                    .frame(maxWidth: .infinity)
                 
                 Button {
                     bottomSheetManager.dismiss()
@@ -35,6 +38,6 @@ struct ChatMediaSheetHeaderView: View {
             .padding(.top, Theme.spacing.lg)
             .padding(.horizontal, Theme.spacing.lg)
             .padding(.bottom, Theme.spacing.md)
-            .topGradientBackground(color: Theme.colors.sectionForeground)
+            .topGradientBackground(color: .clear)
     }
 }
