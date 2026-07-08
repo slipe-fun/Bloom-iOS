@@ -142,7 +142,7 @@ struct AppCoordinatorView: View {
             }
             .overlay(
                 Group {
-                    if !router.path.isEmpty {
+                    if !router.path.isEmpty && bottomSheetManager.state == .hidden {
                         EdgeSwipeGestureView(
                             dragOffset: $dragOffset,
                             isSwiping: $isSwiping,

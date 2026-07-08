@@ -11,6 +11,7 @@ struct ChatFooterView: View {
     @State private var text: String = ""
     @FocusState private var focused: Bool
     @Environment(MessagesListStore.self) private var store
+    @Environment(BottomSheetManager.self) private var bottomSheetManager
     
     let keyboardHeight: CGFloat
     let footerHeight: CGFloat
@@ -20,7 +21,10 @@ struct ChatFooterView: View {
         GlassEffectContainer {
             HStack(alignment: .bottom, spacing: Theme.spacing.md) {
                 Button {
-                   print("Media")
+                    bottomSheetManager.present {
+                        ChatMediaSheetView()
+                            .bindBottomSheetScrollOffset(to: bottomSheetManager)
+                    }
                 } label: {
                     IconView(name: "plus_icon", size: 26, color: Theme.colors.text)
                 }

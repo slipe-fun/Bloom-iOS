@@ -6,9 +6,8 @@
 //
 
 import SwiftUI
-import BlurSwiftUI
 
-struct NewMessageView: View {
+struct ChatsNewMessageView: View {
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
@@ -18,7 +17,7 @@ struct NewMessageView: View {
             }
         }
         .safeAreaInset(edge: .top, spacing: 0) {
-            NewMessageHeaderView()
+            ChatsNewMessageHeaderView()
         }
     }
 }

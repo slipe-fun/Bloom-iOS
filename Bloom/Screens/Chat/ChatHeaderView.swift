@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ChatHeaderView: View {
     @Environment(AppRouter.self) private var router
+    @Environment(BottomSheetManager.self) private var bottomSheetManager
     @Environment(\.customSafeArea.self) private var safeArea
     
     var body: some View {
@@ -23,22 +24,30 @@ struct ChatHeaderView: View {
                 .frame(width: 44, height: 44)
                 .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
                 
-                HStack(spacing: Theme.spacing.md) {
-                    AvatarView(size: .md, image: "", id: "DSFSDF#@1223", name: "Dikiy Super")
-                        .shadow(color: Theme.colors.shadow, radius: 24, x: 0, y: 0)
-                    
-                    VStack(alignment: .leading, spacing: Theme.spacing.xs - 1) {
-                        Text("Dikiy Super")
-                            .font(Theme.font.headline)
-                            .foregroundStyle(Theme.colors.text)
-                        
-                        Text("Last seen recently")
-                            .font(Theme.font.footnote)
-                            .foregroundStyle(Theme.colors.secondaryText)
+                Button {
+                    bottomSheetManager.present {
+                        ChatUserSheetView()
+                            .bindBottomSheetScrollOffset(to: bottomSheetManager)
                     }
-                    
-                    Spacer()
+                } label: {
+                    HStack(spacing: Theme.spacing.md) {
+                        AvatarView(size: .md, image: "", id: "DSFSDF#@1223", name: "Dikiy Super")
+                            .shadow(color: Theme.colors.shadow, radius: 24, x: 0, y: 0)
+                        
+                        VStack(alignment: .leading, spacing: Theme.spacing.xs - 1) {
+                            Text("Dikiy Super")
+                                .font(Theme.font.headline)
+                                .foregroundStyle(Theme.colors.text)
+                            
+                            Text("Last seen recently")
+                                .font(Theme.font.footnote)
+                                .foregroundStyle(Theme.colors.secondaryText)
+                        }
+                        
+                        Spacer()
+                    }
                 }
+                .buttonStyle(.plain)
                 .frame(maxWidth: .infinity)
                 
                 Button {

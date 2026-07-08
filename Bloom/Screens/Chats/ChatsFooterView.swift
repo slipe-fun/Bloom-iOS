@@ -59,7 +59,7 @@ struct ChatsFooterView: View {
                         store.clearSearch()
                     } else {
                         bottomSheetManager.present {
-                           NewMessageView()
+                           ChatsNewMessageView()
                                 .bindBottomSheetScrollOffset(to: bottomSheetManager)
                         }
                     }
