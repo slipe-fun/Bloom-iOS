@@ -19,21 +19,25 @@ struct ChatMediaSheetView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            
-            let size = (geometry.size.width - ((Theme.spacing.sm - 2) * 4)) / 3
+            let spacing = Theme.spacing.sm - 2
+            let totalSpacing = spacing * 4
+            let availableWidth = max(0, geometry.size.width - totalSpacing)
+            let size = availableWidth / 3
             
             ScrollView {
-                LazyVGrid(columns: columns, spacing: Theme.spacing.sm - 2) {
+                LazyVGrid(columns: columns, spacing: spacing) {
                     ForEach(manager.assets, id: \.localIdentifier) { asset in
-                        ChatMediaSheetPhotoView(manager: manager, asset: asset, cellSize: size)
-                            .onTapGesture {
-                                withAnimation(.quickSpring) {
-                                    manager.toggleSelection(for: asset)
-                                }
+                        Button {
+                            withAnimation(.quickSpring) {
+                                manager.toggleSelection(for: asset)
                             }
+                        } label: {
+                            ChatMediaSheetPhotoView(manager: manager, asset: asset, cellSize: size)
+                        }
+                        .buttonStyle(PhotoPressButtonStyle())
                     }
                 }
-                .padding(.horizontal, Theme.spacing.sm - 2)
+                .padding(.horizontal, spacing)
             }
             .safeAreaInset(edge: .top, spacing: 0) {
                 ChatMediaSheetHeaderView()

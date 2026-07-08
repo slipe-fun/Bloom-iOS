@@ -8,30 +8,42 @@
 import SwiftUI
 import Photos
 
-class PhotoLibraryManager: ObservableObject {
-    @Published var assets: [PHAsset] = []
+@MainActor
+class PhotoLibraryManager: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
+    @Published var fetchResult: PHFetchResult<PHAsset> = PHFetchResult<PHAsset>()
     @Published var selectedAssets: Set<PHAsset> = []
-    
     @Published var permissionStatus: PHAuthorizationStatus = .notDetermined
     
     static let imageManager = PHCachingImageManager()
+    static let maxSelectionLimit = 5
+    private var hasFetched = false
+    
+    var assets: PHFetchResultCollection {
+        PHFetchResultCollection(fetchResult: fetchResult)
+    }
+    
+    override init() {
+        super.init()
+        PHPhotoLibrary.shared().register(self)
+    }
+    
+    deinit {
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
+    }
     
     func checkPermissionAndFetch() {
-        guard assets.isEmpty else { return }
+        guard !hasFetched else { return }
         
         let currentStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-        
-        Task { @MainActor in
-            self.permissionStatus = currentStatus
-        }
+        self.permissionStatus = currentStatus
         
         switch currentStatus {
         case .notDetermined:
-            PHPhotoLibrary.requestAuthorization(for: .readWrite) { newStatus in
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] newStatus in
                 Task { @MainActor in
-                    self.permissionStatus = newStatus
+                    self?.permissionStatus = newStatus
                     if newStatus == .authorized || newStatus == .limited {
-                        self.fetchAssets()
+                        self?.fetchAssets()
                     }
                 }
             }
@@ -48,23 +60,23 @@ class PhotoLibraryManager: ObservableObject {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
-        let fetchResult = PHAsset.fetchAssets(with: .image, options: options)
-        var newAssets = [PHAsset]()
-        
-        fetchResult.enumerateObjects { asset, _, _ in
-            newAssets.append(asset)
-        }
-        
-        Task { @MainActor in
-            self.assets = newAssets
-        }
+        self.fetchResult = PHAsset.fetchAssets(with: .image, options: options)
+        self.hasFetched = true
     }
     
     func toggleSelection(for asset: PHAsset) {
         if selectedAssets.contains(asset) {
             selectedAssets.remove(asset)
         } else {
+            guard selectedAssets.count < Self.maxSelectionLimit else { return }
             selectedAssets.insert(asset)
+        }
+    }
+    
+    nonisolated func photoLibraryDidChange(_ changeInstance: PHChange) {
+        Task { @MainActor in
+            guard let changeDetails = changeInstance.changeDetails(for: self.fetchResult) else { return }
+            self.fetchResult = changeDetails.fetchResultAfterChanges
         }
     }
 }
