@@ -12,10 +12,12 @@ struct ChatMediaSheetPhotoView: View {
     @Environment(\.displayScale) private var displayScale
     @State private var image: UIImage?
     @State private var requestID: PHImageRequestID?
+    @ObservedObject var manager: PhotoLibraryManager
     
     let asset: PHAsset
-    let manager: PhotoLibraryManager
     let cellSize: CGFloat
+    
+    private static let cache = NSCache<NSString, UIImage>()
         
     var body: some View {
             ZStack(alignment: .topTrailing) {
@@ -24,6 +26,7 @@ struct ChatMediaSheetPhotoView: View {
                         .resizable()
                         .scaledToFill()
                         .frame(width: cellSize, height: cellSize)
+                        .clipped()
                         .transaction { transaction in
                             transaction.animation = nil
                         }
@@ -44,6 +47,7 @@ struct ChatMediaSheetPhotoView: View {
                 }
             }
             .frame(width: cellSize, height: cellSize)
+            .contentShape(Rectangle())
             .clipShape(
                 RoundedRectangle(cornerRadius: Theme.radius.sm)
             )
@@ -56,20 +60,31 @@ struct ChatMediaSheetPhotoView: View {
                 }
             }
     }
-        
+
     private func loadImage(size: CGFloat) {
+        let key = asset.localIdentifier as NSString
+
+        if let cached = Self.cache.object(forKey: key) {
+            self.image = cached
+            return
+        }
+
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         options.deliveryMode = .opportunistic
         options.resizeMode = .fast
-            
-        let targetSize = CGSize(width: cellSize * displayScale, height: displayScale)
-            
-        requestID = PhotoLibraryManager.imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { result, info in
-            
+
+        let targetSize = CGSize(width: cellSize * displayScale, height: cellSize * displayScale)
+
+        requestID = PhotoLibraryManager.imageManager.requestImage(
+            for: asset,
+            targetSize: targetSize,
+            contentMode: .aspectFill,
+            options: options
+        ) { result, info in
             let isCancelled = info?[PHImageCancelledKey] as? Bool ?? false
-                
             if !isCancelled, let result = result {
+                Self.cache.setObject(result, forKey: key)
                 self.image = result
             }
         }

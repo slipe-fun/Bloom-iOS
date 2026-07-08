@@ -17,6 +17,8 @@ class PhotoLibraryManager: ObservableObject {
     static let imageManager = PHCachingImageManager()
     
     func checkPermissionAndFetch() {
+        guard assets.isEmpty else { return }
+        
         let currentStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         
         Task { @MainActor in

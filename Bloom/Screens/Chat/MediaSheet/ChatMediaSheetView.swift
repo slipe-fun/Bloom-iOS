@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ChatMediaSheetView: View {
-    @StateObject private var manager = PhotoLibraryManager()
+    @ObservedObject var manager: PhotoLibraryManager
     @Environment(\.displayScale) private var displayScale
     
     let columns = [
@@ -25,7 +25,7 @@ struct ChatMediaSheetView: View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: Theme.spacing.sm - 2) {
                     ForEach(manager.assets, id: \.localIdentifier) { asset in
-                        ChatMediaSheetPhotoView(asset: asset, manager: manager, cellSize: size)
+                        ChatMediaSheetPhotoView(manager: manager, asset: asset, cellSize: size)
                             .onTapGesture {
                                 withAnimation(.quickSpring) {
                                     manager.toggleSelection(for: asset)
@@ -37,9 +37,6 @@ struct ChatMediaSheetView: View {
             }
             .safeAreaInset(edge: .top, spacing: 0) {
                 ChatMediaSheetHeaderView()
-            }
-            .onAppear {
-                manager.checkPermissionAndFetch()
             }
         }
     }
