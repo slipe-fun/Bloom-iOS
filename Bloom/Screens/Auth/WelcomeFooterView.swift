@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WelcomeFooterView: View {
     @Environment(AppRouter.self) private var router
-    
+    @State private var isAppeared = false
     @Binding var shown: Bool
     
     var body: some View {
@@ -56,8 +56,15 @@ struct WelcomeFooterView: View {
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
             }
-            .padding(.horizontal, Theme.spacing.xxxl + 8)
-            .padding(.bottom, Theme.spacing.xxxl + 8)
+        }
+        .opacity(isAppeared ? 1.0 : 0.0)
+        .offset(y: isAppeared ? 0 : 40)
+        .padding(.horizontal, Theme.spacing.xxxl + 8)
+        .padding(.bottom, Theme.spacing.xxxl + 8)
+        .onAppear {
+            withAnimation(.smooth(duration: 0.6)) {
+                isAppeared = true
+            }
         }
     }
 }

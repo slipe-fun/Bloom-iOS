@@ -39,6 +39,9 @@ struct ChatMediaSheetView: View {
                 }
                 .padding(.horizontal, spacing)
             }
+            .onDisappear {
+                manager.selectedAssets = []
+            }
             .safeAreaInset(edge: .top, spacing: 0) {
                 ChatMediaSheetHeaderView(manager: manager)
             }

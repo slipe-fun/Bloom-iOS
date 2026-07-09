@@ -52,8 +52,6 @@ struct WelcomeTitleView: View {
                             hoveredIndex = nil
                         }
                 )
-                .opacity(isAppeared ? 1.0 : 0.0)
-                .offset(y: isAppeared ? 0 : 20)
                 
                 Text("🔒 Secured as Bank, ☎️ Simple as SMS and 🏎 Fast as Formula 1")
                     .font(Theme.font.headBody)
@@ -63,14 +61,14 @@ struct WelcomeTitleView: View {
                     .opacity(hoveredIndex == nil ? 1.0 : 0.5)
                     .blur(radius: hoveredIndex == nil ? 0 : 8)
                     .animation(.springy, value: hoveredIndex)
-                    .opacity(isAppeared ? 1.0 : 0.0)
-                    .offset(y: isAppeared ? 0 : 20)
                     .lineSpacing(Theme.lineSpacing.md)
             }
+            .opacity(isAppeared ? 1.0 : 0.0)
+            .offset(y: isAppeared ? 0 : 40)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.horizontal, Theme.spacing.xxxl + 8)
             .onAppear {
-                withAnimation(.springy) {
+                withAnimation(.smooth(duration: 0.3)) {
                     isAppeared = true
                 }
             }
