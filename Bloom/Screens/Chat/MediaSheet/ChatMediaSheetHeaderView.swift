@@ -43,6 +43,9 @@ struct ChatMediaSheetHeaderView: View {
                                 .opacity(max(0, 1 - Double(index) * 0.6))
                                 .rotationEffect(.degrees(-(Double(index) * 6)))
                                 .zIndex(-Double(index))
+                                .transition(
+                                    AnyTransition.opacity.combined(with: .blur(radius: 4)).combined(with: .offset(x: 8, y: 3)).combined(with: .rotationEffect(degress: 6))
+                                )
                         }
                     }
                     .offset(y: 2)
@@ -52,15 +55,15 @@ struct ChatMediaSheetHeaderView: View {
                 .buttonStyle(.plain)
                 .frame(width: 44, height: 44)
                 .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
-                .blur(radius: selectedAssets.isEmpty ? 8 : 0)
-                .opacity(selectedAssets.isEmpty ? 0 : 1)
+                .blur(radius: isAssetsEmpty ? 4 : 0)
+                .opacity(isAssetsEmpty ? 0 : 1)
             }
             .padding(.top, Theme.spacing.lg)
             .padding(.horizontal, Theme.spacing.lg)
             .padding(.bottom, Theme.spacing.md)
             .topGradientBackground(color: .clear)
             .onChange(of: selectedAssets) { oldValue, newValue in
-                withAnimation(.slowSpring) {
+                withAnimation(.quickSpring) {
                     self.isAssetsEmpty = newValue.isEmpty
                 }
             }

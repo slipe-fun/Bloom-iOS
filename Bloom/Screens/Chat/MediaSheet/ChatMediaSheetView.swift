@@ -42,6 +42,9 @@ struct ChatMediaSheetView: View {
             .safeAreaInset(edge: .top, spacing: 0) {
                 ChatMediaSheetHeaderView(manager: manager)
             }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                ChatMediaSheetFooterView()
+            }
         }
     }
 }
