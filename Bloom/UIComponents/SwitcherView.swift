@@ -6,251 +6,137 @@
 //
 
 import SwiftUI
-import UIKit
 
-final class GlassIconView: UIView {
-    private let imageView = UIImageView()
-    static let side: CGFloat = 30
-
-    init(image: UIImage) {
-        super.init(frame: .zero)
-        isOpaque = false
-        isUserInteractionEnabled = false
-        
-        imageView.image = image.withRenderingMode(.alwaysTemplate)
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .label
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        addSubview(imageView)
-        NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            imageView.topAnchor.constraint(equalTo: topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) not supported")
-    }
-
-    override func tintColorDidChange() {
-        super.tintColorDidChange()
-        imageView.tintColor = tintColor
+public struct SwitcherViewItem<Value: Hashable>: Equatable {
+    public let value: Value
+    public let image: Image
+    
+    public init(value: Value, image: Image) {
+        self.value = value
+        self.image = image
     }
     
-    override var intrinsicContentSize: CGSize { CGSize(width: Self.side, height: Self.side) }
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.value == rhs.value
+    }
 }
 
-final class GlassSegmentedControl: UISegmentedControl {
-    private var iconViews: [GlassIconView] = []
-    static let inactiveOpacity: CGFloat = 0.4
-
-    func setIcons(_ images: [UIImage]) {
-        iconViews.forEach { $0.removeFromSuperview() }
-        iconViews = images.map { GlassIconView(image: $0) }
-        setNeedsLayout()
+public struct SwitcherView<Value: Hashable>: View {
+    public let items: [SwitcherViewItem<Value>]
+    @Binding public var selection: Value
+    @State private var dragLocation: CGFloat? = nil
+    
+    private enum Constants {
+        static var width: CGFloat { 77 }
+        static var height: CGFloat { 47 }
+        static var padding: CGFloat { 4 }
     }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        hideAllNativeChrome()
-        injectIconsIfNeeded()
-        updateIconOpacities()
+    
+    public init(items: [SwitcherViewItem<Value>], selection: Binding<Value>) {
+        self.items = items
+        self._selection = selection
     }
-
-    private func injectIconsIfNeeded() {
-        let segments = findSegments()
-        guard segments.count == iconViews.count else { return }
-        for (i, segment) in segments.enumerated() {
-            let icon = iconViews[i]
-            if icon.superview == nil {
-                icon.translatesAutoresizingMaskIntoConstraints = false
-                segment.addSubview(icon)
-                NSLayoutConstraint.activate([
-                    icon.centerXAnchor.constraint(equalTo: segment.centerXAnchor),
-                    icon.centerYAnchor.constraint(equalTo: segment.centerYAnchor),
-                    icon.widthAnchor.constraint(equalToConstant: GlassIconView.side),
-                    icon.heightAnchor.constraint(equalToConstant: GlassIconView.side),
-                ])
+    
+    public var body: some View {
+        GlassEffectContainer {
+            ZStack(alignment: .leading) {
+                indicator
+                segments
             }
-            segment.bringSubviewToFront(icon)
+            .contentShape(Capsule())
+            .highPriorityGesture(dragGesture)
+            .sensoryFeedback(.selection, trigger: activeIndex)
+            .glassEffect(.clear.interactive().tint(Theme.colors.glassBackdrop))
         }
     }
     
-    private func updateIconOpacities() {
-        for (i, icon) in iconViews.enumerated() {
-            UIView.animate(withDuration: 0.15) {
-                icon.alpha = (i == self.selectedSegmentIndex) ? 1.0 : Self.inactiveOpacity
+    private var indicator: some View {
+        Capsule()
+            .fill(Theme.colors.text.opacity(0.15))
+            .frame(width: Constants.width, height: Constants.height)
+            .offset(x: indicatorOffset)
+            .animation(.quickSpring, value: dragLocation != nil)
+            .animation(dragLocation == nil ? .quickSpring : nil, value: indicatorOffset)
+    }
+    
+    private var segments: some View {
+        HStack(spacing: 0) {
+            ForEach(items, id: \.value) { item in
+                GlassSwitcherSegment(
+                    item: item,
+                    isSelected: !items.isEmpty && items[activeIndex].value == item.value,
+                    segmentHeight: Constants.height,
+                    segmentWidth: Constants.width
+                )
+                .equatable()
             }
         }
+        .padding(Constants.padding)
     }
-
-    private func hideAllNativeChrome() {
-        hideRecursively(self)
+    
+    private var dragGesture: some Gesture {
+        DragGesture(minimumDistance: 0)
+            .onChanged { value in
+                dragLocation = value.location.x
+            }
+            .onEnded { value in
+                guard !items.isEmpty else { return }
+                
+                withAnimation(.quickSpring) {
+                    selection = items[activeIndex].value
+                    dragLocation = nil
+                }
+            }
     }
-
-    private func hideRecursively(_ view: UIView) {
-        for sub in view.subviews {
-            if sub is GlassIconView { continue }
-            
-            let className = String(describing: type(of: sub))
-            if className == "UISegment" {
-                hideRecursively(sub)
-                continue
-            }
-            
-            if let label = sub as? UILabel {
-                label.isHidden = true
-            } else if let imageView = sub as? UIImageView {
-                imageView.alpha = 0
-            }
-            
-            hideRecursively(sub)
+    
+    private var indicatorOffset: CGFloat {
+        let minX = Constants.padding
+        
+        guard let dragLocation else {
+            return minX + CGFloat(selectedIndex) * Constants.width
         }
+        
+        let maxX = minX + CGFloat(max(0, items.count - 1)) * Constants.width
+        let targetX = dragLocation - (Constants.width / 2)
+        return min(max(targetX, minX), maxX)
     }
-
-    private func findSegments() -> [UIView] {
-        var result: [UIView] = []
-        findSegments(in: self, into: &result)
-        return result.sorted { $0.frame.minX < $1.frame.minX }
-    }
-
-    private func findSegments(in view: UIView, into result: inout [UIView]) {
-        for sub in view.subviews {
-            if String(describing: type(of: sub)) == "UISegment" {
-                result.append(sub)
-            } else {
-                findSegments(in: sub, into: &result)
-            }
+    
+    private var activeIndex: Int {
+        guard !items.isEmpty else { return 0 }
+        
+        if let dragLocation {
+            let relativeX = dragLocation - Constants.padding - (Constants.width / 2)
+            let index = Int(round(relativeX / Constants.width))
+            return min(max(index, 0), items.count - 1)
         }
+        
+        return selectedIndex
     }
-
-    private func segmentIndex(at point: CGPoint) -> Int {
-        guard numberOfSegments > 0 else { return 0 }
-        let segmentWidth = bounds.width / CGFloat(numberOfSegments)
-        return min(max(Int(point.x / segmentWidth), 0), numberOfSegments - 1)
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let touch = touches.first {
-            let newIndex = segmentIndex(at: touch.location(in: self))
-            if selectedSegmentIndex != newIndex {
-                selectedSegmentIndex = newIndex
-                sendActions(for: .valueChanged)
-                updateIconOpacities()
-            }
-        }
-        super.touchesMoved(touches, with: event)
+    
+    private var selectedIndex: Int {
+        items.firstIndex(where: { $0.value == selection }) ?? 0
     }
 }
 
-final class GlassSwitcherContainer: UIView {
-    let glassView: UIVisualEffectView
-    let control: GlassSegmentedControl
-
-    static let segmentWidth: CGFloat = 77
-    static let segmentHeight: CGFloat = 47
-    static let containerPadding: CGFloat = 3
-    static let containerHeight: CGFloat = segmentHeight + containerPadding * 2
-
-    init(control: GlassSegmentedControl) {
-        self.control = control
-
-        let effect = UIGlassEffect(style: .clear)
-        effect.isInteractive = true
-        glassView = UIVisualEffectView(effect: effect)
-
-        super.init(frame: .zero)
-
-        control.selectedSegmentTintColor = UIColor.label.withAlphaComponent(0.2)
-
-        addSubview(glassView)
-        glassView.translatesAutoresizingMaskIntoConstraints = false
-        glassView.contentView.addSubview(control)
-        control.translatesAutoresizingMaskIntoConstraints = false
-
-        let pad = Self.containerPadding
-        NSLayoutConstraint.activate([
-            glassView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            glassView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            glassView.topAnchor.constraint(equalTo: topAnchor),
-            glassView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-            control.leadingAnchor.constraint(equalTo: glassView.contentView.leadingAnchor, constant: pad),
-            control.trailingAnchor.constraint(equalTo: glassView.contentView.trailingAnchor, constant: -pad),
-            control.topAnchor.constraint(equalTo: glassView.contentView.topAnchor, constant: pad),
-            control.bottomAnchor.constraint(equalTo: glassView.contentView.bottomAnchor, constant: -pad),
-            control.heightAnchor.constraint(equalToConstant: Self.segmentHeight),
-        ])
+private struct GlassSwitcherSegment<Value: Hashable>: View, Equatable {
+    let item: SwitcherViewItem<Value>
+    let isSelected: Bool
+    let segmentHeight: CGFloat
+    let segmentWidth: CGFloat
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.item.value == rhs.item.value && lhs.isSelected == rhs.isSelected
     }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        glassView.layer.cornerRadius = bounds.height / 2
-        glassView.layer.masksToBounds = true
-    }
-}
-
-
-struct SwitcherView<Value: Hashable>: UIViewRepresentable {
-    struct Item {
-        let value: Value
-        let image: UIImage
-    }
-
-    let items: [Item]
-    @Binding var selection: Value
-
-    static func totalWidth(for count: Int) -> CGFloat {
-        GlassSwitcherContainer.segmentWidth * CGFloat(count) + GlassSwitcherContainer.containerPadding * 2
-    }
-    static var totalHeight: CGFloat { GlassSwitcherContainer.containerHeight }
-
-    private static func transparentPlaceholder(size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { _ in
-            UIColor.clear.setFill()
-            UIRectFill(CGRect(origin: .zero, size: size))
-        }
-    }
-    func makeUIView(context: Context) -> GlassSwitcherContainer {
-        let placeholders = items.map { _ in Self.transparentPlaceholder() }
-        let control = GlassSegmentedControl(items: placeholders)
-        for i in items.indices {
-            control.setWidth(GlassSwitcherContainer.segmentWidth, forSegmentAt: i)
-        }
-        control.setIcons(items.map { $0.image })
-        control.selectedSegmentIndex = items.firstIndex { $0.value == selection } ?? 0
-        control.addTarget(context.coordinator, action: #selector(Coordinator.changed(_:)), for: .valueChanged)
-        return GlassSwitcherContainer(control: control)
-    }
-
-    func updateUIView(_ uiView: GlassSwitcherContainer, context: Context) {
-        context.coordinator.parent = self
-        let index = items.firstIndex { $0.value == selection } ?? 0
-        if uiView.control.selectedSegmentIndex != index {
-            uiView.control.selectedSegmentIndex = index
-        }
-    }
-
-    func makeCoordinator() -> Coordinator { Coordinator(self) }
-
-    @MainActor
-    class Coordinator: NSObject {
-        var parent: SwitcherView
-        init(_ parent: SwitcherView) { self.parent = parent }
-        @objc func changed(_ control: UISegmentedControl) {
-            let i = control.selectedSegmentIndex
-            if i >= 0, i < parent.items.count {
-                parent.selection = parent.items[i].value
-            }
-        }
+    
+    var body: some View {
+        item.image
+            .resizable()
+            .renderingMode(.template)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 30, height: 30)
+            .foregroundStyle(Theme.colors.text)
+            .opacity(isSelected ? 1.0 : 0.4)
+            .animation(.quickSpring, value: isSelected)
+            .frame(width: segmentWidth, height: segmentHeight)
     }
 }

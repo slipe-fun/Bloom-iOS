@@ -7,27 +7,28 @@
 
 import SwiftUI
 
-enum Mode: Hashable { case image, document }
+public enum FooterTab: Hashable {
+    case gallery
+    case files
+    case camera
+}
 
 struct ChatMediaSheetFooterView: View {
-    @State private var mode: Mode = .image
+    @State private var selectedTab: FooterTab = .gallery
     
     
-    private let items: [SwitcherView<Mode>.Item] = [
-        .init(value: .image, image: UIImage(named: "image_icon")!),
-        .init(value: .document, image: UIImage(named: "file_icon")!),
+    private let items: [SwitcherViewItem<FooterTab>] = [
+        .init(value: .gallery, image: Image("image_icon")),
+        .init(value: .files, image: Image("file_icon")),
+        .init(value: .camera, image: Image("camera_icon"))
     ]
     
     var body: some View {
         HStack {
-            SwitcherView(
+           SwitcherView(
                 items: items,
-                selection: $mode
-            )
-                    .frame(
-                        width: SwitcherView<Mode>.totalWidth(for: items.count),
-                           height: SwitcherView<Mode>.totalHeight
-                    )
+                selection: $selectedTab
+           )
         }
         .frame(maxWidth: .infinity)
         .padding(.top, Theme.spacing.md)
