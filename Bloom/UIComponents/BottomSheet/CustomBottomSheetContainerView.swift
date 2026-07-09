@@ -68,7 +68,7 @@ struct CustomBottomSheetContainerView<Content: View>: View {
     @State private var isDraggingSheet: Bool = false
     @State private var dragStartTranslation: CGFloat = 0
     
-    private let collapsedHeight: CGFloat = 450
+    private let collapsedHeight: CGFloat = 475
     private let sheetSpace: CGFloat = 8
     private let sheetTopRadius: CGFloat = 40
     

@@ -61,7 +61,7 @@ struct ChatMediaSheetHeaderView: View {
             .padding(.top, Theme.spacing.lg)
             .padding(.horizontal, Theme.spacing.lg)
             .padding(.bottom, Theme.spacing.md)
-            .topGradientBackground(color: .clear)
+            .topGradientBackground(color: Theme.colors.sectionForeground)
             .onChange(of: selectedAssets) { oldValue, newValue in
                 withAnimation(.quickSpring) {
                     self.isAssetsEmpty = newValue.isEmpty

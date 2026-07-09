@@ -73,6 +73,7 @@ struct ChatMediaSheetPhotoView: View {
         .opacity(isDisabled ? 0.4 : 1.0)
         .animation(.quickSpring, value: isDisabled)
         .allowsHitTesting(!isDisabled)
+        .sensoryFeedback(.selection, trigger: isSelected)
         .onAppear {
             loadImage(size: cellSize)
         }

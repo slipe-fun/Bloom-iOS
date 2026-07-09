@@ -12,7 +12,6 @@ struct ChatFooterView: View {
     @FocusState private var focused: Bool
     @Environment(MessagesListStore.self) private var store
     @Environment(BottomSheetManager.self) private var bottomSheetManager
-    @StateObject private var photoManager = PhotoLibraryManager()
     
     let keyboardHeight: CGFloat
     let footerHeight: CGFloat
@@ -22,10 +21,8 @@ struct ChatFooterView: View {
         GlassEffectContainer {
             HStack(alignment: .bottom, spacing: Theme.spacing.md) {
                 Button {
-                    photoManager.checkPermissionAndFetch()
-                    
                     bottomSheetManager.present {
-                        ChatMediaSheetView(manager: photoManager)
+                        ChatMediaSheetView()
                             .bindBottomSheetScrollOffset(to: bottomSheetManager)
                     }
                 } label: {

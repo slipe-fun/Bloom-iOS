@@ -14,9 +14,10 @@ extension View {
             .background(
                 ZStack {
                     VariableBlur(direction: .down)
-                        .dimmingOvershoot(.relative(fraction: 1.35))
+                        .maximumBlurRadius(2.5)
+                        .dimmingOvershoot(.relative(fraction: 1.3))
                         .passesTouchesThrough(true)
-                        .ignoresSafeArea()
+                        .dimmingTintColor(nil)
 
                     LinearGradient(
                         colors: [
