@@ -42,6 +42,7 @@ struct BottomSheetVisuals<Content: View>: View, Animatable {
         .frame(width: screenSize.width, height: compensatedHeight, alignment: .top)
         .background(Theme.colors.sectionForeground)
         .scrollIndicators(.hidden)
+        .compositingGroup()
         .clipShape(
             UnevenRoundedRectangle(
                 cornerRadii: .init(

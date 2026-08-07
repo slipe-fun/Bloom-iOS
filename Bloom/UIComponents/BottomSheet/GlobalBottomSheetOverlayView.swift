@@ -39,7 +39,6 @@ struct GlobalBottomSheetOverlayView: View {
                     }
                 }
             }
-            .animation(.normalSpring, value: manager.state)
         }
         .ignoresSafeArea()
     }
