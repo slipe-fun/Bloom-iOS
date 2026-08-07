@@ -2,14 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSCameraUsageDescription</key>
-	<string>We need access to your camera so you can take and send photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need access to your photo gallery so you can send photos</string>
+	<string>Allow access so you can choose images</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>We using Face ID to log in to your account</string>
 	<key>CADIsableMinimumFrameDurationOnPhone</key>
 	<true/>
-	<key>NSFaceIDUsageDescription</key>
-	<string>We using Face ID for logging in</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>OpenRunde-Regular.ttf</string>

@@ -33,7 +33,7 @@ struct BottomSheetVisuals<Content: View>: View, Animatable {
         let currentScale = minScale + ((1.0 - minScale) * p)
         let compensatedHeight = currentVisualHeight / currentScale
         
-        let currentRadius: CGFloat = p >= 0.999 ? 0 : safeAreaInsets.top - 4 - (sheetSpace / 2)
+        let currentRadius: CGFloat = p >= 0.999 ? 0 : safeAreaInsets.top - (sheetSpace / 2)
         
         VStack(spacing: 0) {
             content
