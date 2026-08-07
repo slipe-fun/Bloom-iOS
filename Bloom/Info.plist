@@ -6,7 +6,7 @@
 	<string>Allow access so you can choose images</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>We using Face ID to log in to your account</string>
-	<key>CADIsableMinimumFrameDurationOnPhone</key>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIAppFonts</key>
 	<array>

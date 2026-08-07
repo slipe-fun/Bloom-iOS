@@ -17,6 +17,7 @@ struct BloomApp: App {
             AppCoordinatorView()
                 .environment(bottomSheetManager)
                 .environment(router)
+                .showFPS()
         }
     }
 }

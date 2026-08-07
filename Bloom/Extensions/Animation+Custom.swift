@@ -13,11 +13,11 @@ extension Animation {
     }
     
     static var normalSpring: Animation {
-        .smooth(duration: 0.3)
+        .smooth(duration: 0.27)
     }
     
     static var slowSpring: Animation {
-        .smooth(duration: 0.7)
+        .smooth(duration: 0.6)
     }
     
     static var springy: Animation {
