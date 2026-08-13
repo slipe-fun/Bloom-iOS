@@ -16,6 +16,12 @@ enum Route: Hashable, Identifiable {
 
 enum ModalRoute: Identifiable {
     case newMessage
+    case settings
     
     var id: Self { self }
+}
+
+enum AuthRoute: Hashable {
+    case mnemonic
+    case success
 }

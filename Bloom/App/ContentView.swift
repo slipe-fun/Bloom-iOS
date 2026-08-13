@@ -31,6 +31,10 @@ struct ContentView: View {
                 NewMessageView(namespace: animationNamespace)
                     .presentationDetents([.medium, .large])
                     .presentationDragIndicator(.hidden)
+            case .settings:
+                SettingsView()
+                    .presentationDetents([.large])
+                    .presentationDragIndicator(.hidden)
             }
         }
         .environment(router)

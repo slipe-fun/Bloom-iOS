@@ -71,7 +71,7 @@ struct ChatFooterSendView: View {
             .animation(.smooth(duration: 0.235), value: hasText)
         }
         .animation(.smooth(duration: 0.235), value: text)
-        .padding(Theme.spacing.xs)
+        .padding(Theme.spacing.xs + 2)
         .buttonStyle(.plain)
         .frame(width: 46, height: 46)
     }

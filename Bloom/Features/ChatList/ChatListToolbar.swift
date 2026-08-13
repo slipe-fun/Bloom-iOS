@@ -44,7 +44,7 @@ struct ChatListToolbar: ToolbarContent {
         
         ToolbarItem(placement: .topBarTrailing) {
             Button {
-                print("settings")
+                router.presentModal(.settings)
             } label: {
                 AvatarView(size: .md, square: false, image: "", id: "2!#SEe3", name: "Nicolas Cage")
             }
