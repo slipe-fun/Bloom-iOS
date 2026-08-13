@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DB01A1B32FE46D4D00AF0B70"
+               BlueprintIdentifier = "DBBEC4713029C65A009523BE"
                BuildableName = "Bloom.app"
                BlueprintName = "Bloom"
                ReferencedContainer = "container:Bloom.xcodeproj">
@@ -29,47 +29,22 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
-      <Testables>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DB01A1C32FE46D5000AF0B70"
-               BuildableName = "BloomTests.xctest"
-               BlueprintName = "BloomTests"
-               ReferencedContainer = "container:Bloom.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DB01A1CD2FE46D5000AF0B70"
-               BuildableName = "BloomUITests.xctest"
-               BlueprintName = "BloomUITests"
-               ReferencedContainer = "container:Bloom.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Release"
-      selectedDebuggerIdentifier = ""
-      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES"
-      queueDebuggingEnabled = "No">
+      allowLocationSimulation = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DB01A1B32FE46D4D00AF0B70"
+            BlueprintIdentifier = "DBBEC4713029C65A009523BE"
             BuildableName = "Bloom.app"
             BlueprintName = "Bloom"
             ReferencedContainer = "container:Bloom.xcodeproj">
@@ -86,7 +61,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DB01A1B32FE46D4D00AF0B70"
+            BlueprintIdentifier = "DBBEC4713029C65A009523BE"
             BuildableName = "Bloom.app"
             BlueprintName = "Bloom"
             ReferencedContainer = "container:Bloom.xcodeproj">

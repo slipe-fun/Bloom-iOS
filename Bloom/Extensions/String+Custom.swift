@@ -2,8 +2,10 @@
 //  String+Custom.swift
 //  Bloom
 //
-//  Created by Аскольд on 29.06.2026.
+//  Created by Аскольд on 13.08.2026.
 //
+
+import Foundation
 
 extension String {
     func trim() -> String {

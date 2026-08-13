@@ -2,7 +2,7 @@
 //  MessagesStore.swift
 //  Bloom
 //
-//  Created by Аскольд on 28.06.2026.
+//  Created by Аскольд on 13.08.2026.
 //
 
 import SwiftUI
@@ -23,7 +23,7 @@ struct MessageItem: Identifiable, Hashable, Sendable {
 
 @Observable
 @MainActor
-final class MessagesListStore {
+final class MessagesStore {
     var data: Deque<MessageItem> = []
     var lastSeenId: Int = 0
 }

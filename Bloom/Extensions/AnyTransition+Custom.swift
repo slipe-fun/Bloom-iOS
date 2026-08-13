@@ -2,7 +2,7 @@
 //  AnyTransition+Custom.swift
 //  Bloom
 //
-//  Created by Аскольд on 27.06.2026.
+//  Created by Аскольд on 13.08.2026.
 //
 
 import SwiftUI
