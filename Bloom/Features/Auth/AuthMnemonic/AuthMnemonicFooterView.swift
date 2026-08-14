@@ -9,18 +9,26 @@ import SwiftUI
 
 struct AuthMnemonicFooterView: View {
     let isEnabled: Bool
+    let isLoading: Bool
+    let action: () -> Void
     
     @State private var isKeyboardVisible = false
 
     var body: some View {
         VStack(spacing: 16) {
-            NavigationLink(value: AuthRoute.success) {
-                Text("Continue")
-                    .font(.system(.headline, design: .rounded, weight: .semibold))
-                    .foregroundStyle(isEnabled ? .white : .primary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 52)
-                    .contentShape(Capsule())
+            Button(action: action) {
+                HStack(spacing: 8) {
+                    if isLoading {
+                        ProgressView()
+                            .tint(isEnabled ? .white : .primary)
+                    }
+                    Text("Continue")
+                }
+                .font(.system(.headline, design: .rounded, weight: .semibold))
+                .foregroundStyle(isEnabled ? .white : .primary)
+                .frame(maxWidth: .infinity)
+                .frame(height: 52)
+                .contentShape(Capsule())
             }
             .buttonStyle(.plain)
             .disabled(!isEnabled)

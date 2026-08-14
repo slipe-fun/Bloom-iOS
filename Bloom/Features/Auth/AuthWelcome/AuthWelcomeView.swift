@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct AuthWelcomeView: View {
-
+    
+    @Binding var path: NavigationPath
     @State private var appeared = false
     @State private var rotation: Double = 0
 
@@ -67,7 +68,7 @@ struct AuthWelcomeView: View {
         }
         .padding(.horizontal, 36)
         .safeAreaInset(edge: .bottom) {
-            AuthWelcomeFooterView(appeared: appeared)
+            AuthWelcomeFooterView(appeared: appeared, path: $path)
         }
         .ignoresSafeArea(.container, edges: .bottom)
         .onAppear {

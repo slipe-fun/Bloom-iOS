@@ -7,12 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5E9B9A8B302F83F000C4CD91 /* BloomKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9B9A89302F83E500C4CD91 /* BloomKit.xcframework */; };
+		5E9B9A8C302F83F000C4CD91 /* BloomKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9B9A89302F83E500C4CD91 /* BloomKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5E9B9A90302F91DA00C4CD91 /* Bip39 in Frameworks */ = {isa = PBXBuildFile; productRef = 5E9B9A8F302F91DA00C4CD91 /* Bip39 */; };
 		DBBEC4D1302CED1C009523BE /* BlurSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = DBBEC4D0302CED1C009523BE /* BlurSwiftUI */; };
 		DBBEC4D3302CED1C009523BE /* BlurUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = DBBEC4D2302CED1C009523BE /* BlurUIKit */; };
 		DBBEC4E5302CF133009523BE /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = DBBEC4E4302CF133009523BE /* DequeModule */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		5E9B9A8D302F83F000C4CD91 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5E9B9A8C302F83F000C4CD91 /* BloomKit.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		5E9B9A89302F83E500C4CD91 /* BloomKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = BloomKit.xcframework; sourceTree = "<group>"; };
 		DBBEC4723029C65A009523BE /* Bloom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bloom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -29,9 +47,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E9B9A8B302F83F000C4CD91 /* BloomKit.xcframework in Frameworks */,
 				DBBEC4D3302CED1C009523BE /* BlurUIKit in Frameworks */,
 				DBBEC4D1302CED1C009523BE /* BlurSwiftUI in Frameworks */,
 				DBBEC4E5302CF133009523BE /* DequeModule in Frameworks */,
+				5E9B9A90302F91DA00C4CD91 /* Bip39 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +63,7 @@
 			children = (
 				DBBEC4743029C65A009523BE /* Bloom */,
 				DBBEC4733029C65A009523BE /* Products */,
+				5E9B9A89302F83E500C4CD91 /* BloomKit.xcframework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +85,7 @@
 				DBBEC46E3029C65A009523BE /* Sources */,
 				DBBEC46F3029C65A009523BE /* Frameworks */,
 				DBBEC4703029C65A009523BE /* Resources */,
+				5E9B9A8D302F83F000C4CD91 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -77,6 +99,7 @@
 				DBBEC4D0302CED1C009523BE /* BlurSwiftUI */,
 				DBBEC4D2302CED1C009523BE /* BlurUIKit */,
 				DBBEC4E4302CF133009523BE /* DequeModule */,
+				5E9B9A8F302F91DA00C4CD91 /* Bip39 */,
 			);
 			productName = Bloom;
 			productReference = DBBEC4723029C65A009523BE /* Bloom.app */;
@@ -109,6 +132,7 @@
 			packageReferences = (
 				DBBEC4CF302CED1C009523BE /* XCRemoteSwiftPackageReference "BlurUIKit" */,
 				DBBEC4E3302CF133009523BE /* XCRemoteSwiftPackageReference "swift-collections" */,
+				5E9B9A8E302F91DA00C4CD91 /* XCRemoteSwiftPackageReference "Bip39.swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DBBEC4733029C65A009523BE /* Products */;
@@ -358,6 +382,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5E9B9A8E302F91DA00C4CD91 /* XCRemoteSwiftPackageReference "Bip39.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tesseract-one/Bip39.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.0;
+			};
+		};
 		DBBEC4CF302CED1C009523BE /* XCRemoteSwiftPackageReference "BlurUIKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TimOliver/BlurUIKit";
@@ -377,6 +409,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5E9B9A8F302F91DA00C4CD91 /* Bip39 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5E9B9A8E302F91DA00C4CD91 /* XCRemoteSwiftPackageReference "Bip39.swift" */;
+			productName = Bip39;
+		};
 		DBBEC4D0302CED1C009523BE /* BlurSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DBBEC4CF302CED1C009523BE /* XCRemoteSwiftPackageReference "BlurUIKit" */;

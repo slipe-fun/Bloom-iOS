@@ -10,11 +10,13 @@ import SwiftUI
 @main
 struct BloomApp: App {
     @State private var appState = AppState()
+    @State private var bloomManager = BloomManager()
 
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environment(appState)
+                .environment(bloomManager)
         }
     }
 }

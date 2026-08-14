@@ -9,9 +9,25 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(Router.self) private var router
+    @Environment(AppState.self) private var appState
+    @Environment(BloomManager.self) private var bloomManager
 
     var body: some View {
-        NavigationStack {
+        List {
+                        Section {
+                            Button(role: .destructive) {
+                                bloomManager.logout()
+                                
+                                router.dismissModal()
+                                
+                                appState.logout()
+                            } label: {
+                                Label("Log Out", systemImage: "arrow.left.circle.fill")
+                                    .foregroundColor(.red)
+                            }
+                        }
+
+
             List {
                 ForEach(1...20, id: \.self) { id in
                     NewMessageRowView(userId: id)

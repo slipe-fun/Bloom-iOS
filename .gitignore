@@ -21,3 +21,5 @@ DerivedData/
 
 # Crash reports
 *.crash
+
+BloomKit.xcframework

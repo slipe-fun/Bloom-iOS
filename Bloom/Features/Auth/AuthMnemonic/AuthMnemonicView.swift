@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct AuthMnemonicView: View {
-    @Environment(AppState.self) private var appState
+    @Binding var path: NavigationPath
+    @Environment(BloomManager.self) private var bloomManager
+    
     @State private var words: [String] = Array(repeating: "", count: 12)
     @FocusState private var focusedIndex: Int?
-
+    
+    @State private var isLoading = false
+    @State private var showErrorAlert = false
+    
     private var isComplete: Bool {
         words.allSatisfy { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
     }
-
+    
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
@@ -23,15 +28,16 @@ struct AuthMnemonicView: View {
                     VStack(spacing: Theme.spacing.md - 2) {
                         Text("Enter mnemonic")
                             .font(.system(size: 32, weight: .bold, design: .rounded))
-
+                        
                         Text("You need to enter 12 words of mnemonic phrase to log in")
                             .font(.system(.headline, design: .rounded, weight: .medium))
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                     }
                     .padding(.top, 24)
-
+                    
                     AuthMnemonicInputView(words: $words, focusedIndex: $focusedIndex)
+                        .disabled(isLoading)
                 }
                 .padding(.horizontal, 36)
                 .padding(.bottom, 24)
@@ -40,11 +46,43 @@ struct AuthMnemonicView: View {
             .scrollDismissesKeyboard(.interactively)
         }
         .safeAreaInset(edge: .bottom) {
-            AuthMnemonicFooterView(isEnabled: isComplete)
+            AuthMnemonicFooterView(
+                isEnabled: isComplete && !isLoading,
+                isLoading: isLoading
+            ) {
+                performLogin()
+            }
         }
         .toolbarBackground(.hidden, for: .navigationBar)
         .scrollEdgeEffectHidden(true, for: .all)
         .topVariableBlur()
         .ignoresSafeArea(.container, edges: .bottom)
+        .alert("Login Error", isPresented: $showErrorAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Invalid mnemonic phrase. Please make sure all words are correct.")
+        }
+    }
+    
+    private func performLogin() {
+        isLoading = true
+        
+        // Принудительно очищаем пробелы, переносы строк и переводим в нижний регистр (lowercased)
+        let mnemonicPhrase = words
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
+            .joined(separator: " ")
+        
+        // Выведем в консоль то, что реально уходит в SDK на проверку
+        print("🔑 Попытка входа с фразой: [\(mnemonicPhrase)]")
+        
+        Task {
+            let user = await bloomManager.loginUser(recoveryKey: mnemonicPhrase)
+            isLoading = false
+            if user != nil {
+                path.append(AuthRoute.success)
+            } else {
+                showErrorAlert = true
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RootView: View {
     @Environment(AppState.self) private var appState
+    @Environment(BloomManager.self) private var bloomManager
 
     var body: some View {
         ZStack {
@@ -26,6 +27,11 @@ struct RootView: View {
                         .opacity
                             .combined(with: .blur(radius: 10))
                     )
+            }
+        }
+        .onAppear {
+            if bloomManager.currentUser != nil {
+                appState.authenticate()
             }
         }
     }

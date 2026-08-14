@@ -12,12 +12,11 @@ struct AuthFlow: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            AuthWelcomeView()
+            AuthWelcomeView(path: $path)
                 .navigationDestination(for: AuthRoute.self) { route in
                     switch route {
                     case .mnemonic:
-                        AuthMnemonicView()
-
+                        AuthMnemonicView(path: $path)
                     case .success:
                         AuthSuccessView()
                     }
