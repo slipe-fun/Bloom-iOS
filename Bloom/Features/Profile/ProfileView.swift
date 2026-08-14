@@ -10,6 +10,7 @@ import SwiftUI
 struct ProfileView: View {
     let id: Int
    
+    @Environment(\.heroNamespace) private var namespace
 
     var body: some View {
         VStack(spacing: 20) {
@@ -18,7 +19,6 @@ struct ProfileView: View {
                 id: String(id),
                 name: String(id)
             )
-            .heroMatched(id: "user_avatar_transition\(id)", isSource: false)
 
             Text("Имя Пользователя")
                 .font(.title2.bold())

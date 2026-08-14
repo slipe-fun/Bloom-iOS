@@ -33,6 +33,8 @@ struct ChatViewToolbarUser: View {
     let chatId: Int
     let isPreview: Bool
     
+    @Environment(\.heroNamespace) private var namespace
+    
     var body: some View {
         NavigationLink(value: Route.profile(id: chatId)) {
             HStack(spacing: Theme.spacing.md) {
@@ -41,7 +43,6 @@ struct ChatViewToolbarUser: View {
                     id: String(chatId),
                     name: String(chatId)
                 )
-                .heroMatched(id: "user_avatar_transition_\(chatId)")
                 
                 VStack(alignment: .center, spacing: Theme.spacing.xs) {
                     HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
