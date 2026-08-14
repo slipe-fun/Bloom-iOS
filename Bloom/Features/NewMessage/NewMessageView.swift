@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NewMessageView: View {
-    var namespace: Namespace.ID
+    @Environment(\.heroNamespace) private var namespace
     @Environment(Router.self) private var router
 
     var body: some View {
@@ -45,6 +45,6 @@ struct NewMessageView: View {
             .topVariableBlur()
             .bottomSafeAreaGradient()
         }
-        .navigationTransition(.zoom(sourceID: "newMessageButton", in: namespace))
+        .navigationTransition(.zoom(sourceID: "newMessageButton", in: namespace!))
     }
 }

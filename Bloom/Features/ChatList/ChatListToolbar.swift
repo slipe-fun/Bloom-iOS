@@ -9,9 +9,9 @@ import SwiftUI
 
 
 struct ChatListToolbar: ToolbarContent {
-    var namespace: Namespace.ID
     let scrollY: CGFloat
     
+    @Environment(\.heroNamespace) private var namespace
     @Environment(Router.self) private var router
     
     @ToolbarContentBuilder
@@ -67,7 +67,7 @@ struct ChatListToolbar: ToolbarContent {
                     .foregroundColor(.primary)
             }
             .controlSize(.large)
-            .matchedTransitionSource(id: "newMessageButton", in: namespace)
+            .matchedTransitionSource(id: "newMessageButton", in: namespace!)
         }
     }
 }

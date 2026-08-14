@@ -10,6 +10,7 @@ import SwiftUI
 enum Route: Hashable, Identifiable {
     case chatList
     case chat(id: Int)
+    case profile(id: Int)
     
     var id: Self { self }
 }

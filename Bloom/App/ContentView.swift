@@ -10,17 +10,19 @@ import SwiftUI
 struct ContentView: View {
     @State private var router = Router()
     @State private var store = MessagesStore()
-    @Namespace private var animationNamespace
+    @Namespace private var heroNamespace
     
     var body: some View {
         NavigationStack(path: $router.path) {
-            ChatListView(namespace: animationNamespace)
+            ChatListView()
                 .navigationDestination(for: Route.self) { route in
                     switch route {
                     case .chatList:
-                        ChatListView(namespace: animationNamespace)
+                        ChatListView()
                     case .chat(let id):
                         ChatView(chatId: id)
+                    case .profile(let id):
+                        ProfileView(id: id)
                     }
                 }
         }
@@ -29,7 +31,7 @@ struct ContentView: View {
         }) { modal in
             switch modal {
             case .newMessage:
-                NewMessageView(namespace: animationNamespace)
+                NewMessageView()
                     .presentationDetents([.medium, .large])
                     .presentationDragIndicator(.hidden)
             case .settings:
@@ -40,5 +42,6 @@ struct ContentView: View {
         }
         .environment(store)
         .environment(router)
+        .environment(\.heroNamespace, heroNamespace)
     }
 }

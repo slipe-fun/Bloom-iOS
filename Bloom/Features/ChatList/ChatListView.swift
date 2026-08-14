@@ -10,8 +10,6 @@ import BlurSwiftUI
 import BlurUIKit
 
 struct ChatListView: View {
-    var namespace: Namespace.ID
-    
     @Environment(Router.self) private var router
     @State private var searchText = ""
     @State private var scrollY: CGFloat = 0
@@ -39,7 +37,7 @@ struct ChatListView: View {
         .toolbarBackground(.hidden, for: .bottomBar)
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbar {
-            ChatListToolbar(namespace: namespace, scrollY: scrollY)
+            ChatListToolbar(scrollY: scrollY)
         }
         .topVariableBlur()
         .bottomSafeAreaGradient()

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ChatViewToolbar: ToolbarContent {
     let chatId: Int
+
     @Environment(Router.self) private var router
     
     @ToolbarContentBuilder
@@ -33,34 +34,38 @@ struct ChatViewToolbarUser: View {
     let isPreview: Bool
     
     var body: some View {
-        HStack(spacing: Theme.spacing.md) {
-            AvatarView(
-                size: .md,
-                id: String(chatId),
-                name: String(chatId)
-            )
-            
-            VStack(alignment: .center, spacing: Theme.spacing.xs) {
-                HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
-                    Text("Chat with \(chatId)")
-                        .font(.system(.headline, design: .rounded, weight: .semibold))
-                        .foregroundStyle(.primary)
-                        .lineLimit(1)
-                    
-                    Spacer(minLength: Theme.spacing.xs)
-                }
+        NavigationLink(value: Route.profile(id: chatId)) {
+            HStack(spacing: Theme.spacing.md) {
+                AvatarView(
+                    size: .md,
+                    id: String(chatId),
+                    name: String(chatId)
+                )
+                .heroMatched(id: "user_avatar_transition_\(chatId)")
                 
-                HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
-                    Text("Last seen recently")
-                        .font(.system(.subheadline, design: .rounded, weight: .medium))
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(1)
+                VStack(alignment: .center, spacing: Theme.spacing.xs) {
+                    HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
+                        Text("Chat with \(chatId)")
+                            .font(.system(.headline, design: .rounded, weight: .semibold))
+                            .foregroundStyle(.primary)
+                            .lineLimit(1)
+                        
+                        Spacer(minLength: Theme.spacing.xs)
+                    }
                     
-                    Spacer(minLength: Theme.spacing.xs)
+                    HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
+                        Text("Last seen recently")
+                            .font(.system(.subheadline, design: .rounded, weight: .medium))
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(1)
+                        
+                        Spacer(minLength: Theme.spacing.xs)
+                    }
                 }
+                .frame(maxWidth: .infinity, maxHeight: isPreview ? nil : .infinity, alignment: .center)
             }
-            .frame(maxWidth: .infinity, maxHeight: isPreview ? nil : .infinity, alignment: .center)
         }
+        .buttonStyle(.plain)
     }
 }
