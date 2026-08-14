@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5E9B9A8B302F83F000C4CD91 /* BloomKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9B9A89302F83E500C4CD91 /* BloomKit.xcframework */; };
-		5E9B9A8C302F83F000C4CD91 /* BloomKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9B9A89302F83E500C4CD91 /* BloomKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5E9B9A90302F91DA00C4CD91 /* Bip39 in Frameworks */ = {isa = PBXBuildFile; productRef = 5E9B9A8F302F91DA00C4CD91 /* Bip39 */; };
 		DBBEC4D1302CED1C009523BE /* BlurSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = DBBEC4D0302CED1C009523BE /* BlurSwiftUI */; };
 		DBBEC4D3302CED1C009523BE /* BlurUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = DBBEC4D2302CED1C009523BE /* BlurUIKit */; };
 		DBBEC4E5302CF133009523BE /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = DBBEC4E4302CF133009523BE /* DequeModule */; };
+		DBBEC631302F9EB5009523BE /* BloomKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEC62F302F9DB2009523BE /* BloomKit.xcframework */; };
+		DBBEC632302F9EB5009523BE /* BloomKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DBBEC62F302F9DB2009523BE /* BloomKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -22,7 +22,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5E9B9A8C302F83F000C4CD91 /* BloomKit.xcframework in Embed Frameworks */,
+				DBBEC632302F9EB5009523BE /* BloomKit.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -30,8 +30,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5E9B9A89302F83E500C4CD91 /* BloomKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = BloomKit.xcframework; sourceTree = "<group>"; };
 		DBBEC4723029C65A009523BE /* Bloom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bloom.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBBEC62F302F9DB2009523BE /* BloomKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = BloomKit.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -47,8 +47,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5E9B9A8B302F83F000C4CD91 /* BloomKit.xcframework in Frameworks */,
 				DBBEC4D3302CED1C009523BE /* BlurUIKit in Frameworks */,
+				DBBEC631302F9EB5009523BE /* BloomKit.xcframework in Frameworks */,
 				DBBEC4D1302CED1C009523BE /* BlurSwiftUI in Frameworks */,
 				DBBEC4E5302CF133009523BE /* DequeModule in Frameworks */,
 				5E9B9A90302F91DA00C4CD91 /* Bip39 in Frameworks */,
@@ -63,7 +63,7 @@
 			children = (
 				DBBEC4743029C65A009523BE /* Bloom */,
 				DBBEC4733029C65A009523BE /* Products */,
-				5E9B9A89302F83E500C4CD91 /* BloomKit.xcframework */,
+				DBBEC62F302F9DB2009523BE /* BloomKit.xcframework */,
 			);
 			sourceTree = "<group>";
 		};

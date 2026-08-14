@@ -9,23 +9,35 @@ import SwiftUI
 import BlurSwiftUI
 import BlurUIKit
 
+struct VariableBlurView: View {
+    let height: CGFloat
+    let color: Color?
+    
+    var body: some View {
+        VariableBlur(direction: .down)
+            .maximumBlurRadius(3.25)
+            .dimmingOvershoot(.relative(fraction: 1.3))
+            .passesTouchesThrough(true)
+            .dimmingTintColor(color)
+            .frame(height: height)
+            .ignoresSafeArea(edges: .top)
+    }
+}
+
 struct TopVariableBlurModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .overlay(alignment: .top) {
                 GeometryReader { geometry in
-                    VariableBlur(direction: .down)
-                        .maximumBlurRadius(3.25)
-                        .dimmingOvershoot(.relative(fraction: 1.3))
-                        .passesTouchesThrough(true)
-                        .frame(height: geometry.safeAreaInsets.top)
-                        .ignoresSafeArea(edges: .top)
+                    VariableBlurView(height: geometry.safeAreaInsets.top, color: Color(.systemBackground))
                 }
             }
     }
 }
 
 struct BottomSafeAreaGradientModifier: ViewModifier {
+    let height: CGFloat?
+    
     func body(content: Content) -> some View {
         content
             .overlay(alignment: .bottom) {
@@ -40,12 +52,12 @@ struct BottomSafeAreaGradientModifier: ViewModifier {
                             startPoint: .bottom,
                             endPoint: .top
                         )
-                        .frame(height: geometry.safeAreaInsets.bottom)
+                        .frame(height: (height != nil) ? height : geometry.safeAreaInsets.bottom)
                     }
-                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottom)
+                    .frame(width: geometry.size.width, height: (height != nil) ? height : geometry.size.height, alignment: .bottom)
                     .ignoresSafeArea(edges: .bottom)
                     .allowsHitTesting(false)
-                    .offset(y: geometry.safeAreaInsets.bottom)
+                    .offset(y: (height != nil) ? 0 : geometry.safeAreaInsets.bottom)
                 }
             }
     }
@@ -56,7 +68,7 @@ extension View {
         modifier(TopVariableBlurModifier())
     }
 
-    func bottomSafeAreaGradient() -> some View {
-        modifier(BottomSafeAreaGradientModifier())
+    func bottomSafeAreaGradient(height: CGFloat? = nil) -> some View {
+        modifier(BottomSafeAreaGradientModifier(height: height))
     }
 }

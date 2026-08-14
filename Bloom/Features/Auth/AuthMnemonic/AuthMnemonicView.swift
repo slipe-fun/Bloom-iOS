@@ -67,12 +67,10 @@ struct AuthMnemonicView: View {
     private func performLogin() {
         isLoading = true
         
-        // Принудительно очищаем пробелы, переносы строк и переводим в нижний регистр (lowercased)
         let mnemonicPhrase = words
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
             .joined(separator: " ")
         
-        // Выведем в консоль то, что реально уходит в SDK на проверку
         print("🔑 Попытка входа с фразой: [\(mnemonicPhrase)]")
         
         Task {

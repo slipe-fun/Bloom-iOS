@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ChatsListRowView: View {
     let userId: Int
+    @Environment(MessagesStore.self) private var store
 
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
@@ -57,51 +58,65 @@ struct ChatsListRowView: View {
                 }
         .buttonStyle(.plain)
         .contextMenu {
-            Button {
-            } label: {
-                Label("Pin", systemImage: "pin.fill")
+            Section {
+                Button {
+                    print("mute")
+                } label: {
+                    Label("Mute", systemImage: "speaker.slash.fill")
+                        .fontDesign(.rounded)
+                        .fontWeight(.medium)
+                }
+                
+                Button {
+                    print("pin")
+                } label: {
+                    Label("Pin chat", systemImage: "pin.fill")
+                        .fontDesign(.rounded)
+                        .fontWeight(.medium)
+                }
             }
-
-            Button {
-            } label: {
-                Label("Mute", systemImage: "bell.slash.fill")
-            }
-
-            Divider()
-
-            Button(role: .destructive) {
-            } label: {
-                Label("Delete chat", systemImage: "trash.fill")
+            
+            Section {
+                Button(role: .destructive) {
+                    print("clear messages")
+                } label: {
+                    Label("Clear messages", systemImage: "trash.fill")
+                        .fontDesign(.rounded)
+                        .fontWeight(.medium)
+                }
+                
+                Button(role: .destructive) {
+                    print("block user")
+                } label: {
+                    Label("Block user", systemImage: "person.crop.circle.badge.xmark")
+                        .fontDesign(.rounded)
+                        .fontWeight(.medium)
+                }
             }
         } preview: {
-            ChatPreviewView(userId: userId)
+            ChatPreviewView(userId: userId, store: store)
         }
-    }
-}
-
-// MARK: - Представление предпросмотра чата
-
-struct ChatPreviewView: View {
-    let userId: Int
-    
-        private var previewWidth: CGFloat {
-            let screenWidth = UIScreen.main.bounds.width
-            return screenWidth - 32
+        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+            Button {
+                // Pin here
+            } label: {
+                 Image(systemName: "pin.fill")
+            }
+            .tint(.orange)
         }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: Theme.spacing.md) {
-            Text("Chat with \(userId)")
-                .font(.headline)
-
-            Text("Last messages")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-            Spacer()
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            Button(role: .destructive) {
+                // Delete here
+            } label: {
+                 Image(systemName: "trash.fill")
+            }
+            
+            Button {
+                // Mute here
+            } label: {
+                 Image(systemName: "speaker.slash.fill")
+            }
+            .tint(.indigo)
         }
-        .padding()
-        .frame(width: previewWidth, height: previewWidth * 1.25)
-        .background(Theme.colors.background)
     }
 }

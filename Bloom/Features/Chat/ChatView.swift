@@ -12,10 +12,9 @@ import BlurUIKit
 struct ChatView: View {
     let chatId: Int
 
-    @State private var store = MessagesStore()
+    @Environment(MessagesStore.self) private var store
     @State private var isAtBottom = true
     @State private var scrolledID: Int?
-    @Environment(Router.self) private var router
 
     private let bottomSpacerId = Int.min
     private let scrollThreshold: CGFloat = 120
@@ -57,10 +56,14 @@ struct ChatView: View {
         .onChange(of: store.data.count) { oldCount, newCount in
             if (store.data.first!.me) {
                 guard newCount > oldCount else { return }
-                scrollToBottom(animated: true)
+                withAnimation(.smooth(duration: 0.235)) {
+                    scrolledID = bottomSpacerId
+                }
             } else {
                 guard newCount > oldCount, isAtBottom else { return }
-                scrollToBottom(animated: true)
+                withAnimation(.smooth(duration: 0.235)) {
+                    scrolledID = bottomSpacerId
+                }
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -76,16 +79,5 @@ struct ChatView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .topVariableBlur()
         .bottomSafeAreaGradient()
-        .environment(store)
-    }
-
-    private func scrollToBottom(animated: Bool) {
-        if animated {
-            withAnimation(.smooth(duration: 0.235)) {
-                scrolledID = bottomSpacerId
-            }
-        } else {
-            scrolledID = bottomSpacerId
-        }
     }
 }

@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct ChatViewToolbar: ToolbarContent {
     let chatId: Int
     @Environment(Router.self) private var router
@@ -15,35 +14,7 @@ struct ChatViewToolbar: ToolbarContent {
     @ToolbarContentBuilder
     var body: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
-            HStack(spacing: Theme.spacing.md) {
-                AvatarView(
-                    size: .md,
-                    id: String(chatId),
-                    name: String(chatId)
-                )
-                
-                VStack(alignment: .center, spacing: Theme.spacing.xs) {
-                    HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
-                        Text("Test name")
-                            .font(.system(.headline, design: .rounded, weight: .semibold))
-                            .foregroundStyle(.primary)
-                            .lineLimit(1)
-                        
-                        Spacer(minLength: Theme.spacing.xs)
-                    }
-                    
-                    HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
-                        Text("@testusername")
-                            .font(.system(.subheadline, design: .rounded, weight: .medium))
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.leading)
-                            .lineLimit(1)
-                        
-                        Spacer(minLength: Theme.spacing.xs)
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            }
+            ChatViewToolbarUser(chatId: chatId, isPreview: false)
             .fixedSize(horizontal: true, vertical: false)
             
         }
@@ -52,31 +23,44 @@ struct ChatViewToolbar: ToolbarContent {
         ToolbarSpacer(.flexible, placement: .topBarTrailing)
 
         ToolbarItem(placement: .topBarTrailing) {
-            Menu {
-                Button {
-                    // Действие: Закрепить
-                } label: {
-                    Label("Pin", systemImage: "pin.fill")
-                }
+            ChatViewToolbarMenu()
+        }
+    }
+}
 
-                Button {
-                    // Действие: Без звука
-                } label: {
-                    Label("Mute", systemImage: "bell.slash.fill")
+struct ChatViewToolbarUser: View {
+    let chatId: Int
+    let isPreview: Bool
+    
+    var body: some View {
+        HStack(spacing: Theme.spacing.md) {
+            AvatarView(
+                size: .md,
+                id: String(chatId),
+                name: String(chatId)
+            )
+            
+            VStack(alignment: .center, spacing: Theme.spacing.xs) {
+                HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
+                    Text("Chat with \(chatId)")
+                        .font(.system(.headline, design: .rounded, weight: .semibold))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                    
+                    Spacer(minLength: Theme.spacing.xs)
                 }
-
-                Divider()
-
-                Button(role: .destructive) {
-                    // Действие: Удалить
-                } label: {
-                    Label("Delete chat", systemImage: "trash.fill")
+                
+                HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
+                    Text("Last seen recently")
+                        .font(.system(.subheadline, design: .rounded, weight: .medium))
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(1)
+                    
+                    Spacer(minLength: Theme.spacing.xs)
                 }
-            } label: {
-                Image(systemName: "ellipsis")
-                    .font(.headline)
-                    .foregroundColor(.primary)
             }
+            .frame(maxWidth: .infinity, maxHeight: isPreview ? nil : .infinity, alignment: .center)
         }
     }
 }
