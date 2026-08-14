@@ -28,6 +28,7 @@ struct AuthWelcomeFooterView: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .frame(height: 52)
+                .contentShape(Capsule())
             }
             .buttonStyle(.plain)
             .glassEffect(
@@ -66,6 +67,7 @@ struct AuthWelcomeFooterView: View {
                 .smooth(duration: 0.65).delay(0.32),
                 value: appeared
             )
+            .contentShape(Capsule())
         }
         .padding(.horizontal, 36)
         .padding(.top, 16)

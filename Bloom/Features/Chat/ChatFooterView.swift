@@ -77,10 +77,10 @@ struct ChatFooterView: View {
             .animation(.smooth(duration: 0.235), value: text)
             .frame(maxWidth: .infinity)
         }
-        .padding(.horizontal, focused ? Theme.spacing.lg : Theme.spacing.xxxl)
+        .padding(.horizontal, isKeyboardVisible ? Theme.spacing.lg : Theme.spacing.xxxl)
         .padding(.top, Theme.spacing.md)
-        .padding(.bottom, focused ? Theme.spacing.lg : Theme.spacing.xxxl)
-        .animation(.smooth(duration: 0.235), value: focused)
+        .padding(.bottom, isKeyboardVisible ? Theme.spacing.lg : Theme.spacing.xxxl)
+        .animation(.smooth(duration: 0.235), value: isKeyboardVisible)
         .background(
             LinearGradient(
                 colors: [
@@ -91,7 +91,7 @@ struct ChatFooterView: View {
                 startPoint: .bottom,
                 endPoint: .top
             )
-            .frame(height: focused ? 0 : nil)
+            .frame(height: isKeyboardVisible ? 0 : nil)
         )
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
             isKeyboardVisible = true
