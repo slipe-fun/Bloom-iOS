@@ -61,7 +61,7 @@ struct Theme {
         static let yellow = Color(uiColor: UIColor(hex: "FF901A"))
         static let cyan = Color(uiColor: UIColor(hex: "28A8E9"))
         static let purple = Color(uiColor: UIColor(hex: "A41AFF"))
-        static let red = Color(uiColor: UIColor(hex: "F43025"))
+        static let red = Color(uiColor: UIColor(hex: "EE362B"))
         static let gray = Color(uiColor: UIColor(hex: "8C8C8C"))
         
         static let whiteBackdrop = white.opacity(0.5)
