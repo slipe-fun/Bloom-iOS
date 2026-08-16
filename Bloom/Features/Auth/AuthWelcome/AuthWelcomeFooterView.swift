@@ -20,13 +20,18 @@ struct AuthWelcomeFooterView: View {
             Button {
                 isLoading = true
                 Task {
-                    let user: User?
-                    
+                    var user: User? = nil
+                    var mnemonic: String? = nil
+
                     if bloomManager.checkSession() {
                         user = await bloomManager.loginUser()
                     } else {
-                        user = await bloomManager.registerUser()
+                        let registerResult = await bloomManager.registerUser()
+                        user = registerResult.user
+                        mnemonic = registerResult.mnemonic
                     }
+                    
+                    print(mnemonic)
                     
                     isLoading = false
                     if user != nil {

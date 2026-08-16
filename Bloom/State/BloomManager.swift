@@ -3,6 +3,26 @@ import Observation
 import BloomKit
 import Bip39
 
+extension String {
+    func hexToBytes() -> [UInt8] {
+        var bytes = [UInt8]()
+        var temp = ""
+        
+        let cleanHex = self.replacingOccurrences(of: " ", with: "").lowercased()
+        
+        for char in cleanHex {
+            temp += String(char)
+            if temp.count == 2 {
+                if let byte = UInt8(temp, radix: 16) {
+                    bytes.append(byte)
+                }
+                temp = ""
+            }
+        }
+        return bytes
+    }
+}
+
 final class ChatsObserver: NSObject, ClientChatsListenerProtocol {
     var onUpdate: (@MainActor (Data) -> Void)?
     
@@ -100,7 +120,7 @@ final class BloomManager {
         self.startSyncingChats()
     }
 
-    func registerUser() async -> User? {
+    func registerUser() async -> (user: User?, mnemonic: String?) {
         let backgroundResult = await Task.detached(priority: .userInitiated) { [client] () -> RegisterBackgroundResult? in
             do {
                 let result = try client.register()
@@ -113,10 +133,18 @@ final class BloomManager {
             }
         }.value
         
-        guard let result = backgroundResult else { return nil }
+        guard let result = backgroundResult else { return (nil, nil) }
         
         do {
+            var mnemonicPhrase: String? = nil
+            
             if let rawRecoveryKey = result.rawRecoveryKey {
+                let entropyBytes = rawRecoveryKey.hexToBytes()
+                
+                let mnemonic = try Mnemonic(entropy: entropyBytes)
+                
+                mnemonicPhrase = mnemonic.mnemonic().joined(separator: " ")
+
                 KeychainHelper.shared.save(rawRecoveryKey, service: "pw.bloomapp.auth", account: "recoveryKey")
             }
             
@@ -124,9 +152,9 @@ final class BloomManager {
             let user = try decoder.decode(User.self, from: result.userJSON ?? Data())
             
             self.setupSession(user: user)
-            return user
+            return (user, mnemonicPhrase)
         } catch {
-            return nil
+            return (nil, nil)
         }
     }
 
