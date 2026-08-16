@@ -36,37 +36,45 @@ struct ChatViewToolbarUser: View {
     @Environment(\.heroNamespace) private var namespace
     
     var body: some View {
-        NavigationLink(value: Route.profile(id: chatId)) {
-            HStack(spacing: Theme.spacing.md) {
-                AvatarView(
-                    size: .md,
-                    id: String(chatId),
-                    name: String(chatId)
-                )
-                
-                VStack(alignment: .center, spacing: Theme.spacing.xs) {
-                    HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
-                        Text("Chat with \(chatId)")
-                            .font(.system(.headline, design: .rounded, weight: .semibold))
-                            .foregroundStyle(.primary)
-                            .lineLimit(1)
-                        
-                        Spacer(minLength: Theme.spacing.xs)
-                    }
-                    
-                    HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
-                        Text("Last seen recently")
-                            .font(.system(.subheadline, design: .rounded, weight: .medium))
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.leading)
-                            .lineLimit(1)
-                        
-                        Spacer(minLength: Theme.spacing.xs)
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: isPreview ? nil : .infinity, alignment: .center)
+        if isPreview {
+            content
+        } else {
+            NavigationLink(value: Route.profile(id: chatId)) {
+                content
             }
+            .buttonStyle(.plain)
         }
-        .buttonStyle(.plain)
+    }
+    
+    private var content: some View {
+        HStack(spacing: Theme.spacing.md) {
+            AvatarView(
+                size: .md,
+                id: String(chatId),
+                name: String(chatId)
+            )
+            
+            VStack(alignment: .center, spacing: Theme.spacing.xs) {
+                HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
+                    Text("Chat with \(chatId)")
+                        .font(.system(.headline, design: .rounded, weight: .semibold))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                    
+                    Spacer(minLength: Theme.spacing.xs)
+                }
+                
+                HStack(alignment: .firstTextBaseline, spacing: Theme.spacing.xs) {
+                    Text("Last seen recently")
+                        .font(.system(.subheadline, design: .rounded, weight: .medium))
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(1)
+                    
+                    Spacer(minLength: Theme.spacing.xs)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: isPreview ? nil : .infinity, alignment: .center)
+        }
     }
 }
