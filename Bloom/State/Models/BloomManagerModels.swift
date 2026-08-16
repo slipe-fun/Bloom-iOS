@@ -4,7 +4,27 @@ public extension JSONDecoder {
     static var bloomDecoder: JSONDecoder {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        decoder.dateDecodingStrategy = .iso8601
+        
+        decoder.dateDecodingStrategy = .custom { decoder in
+            let container = try decoder.singleValueContainer()
+            let dateString = try container.decode(String.self)
+            
+            let withFractional = ISO8601DateFormatter()
+            withFractional.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+            if let date = withFractional.date(from: dateString) {
+                return date
+            }
+            
+            let standard = ISO8601DateFormatter()
+            if let date = standard.date(from: dateString) {
+                return date
+            }
+            
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Invalid date format: \(dateString)"
+            )
+        }
         return decoder
     }
 }
@@ -252,9 +272,54 @@ public struct ChatResponse: Codable {
     public let handshake: Handshake?
     public let title: String?
     public let type: String
-    public let me: User?
-    public let recipient: User?
+    private let meData: Data?
+    private let recipientData: Data?
     public let lastMessage: DecryptedMessageWithReply?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case members
+        case handshake
+        case title
+        case type
+        case meData = "me"
+        case recipientData = "recipient"
+        case lastMessage
+    }
+    
+    public var me: User? {
+        guard let data = meData else { return nil }
+        return try? JSONDecoder.bloomDecoder.decode(User.self, from: data)
+    }
+    
+    public var recipient: User? {
+        guard let data = recipientData else { return nil }
+        return try? JSONDecoder.bloomDecoder.decode(User.self, from: data)
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        members = try container.decodeIfPresent([User].self, forKey: .members)
+        handshake = try container.decodeIfPresent(Handshake.self, forKey: .handshake)
+        title = try container.decodeIfPresent(String.self, forKey: .title)
+        type = try container.decode(String.self, forKey: .type)
+        meData = try container.decodeIfPresent(Data.self, forKey: .meData)
+        recipientData = try container.decodeIfPresent(Data.self, forKey: .recipientData)
+        lastMessage = try container.decodeIfPresent(DecryptedMessageWithReply.self, forKey: .lastMessage)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(members, forKey: .members)
+        try container.encode(handshake, forKey: .handshake)
+        try container.encode(title, forKey: .title)
+        try container.encode(type, forKey: .type)
+        try container.encode(meData, forKey: .meData)
+        try container.encode(recipientData, forKey: .recipientData)
+        try container.encode(lastMessage, forKey: .lastMessage)
+    }
 }
 
 public struct StartExchangeSessionResponse: Codable {

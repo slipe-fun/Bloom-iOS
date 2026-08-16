@@ -1,14 +1,20 @@
-//
-//  BloomManager.swift
-//  Bloom
-//
-//  Created by Pip Pipiv on 14.08.2026.
-//
-
 import Foundation
 import Observation
 import BloomKit
 import Bip39
+
+final class ChatsObserver: NSObject, ClientChatsListenerProtocol {
+    var onUpdate: (@MainActor (Data) -> Void)?
+    
+    func onChatsUpdated(_ chatsJSON: Data?) {
+        guard let data = chatsJSON else {
+            return
+        }
+        Task { @MainActor in
+            self.onUpdate?(data)
+        }
+    }
+}
 
 final class UserObserver: NSObject, ClientUserListenerProtocol {
     var onUpdate: (@MainActor (User) -> Void)?
@@ -18,24 +24,25 @@ final class UserObserver: NSObject, ClientUserListenerProtocol {
         do {
             let decoder = JSONDecoder.bloomDecoder
             let updatedUser = try decoder.decode(User.self, from: data)
-            
             Task { @MainActor in
                 self.onUpdate?(updatedUser)
             }
-        } catch {
-        }
+        } catch {}
     }
 }
 
 @Observable
 @MainActor
 final class BloomManager {
-    private let client: ClientBloomClient
+    let client: ClientBloomClient
     
     var currentUser: User?
+    var conversations: [ChatResponse] = []
     
     private let userObserver = UserObserver()
+    private let chatsObserver = ChatsObserver()
     private var isObservingUser = false
+    private var isObservingChats = false
     
     init() {
         do {
@@ -57,10 +64,8 @@ final class BloomManager {
             try self.client.initialize()
             
             if let result = try? client.restoreSession() {
-                self.currentUser = try? JSONDecoder.bloomDecoder.decode(User.self, from: result.userJSON ?? Data())
-                
-                if self.currentUser != nil {
-                    startObservingUser { _ in }
+                if let decodedUser = try? JSONDecoder.bloomDecoder.decode(User.self, from: result.userJSON ?? Data()) {
+                    setupSession(user: decodedUser)
                 }
             }
         } catch {
@@ -89,6 +94,12 @@ final class BloomManager {
         return newKey
     }
 
+    private func setupSession(user: User) {
+        self.currentUser = user
+        self.startObservingUser { _ in }
+        self.startSyncingChats()
+    }
+
     func registerUser() async -> User? {
         let backgroundResult = await Task.detached(priority: .userInitiated) { [client] () -> RegisterBackgroundResult? in
             do {
@@ -112,8 +123,7 @@ final class BloomManager {
             let decoder = JSONDecoder.bloomDecoder
             let user = try decoder.decode(User.self, from: result.userJSON ?? Data())
             
-            self.currentUser = user
-            self.startObservingUser { _ in }
+            self.setupSession(user: user)
             return user
         } catch {
             return nil
@@ -168,8 +178,7 @@ final class BloomManager {
                 KeychainHelper.shared.save(keyToUse, service: service, account: "recoveryKey")
             }
             
-            self.currentUser = user
-            self.startObservingUser { _ in }
+            self.setupSession(user: user)
             return user
         } catch {
             return nil
@@ -182,11 +191,41 @@ final class BloomManager {
     }
     
     func logout() {
+        stopSyncingChats()
         stopObservingUser()
         client.clearCredentials()
         self.currentUser = nil
     }
     
+    private func startSyncingChats() {
+        self.chatsObserver.onUpdate = { [weak self] data in
+            self?.parseAndSetChats(data)
+        }
+        if !isObservingChats {
+            self.client.register(self.chatsObserver)
+            self.client.startChatsSync()
+            self.isObservingChats = true
+        }
+    }
+        
+    private func stopSyncingChats() {
+        guard isObservingChats else { return }
+        self.client.stopChatsSync()
+        self.client.unregisterChatsListener()
+        self.isObservingChats = false
+    }
+        
+    private func parseAndSetChats(_ data: Data) {
+        do {
+            let decodedChats = try JSONDecoder.bloomDecoder.decode([ChatResponse].self, from: data)
+            self.conversations = decodedChats.sorted {
+                ($0.lastMessage?.id ?? 0) > ($1.lastMessage?.id ?? 0)
+            }
+        } catch {
+            print(error)
+        }
+    }
+
     func getMe() -> User? {
         do {
             let result = try client.getMe()

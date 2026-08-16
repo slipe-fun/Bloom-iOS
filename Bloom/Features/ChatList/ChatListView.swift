@@ -10,14 +10,17 @@ import BlurSwiftUI
 import BlurUIKit
 
 struct ChatListView: View {
+    var namespace: Namespace.ID
+    
     @Environment(Router.self) private var router
+    @Environment(BloomManager.self) private var bloomManager
     @State private var searchText = ""
     @State private var scrollY: CGFloat = 0
 
     var body: some View {
         List {
-            ForEach(1...20, id: \.self) { id in
-                ChatsListRowView(userId: id)
+            ForEach(bloomManager.conversations, id: \.id) { chat in
+                ChatsListRowView(chat: chat)
                     .listRowInsets(EdgeInsets())
                     .listRowSeparator(.hidden)
             }

@@ -71,8 +71,6 @@ struct AuthMnemonicView: View {
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
             .joined(separator: " ")
         
-        print("🔑 Попытка входа с фразой: [\(mnemonicPhrase)]")
-        
         Task {
             let user = await bloomManager.loginUser(recoveryKey: mnemonicPhrase)
             isLoading = false

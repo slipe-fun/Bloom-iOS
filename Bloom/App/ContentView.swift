@@ -14,11 +14,11 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack(path: $router.path) {
-            ChatListView()
+            ChatListView(namespace: heroNamespace)
                 .navigationDestination(for: Route.self) { route in
                     switch route {
                     case .chatList:
-                        ChatListView()
+                        ChatListView(namespace: heroNamespace)
                     case .chat(let id):
                         ChatView(chatId: id)
                     case .profile(let id):

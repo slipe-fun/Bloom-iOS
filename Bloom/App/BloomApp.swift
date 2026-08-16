@@ -17,6 +17,14 @@ struct BloomApp: App {
             RootView()
                 .environment(appState)
                 .environment(bloomManager)
+                // test test test (delete later)
+                .onChange(of: bloomManager.currentUser?.id, initial: true) { oldValue, newValue in
+                    if let userID = newValue {
+                        print(userID)
+                    } else {
+                        print("no active session")
+                    }
+                }
         }
     }
 }
