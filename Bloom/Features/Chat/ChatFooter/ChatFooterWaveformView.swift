@@ -35,8 +35,8 @@ struct ChatFooterWaveformView: View {
     var samples: [AudioSample]
 
     var waveColor: Color = Theme.colors.red
-    var barWidth: CGFloat = 2.2
-    var barSpacing: CGFloat = 2.2
+    var barWidth: CGFloat = 2
+    var barSpacing: CGFloat = 2
     var minBarHeight: CGFloat = 6.0
     var maxBarHeight: CGFloat = 36.0
 
