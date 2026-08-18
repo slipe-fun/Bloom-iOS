@@ -25,6 +25,7 @@ public extension JSONDecoder {
                 debugDescription: "Invalid date format: \(dateString)"
             )
         }
+        
         return decoder
     }
 }
@@ -154,6 +155,7 @@ public struct RawMessage: Codable {
     public let chatId: Int
     public let seen: Date?
     public let replyTo: Int?
+    public let createdAt: Date
 }
 
 public struct RawMessageWithReply: Codable {
@@ -165,6 +167,7 @@ public struct RawMessageWithReply: Codable {
     public let seen: Date?
     public let replyTo: Int?
     public let replyToMessage: RawMessage?
+    public let createdAt: Date
 }
 
 public struct Message: Codable {
@@ -179,7 +182,7 @@ public struct Message: Codable {
     public let authorId: String?
     public let syncTag: String?
     public let timestamp: Int64?
-    
+    public let createdAt: Date
     public let replyToMessage: MessageBox?
 }
 
@@ -197,6 +200,7 @@ public struct DecryptedMessage: Codable, Identifiable {
     public let authorId: String
     public let timestamp: Int64
     public let seen: Date?
+    public let createdAt: Date
 }
 
 public struct DecryptedMessageWithReply: Codable, Identifiable {
@@ -205,6 +209,7 @@ public struct DecryptedMessageWithReply: Codable, Identifiable {
     public let authorId: String
     public let timestamp: Int64
     public let seen: Date?
+    public let createdAt: Date
     public let replyTo: DecryptedMessage?
 }
 
@@ -288,17 +293,24 @@ public struct ChatResponse: Codable {
     }
     
     public var me: User? {
-        guard let data = meData else { return nil }
+        guard let data = meData else {
+            return nil
+        }
+        
         return try? JSONDecoder.bloomDecoder.decode(User.self, from: data)
     }
     
     public var recipient: User? {
-        guard let data = recipientData else { return nil }
+        guard let data = recipientData else {
+            return nil
+        }
+        
         return try? JSONDecoder.bloomDecoder.decode(User.self, from: data)
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         id = try container.decode(Int.self, forKey: .id)
         members = try container.decodeIfPresent([User].self, forKey: .members)
         handshake = try container.decodeIfPresent(Handshake.self, forKey: .handshake)
@@ -306,11 +318,15 @@ public struct ChatResponse: Codable {
         type = try container.decode(String.self, forKey: .type)
         meData = try container.decodeIfPresent(Data.self, forKey: .meData)
         recipientData = try container.decodeIfPresent(Data.self, forKey: .recipientData)
-        lastMessage = try container.decodeIfPresent(DecryptedMessageWithReply.self, forKey: .lastMessage)
+        lastMessage = try container.decodeIfPresent(
+            DecryptedMessageWithReply.self,
+            forKey: .lastMessage
+        )
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        
         try container.encode(id, forKey: .id)
         try container.encode(members, forKey: .members)
         try container.encode(handshake, forKey: .handshake)

@@ -246,9 +246,7 @@ final class BloomManager {
     private func parseAndSetChats(_ data: Data) {
         do {
             let decodedChats = try JSONDecoder.bloomDecoder.decode([ChatResponse].self, from: data)
-            self.conversations = decodedChats.sorted {
-                ($0.lastMessage?.id ?? 0) > ($1.lastMessage?.id ?? 0)
-            }
+            self.conversations = decodedChats
         } catch {
             print(error)
         }
